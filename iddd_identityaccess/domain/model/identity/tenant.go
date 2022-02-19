@@ -1,6 +1,10 @@
 package identity
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/Msksgm/go-IDDD-05-entity/iddd_common/ierrors"
+)
 
 type Tenant struct {
 	tenantId TenantId
@@ -8,6 +12,7 @@ type Tenant struct {
 }
 
 func NewTenant(tenantId TenantId, name string) (_ *Tenant, err error) {
+	defer ierrors.Wrap(&err, "tenant.NewTenant(%v, %s)", tenantId, name)
 	if name == "" {
 		return nil, fmt.Errorf("The tenant name is required.")
 	}
