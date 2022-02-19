@@ -2,9 +2,9 @@ package identity
 
 import (
 	"fmt"
-	"reflect"
 	"testing"
 
+	"github.com/google/go-cmp/cmp"
 	"github.com/google/uuid"
 )
 
@@ -16,13 +16,15 @@ func TestNewTenantId(t *testing.T) {
 		}
 		uu := u.String()
 
-		tenatId, err := NewTenantId(uu)
+		got, err := NewTenantId(uu)
 		if err != nil {
 			t.Fatal(err)
 		}
 
-		if !reflect.DeepEqual(tenatId.id, uu) {
-			t.Errorf("tenantId: %s should be equal to uu %s", tenatId, uu)
+		want := &TenantId{id: uu}
+
+		if diff := cmp.Diff(want, got, cmp.AllowUnexported(TenantId{})); diff != "" {
+			t.Errorf("mismatch (-want, +got):\n%s", diff)
 		}
 	})
 	t.Run("fail invalid UUID length", func(t *testing.T) {
