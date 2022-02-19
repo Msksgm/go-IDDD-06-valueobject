@@ -16,6 +16,9 @@ func NewTenant(tenantId TenantId, name string) (_ *Tenant, err error) {
 	if err := tenant.setName(name); err != nil {
 		return nil, err
 	}
+	if err := tenant.setTenantId(tenantId); err != nil {
+		return nil, err
+	}
 	return &Tenant{tenantId: tenantId, name: name}, nil
 }
 
@@ -28,6 +31,15 @@ func (tenant *Tenant) setName(name string) (err error) {
 		return fmt.Errorf("The tenant description must be 100 characters or less.")
 	}
 	tenant.name = name
+	return nil
+}
+
+func (tenant *Tenant) setTenantId(tenantId TenantId) (err error) {
+	defer ierrors.Wrap(&err, "tenant.setTenantId(%s)", tenantId)
+	if tenantId.id == "" {
+		return fmt.Errorf("TenentId is required.")
+	}
+	tenant.tenantId = tenantId
 	return nil
 }
 

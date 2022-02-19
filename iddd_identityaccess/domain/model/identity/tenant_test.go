@@ -93,6 +93,18 @@ func TestNewTenant(t *testing.T) {
 			t.Errorf("tenant should be nil, but %v", tenant)
 		}
 	})
+	t.Run("fail empty tenantId", func(t *testing.T) {
+		tenantId := TenantId{id: ""}
+		name := "TenantName"
+		tenant, err := NewTenant(tenantId, name)
+		want := fmt.Sprintf("tenant.setTenantId(%s): TenentId is required.", tenantId)
+		if got := err.Error(); want != got {
+			t.Errorf("got %s, want %s", got, want)
+		}
+		if tenant != nil {
+			t.Errorf("tenant should be nil, but %v", tenant)
+		}
+	})
 }
 
 func TestEquals(t *testing.T) {
