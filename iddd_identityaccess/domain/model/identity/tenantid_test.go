@@ -12,13 +12,13 @@ func TestNewTenantId(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		u, err := uuid.NewRandom()
 		if err != nil {
-			t.Error(err)
+			t.Fatal(err)
 		}
 		uu := u.String()
 
 		tenatId, err := NewTenantId(uu)
 		if err != nil {
-			t.Error(err)
+			t.Fatal(err)
 		}
 
 		if !reflect.DeepEqual(tenatId.tenantId, uu) {
