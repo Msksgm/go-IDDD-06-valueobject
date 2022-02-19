@@ -16,6 +16,14 @@ func init() {
 
 var rs1Letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 
+func RandString(n int) string {
+	b := make([]rune, n)
+	for i := range b {
+		b[i] = rs1Letters[rand.Intn(len(rs1Letters))]
+	}
+	return string(b)
+}
+
 func TestNewTenant(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		u, err := uuid.NewRandom()
@@ -32,7 +40,7 @@ func TestNewTenant(t *testing.T) {
 		name := "TenantName"
 		tenant, err := NewTenant(*tenantId, name)
 		if err != nil {
-			t.Fatal(tenant)
+			t.Fatal(err)
 		}
 
 		if !reflect.DeepEqual(tenant.tenantId.tenantId, uu) {
@@ -89,10 +97,31 @@ func TestNewTenant(t *testing.T) {
 	})
 }
 
-func RandString(n int) string {
-	b := make([]rune, n)
-	for i := range b {
-		b[i] = rs1Letters[rand.Intn(len(rs1Letters))]
+func TestEquals(t *testing.T) {
+	u, err := uuid.NewRandom()
+	if err != nil {
+		t.Fatal(err)
 	}
-	return string(b)
+	uu := u.String()
+
+	tenantId, err := NewTenantId(uu)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	name1 := "TenantName1"
+	tenant1, err := NewTenant(*tenantId, name1)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	name2 := "TenantName1"
+	tenant2, err := NewTenant(*tenantId, name2)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if !tenant1.Equals(*tenant2) {
+		t.Errorf("tenant1 %v must be equal to %v by tenantId", tenant1, tenant2)
+	}
 }

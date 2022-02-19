@@ -21,3 +21,7 @@ func NewTenant(tenantId TenantId, name string) (_ *Tenant, err error) {
 	}
 	return &Tenant{tenantId: tenantId, name: name}, nil
 }
+
+func (tenant *Tenant) Equals(otherTenant Tenant) bool {
+	return tenant.tenantId == otherTenant.tenantId
+}
