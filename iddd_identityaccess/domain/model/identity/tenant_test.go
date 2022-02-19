@@ -65,7 +65,7 @@ func TestNewTenant(t *testing.T) {
 
 		name := ""
 		tenant, err := NewTenant(*tenantId, name)
-		want := fmt.Sprintf("tenant.NewTenant(%v, %s): The tenant name is required.", *tenantId, name)
+		want := fmt.Sprintf("tenant.setName(%s): The tenant name is required.", name)
 		if got := err.Error(); want != got {
 			t.Errorf("got %s, want %s", got, want)
 		}
@@ -87,7 +87,7 @@ func TestNewTenant(t *testing.T) {
 
 		name := RandString(101)
 		tenant, err := NewTenant(*tenantId, name)
-		want := fmt.Sprintf("tenant.NewTenant(%v, %s): The tenant description must be 100 characters or less.", *tenantId, name)
+		want := fmt.Sprintf("tenant.setName(%s): The tenant description must be 100 characters or less.", name)
 		if got := err.Error(); want != got {
 			t.Errorf("got %s, want %s", got, want)
 		}
