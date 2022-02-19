@@ -108,21 +108,46 @@ func TestNewTenant(t *testing.T) {
 }
 
 func TestEquals(t *testing.T) {
-	u, err := uuid.NewRandom()
-	if err != nil {
-		t.Fatal(err)
-	}
-	uu := u.String()
+	t.Run("equal", func(t *testing.T) {
+		u, err := uuid.NewRandom()
+		if err != nil {
+			t.Fatal(err)
+		}
+		uu := u.String()
 
-	tenantId := &TenantId{id: uu}
+		tenantId := &TenantId{id: uu}
 
-	name1 := "TenantName1"
-	tenant1 := &Tenant{tenantId: *tenantId, name: name1}
+		name1 := "TenantName1"
+		tenant1 := &Tenant{tenantId: *tenantId, name: name1}
 
-	name2 := "TenantName1"
-	tenant2 := &Tenant{tenantId: *tenantId, name: name2}
+		name2 := "TenantName1"
+		tenant2 := &Tenant{tenantId: *tenantId, name: name2}
 
-	if !tenant1.Equals(*tenant2) {
-		t.Errorf("tenant1 %v must be equal to %v by tenantId", tenant1, tenant2)
-	}
+		if !tenant1.Equals(*tenant2) {
+			t.Errorf("tenant1 %v must be equal to %v by tenantId", tenant1, tenant2)
+		}
+	})
+	t.Run("not equal", func(t *testing.T) {
+		u1, err := uuid.NewRandom()
+		if err != nil {
+			t.Fatal(err)
+		}
+		uu1 := u1.String()
+		tenantId1 := &TenantId{id: uu1}
+
+		u2, err := uuid.NewRandom()
+		if err != nil {
+			t.Fatal(err)
+		}
+		uu2 := u2.String()
+		tenantId2 := &TenantId{id: uu2}
+
+		name := "TenantName"
+		tenant1 := &Tenant{tenantId: *tenantId1, name: name}
+		tenant2 := &Tenant{tenantId: *tenantId2, name: name}
+
+		if tenant1.Equals(*tenant2) {
+			t.Errorf("tenant1 %v must be not equal to %v by tenantId", tenant1, tenant2)
+		}
+	})
 }
