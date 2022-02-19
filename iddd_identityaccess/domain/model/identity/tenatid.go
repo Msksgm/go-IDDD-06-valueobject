@@ -6,21 +6,22 @@ import (
 )
 
 type TenantId struct {
-	tenantId string
+	id string
 }
 
 func NewTenantId(uu string) (*TenantId, error) {
-	if err := validateUu(uu); err != nil {
+	tenantId := new(TenantId)
+	if err := tenantId.setId(uu); err != nil {
 		return nil, err
 	}
-	tenantId := &TenantId{tenantId: uu}
 	return tenantId, nil
 }
 
-func validateUu(uu string) (err error) {
-	defer ierrors.Wrap(&err, "tenantid.validateUu(%s)", uu)
+func (tenantId *TenantId) setId(uu string) (err error) {
+	defer ierrors.Wrap(&err, "tenantid.setId(%s)", uu)
 	if _, err := uuid.Parse(uu); err != nil {
 		return err
 	}
+	tenantId.id = uu
 	return nil
 }

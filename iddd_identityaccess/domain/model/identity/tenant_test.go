@@ -43,7 +43,7 @@ func TestNewTenant(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		if !reflect.DeepEqual(tenant.tenantId.tenantId, uu) {
+		if !reflect.DeepEqual(tenant.tenantId.id, uu) {
 			t.Errorf("tenant.tenantId %v should be equal to uu %v", tenant.tenantId, uu)
 		}
 

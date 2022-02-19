@@ -21,7 +21,7 @@ func TestNewTenantId(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		if !reflect.DeepEqual(tenatId.tenantId, uu) {
+		if !reflect.DeepEqual(tenatId.id, uu) {
 			t.Errorf("tenantId: %s should be equal to uu %s", tenatId, uu)
 		}
 	})
@@ -29,7 +29,7 @@ func TestNewTenantId(t *testing.T) {
 		uu := "UUID"
 
 		tenatId, err := NewTenantId(uu)
-		want := fmt.Sprintf("tenantid.validateUu(%s): invalid UUID length: %d", uu, len(uu))
+		want := fmt.Sprintf("tenantid.setId(%s): invalid UUID length: %d", uu, len(uu))
 		if got := err.Error(); want != got {
 			t.Errorf("got %s, want %s", got, want)
 		}
