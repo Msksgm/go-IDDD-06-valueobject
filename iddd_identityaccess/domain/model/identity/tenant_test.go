@@ -3,10 +3,10 @@ package identity
 import (
 	"fmt"
 	"math/rand"
-	"reflect"
 	"testing"
 	"time"
 
+	"github.com/google/go-cmp/cmp"
 	"github.com/google/uuid"
 )
 
@@ -38,17 +38,15 @@ func TestNewTenant(t *testing.T) {
 		}
 
 		name := "TenantName"
-		tenant, err := NewTenant(*tenantId, name)
+		got, err := NewTenant(*tenantId, name)
 		if err != nil {
 			t.Fatal(err)
 		}
 
-		if !reflect.DeepEqual(tenant.tenantId.id, uu) {
-			t.Errorf("tenant.tenantId %v should be equal to uu %v", tenant.tenantId, uu)
-		}
+		want := &Tenant{tenantId: TenantId{id: uu}, name: "TenantName"}
 
-		if !reflect.DeepEqual(tenant.name, name) {
-			t.Errorf("tenant.name %v should be equal to name %v", tenant.name, name)
+		if diff := cmp.Diff(want, got, cmp.AllowUnexported(Tenant{}, TenantId{})); diff != "" {
+			t.Errorf("mismatch (-want, +got):\n%s", diff)
 		}
 	})
 	t.Run("fail empty name", func(t *testing.T) {
