@@ -29,7 +29,7 @@ func TestNewTenantId(t *testing.T) {
 		uu := "UUID"
 
 		tenatId, err := NewTenantId(uu)
-		want := fmt.Sprintf("NewTenantId: invalid UUID length: %d", len(uu))
+		want := fmt.Sprintf("tenantid.validateUu(%s): invalid UUID length: %d", uu, len(uu))
 		if got := err.Error(); want != got {
 			t.Errorf("got %s, want %s", got, want)
 		}
