@@ -114,22 +114,13 @@ func TestEquals(t *testing.T) {
 	}
 	uu := u.String()
 
-	tenantId, err := NewTenantId(uu)
-	if err != nil {
-		t.Fatal(err)
-	}
+	tenantId := &TenantId{id: uu}
 
 	name1 := "TenantName1"
-	tenant1, err := NewTenant(*tenantId, name1)
-	if err != nil {
-		t.Fatal(err)
-	}
+	tenant1 := &Tenant{tenantId: *tenantId, name: name1}
 
 	name2 := "TenantName1"
-	tenant2, err := NewTenant(*tenantId, name2)
-	if err != nil {
-		t.Fatal(err)
-	}
+	tenant2 := &Tenant{tenantId: *tenantId, name: name2}
 
 	if !tenant1.Equals(*tenant2) {
 		t.Errorf("tenant1 %v must be equal to %v by tenantId", tenant1, tenant2)
