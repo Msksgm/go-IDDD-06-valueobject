@@ -69,6 +69,27 @@ func TestNewUser(t *testing.T) {
 			t.Errorf("got %s, want %s", got, want)
 		}
 	})
+	t.Run("fail username is lower than 3 characters.", func(t *testing.T) {
+		u, err := uuid.NewRandom()
+		if err != nil {
+			t.Fatal(err)
+		}
+		uu := u.String()
+
+		tenantId, err := NewTenantId(uu)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		userName := "na"
+		password := "qwerty!ASDFG#"
+
+		_, err = NewUser(*tenantId, userName, password)
+		want := fmt.Sprintf("user.setUserName(%s): The username must be 3 to 250 characters.", userName)
+		if got := err.Error(); got != want {
+			t.Errorf("got %s, want %s", got, want)
+		}
+	})
 }
 
 func TestUserEquals(t *testing.T) {
