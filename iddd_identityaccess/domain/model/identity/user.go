@@ -51,8 +51,35 @@ func (user *User) protectPassword(currentPassword string, changedPassword string
 		return "", err
 	}
 
+	if err := user.assertPasswordNotWeak(changedPassword); err != nil {
+		return "", err
+	}
+
+	if err := user.assertUsernamePasswordNotSame(changedPassword); err != nil {
+		return "", err
+	}
+
+	bcryptedPassword, err := bcrypt.GenerateFromPassword([]byte(changedPassword), 12)
+	if err != nil {
+		return "", err
+	}
+
+	return string(bcryptedPassword), nil
+}
+
+func (user *User) assertPasswordNotSame(currentPassword string, changedPassword string) (err error) {
+	defer ierrors.Wrap(&err, "user.assertPasswordNotSame(%s, %s)", currentPassword, changedPassword)
+	if currentPassword == changedPassword {
+		return fmt.Errorf("The password is unchanged")
+	}
+	return nil
+}
+
+func (user *User) assertPasswordNotWeak(changedPassword string) (err error) {
+	defer ierrors.Wrap(&err, "user.assertPasswordNotWeak(%s)", changedPassword)
+
 	if changedPassword == "" {
-		return "", fmt.Errorf("The password must not be empty")
+		return fmt.Errorf("The password must not be empty")
 	}
 
 	strength := 0
@@ -88,26 +115,9 @@ func (user *User) protectPassword(currentPassword string, changedPassword string
 	}
 
 	if strength < STRONG_THRESHOL {
-		return "", fmt.Errorf("The password must be stronger.")
+		return fmt.Errorf("The password must be stronger.")
 	}
 
-	if err := user.assertUsernamePasswordNotSame(changedPassword); err != nil {
-		return "", err
-	}
-
-	bcryptedPassword, err := bcrypt.GenerateFromPassword([]byte(changedPassword), 12)
-	if err != nil {
-		return "", err
-	}
-
-	return string(bcryptedPassword), nil
-}
-
-func (user *User) assertPasswordNotSame(currentPassword string, changedPassword string) (err error) {
-	defer ierrors.Wrap(&err, "user.assertPasswordNotSame(%s, %s)", currentPassword, changedPassword)
-	if currentPassword == changedPassword {
-		return fmt.Errorf("The password is unchanged")
-	}
 	return nil
 }
 
