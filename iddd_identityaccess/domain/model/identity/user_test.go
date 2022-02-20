@@ -1,7 +1,6 @@
 package identity
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -49,32 +48,67 @@ func TestNewUser(t *testing.T) {
 }
 
 func TestUserEquals(t *testing.T) {
-	u, err := uuid.NewRandom()
-	if err != nil {
-		t.Fatal(err)
-	}
-	uu := u.String()
+	t.Run("success", func(t *testing.T) {
+		u, err := uuid.NewRandom()
+		if err != nil {
+			t.Fatal(err)
+		}
+		uu := u.String()
 
-	tenantId, err := NewTenantId(uu)
-	if err != nil {
-		t.Fatal(err)
-	}
+		tenantId, err := NewTenantId(uu)
+		if err != nil {
+			t.Fatal(err)
+		}
 
-	userName := "userName"
-	password := "qwerty!ASDFG#"
-	bcryptedPassword, err := bcrypt.GenerateFromPassword([]byte(password), 12)
-	if err != nil {
-		t.Fatal(err)
-	}
+		userName := "userName"
+		password := "qwerty!ASDFG#"
+		bcryptedPassword, err := bcrypt.GenerateFromPassword([]byte(password), 12)
+		if err != nil {
+			t.Fatal(err)
+		}
 
-	user, err := NewUser(*tenantId, userName, password)
-	if err != nil {
-		t.Fatal(err)
-	}
+		user, err := NewUser(*tenantId, userName, password)
+		if err != nil {
+			t.Fatal(err)
+		}
 
-	other := &User{tenantId: TenantId{id: uu}, userName: userName, password: string(bcryptedPassword)}
+		other := &User{tenantId: TenantId{id: uu}, userName: userName, password: string(bcryptedPassword)}
 
-	if !user.Equals(*other) {
-		fmt.Errorf("user: %v must be equal to other :%v", user, other)
-	}
+		if !user.Equals(*other) {
+			t.Errorf("user: %v must be equal to other :%v", user, other)
+		}
+	})
+	t.Run("fail tenantId is not equal", func(t *testing.T) {
+		u1, err := uuid.NewRandom()
+		if err != nil {
+			t.Fatal(err)
+		}
+		uu1 := u1.String()
+		tenantId1 := &TenantId{id: uu1}
+
+		userName := "userName"
+		password := "qwerty!ASDFG#"
+		bcryptedPassword, err := bcrypt.GenerateFromPassword([]byte(password), 12)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		user, err := NewUser(*tenantId1, userName, password)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		u2, err := uuid.NewRandom()
+		if err != nil {
+			t.Fatal(err)
+		}
+		uu2 := u2.String()
+		tenantId2 := &TenantId{id: uu2}
+
+		other := &User{tenantId: *tenantId2, userName: userName, password: string(bcryptedPassword)}
+
+		if user.Equals(*other) {
+			t.Errorf("user: %v must be equal to other :%v", user, other)
+		}
+	})
 }
