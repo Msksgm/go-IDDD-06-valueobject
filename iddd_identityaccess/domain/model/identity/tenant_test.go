@@ -38,12 +38,13 @@ func TestNewTenant(t *testing.T) {
 		}
 
 		name := "TenantName"
-		got, err := NewTenant(*tenantId, name)
+		// activate := true
+		got, err := NewTenant(*tenantId, name, true)
 		if err != nil {
 			t.Fatal(err)
 		}
 
-		want := &Tenant{tenantId: TenantId{id: uu}, name: "TenantName"}
+		want := &Tenant{tenantId: TenantId{id: uu}, name: "TenantName", activate: true}
 
 		if diff := cmp.Diff(want, got, cmp.AllowUnexported(Tenant{}, TenantId{})); diff != "" {
 			t.Errorf("mismatch (-want, +got):\n%s", diff)
@@ -62,7 +63,8 @@ func TestNewTenant(t *testing.T) {
 		}
 
 		name := ""
-		tenant, err := NewTenant(*tenantId, name)
+		activate := true
+		tenant, err := NewTenant(*tenantId, name, activate)
 		want := fmt.Sprintf("tenant.setName(%s): The tenant name is required.", name)
 		if got := err.Error(); want != got {
 			t.Errorf("got %s, want %s", got, want)
@@ -84,7 +86,8 @@ func TestNewTenant(t *testing.T) {
 		}
 
 		name := RandString(101)
-		tenant, err := NewTenant(*tenantId, name)
+		activate := true
+		tenant, err := NewTenant(*tenantId, name, activate)
 		want := fmt.Sprintf("tenant.setName(%s): The tenant description must be 100 characters or less.", name)
 		if got := err.Error(); want != got {
 			t.Errorf("got %s, want %s", got, want)
@@ -96,7 +99,8 @@ func TestNewTenant(t *testing.T) {
 	t.Run("fail empty tenantId", func(t *testing.T) {
 		tenantId := TenantId{id: ""}
 		name := "TenantName"
-		tenant, err := NewTenant(tenantId, name)
+		activate := true
+		tenant, err := NewTenant(tenantId, name, activate)
 		want := fmt.Sprintf("tenant.setTenantId(%s): TenentId is required.", tenantId)
 		if got := err.Error(); want != got {
 			t.Errorf("got %s, want %s", got, want)
