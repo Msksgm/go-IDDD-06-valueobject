@@ -49,6 +49,12 @@ func (tenant *Tenant) setActive(active bool) {
 	tenant.active = active
 }
 
+func (tenant *Tenant) activate() {
+	if !tenant.isActive() {
+		tenant.setActive(true)
+	}
+}
+
 func (tenant *Tenant) deactivate() {
 	if tenant.isActive() {
 		tenant.setActive(false)

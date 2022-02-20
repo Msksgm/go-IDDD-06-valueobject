@@ -149,6 +149,45 @@ func TestDeactivate(t *testing.T) {
 	})
 }
 
+func TestActivate(t *testing.T) {
+	t.Run("deactive to active", func(t *testing.T) {
+		u, err := uuid.NewRandom()
+		if err != nil {
+			t.Fatal(err)
+		}
+		uu := u.String()
+
+		tenantId := TenantId{id: uu}
+		name := "TenantName"
+		acitve := false
+		tenant := Tenant{tenantId: tenantId, name: name, active: acitve}
+
+		tenant.activate()
+
+		if !tenant.active {
+			t.Errorf("tenant.activa must be true, but false")
+		}
+	})
+	t.Run("active to active", func(t *testing.T) {
+		u, err := uuid.NewRandom()
+		if err != nil {
+			t.Fatal(err)
+		}
+		uu := u.String()
+
+		tenantId := TenantId{id: uu}
+		name := "TenantName"
+		acitve := true
+		tenant := Tenant{tenantId: tenantId, name: name, active: acitve}
+
+		tenant.activate()
+
+		if !tenant.active {
+			t.Errorf("tenant.activa must be true, but false")
+		}
+	})
+}
+
 func TestEquals(t *testing.T) {
 	t.Run("equal", func(t *testing.T) {
 		u, err := uuid.NewRandom()
