@@ -113,6 +113,25 @@ func TestNewUser(t *testing.T) {
 	})
 }
 
+func TestAssertPasswordNotSame(t *testing.T) {
+	u, err := uuid.NewRandom()
+	if err != nil {
+		t.Fatal(err)
+	}
+	uu := u.String()
+	tenantId := TenantId{id: uu}
+
+	userName := "user"
+	password := "qwerty!ASDFG#"
+	user := &User{tenantId: tenantId, userName: userName, password: password}
+	changedPassword := "ASDFG#qwerty!"
+
+	err = user.assertPasswordNotSame(password, changedPassword)
+	if err != nil {
+		t.Fatal(err)
+	}
+}
+
 func TestUserEquals(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		u, err := uuid.NewRandom()

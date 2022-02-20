@@ -103,6 +103,13 @@ func (user *User) protectPassword(currentPassword string, changedPassword string
 	return string(bcryptedPassword), nil
 }
 
+func (user *User) assertPasswordNotSame(currentPassword string, changedPassword string) (err error) {
+	if currentPassword == changedPassword {
+		return fmt.Errorf("The password is unchanged")
+	}
+	return nil
+}
+
 func (user *User) Equals(other User) bool {
 	return user.tenantId.id == other.tenantId.id
 }
