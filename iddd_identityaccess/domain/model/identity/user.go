@@ -25,11 +25,9 @@ func NewUser(tenantId TenantId, userName string, password string) (_ *User, err 
 		return nil, err
 	}
 
-	bcryptedPassword, err := user.protectPassword("", password)
-	if err != nil {
+	if err := user.protectPassword("", password); err != nil {
 		return nil, err
 	}
-	user.password = bcryptedPassword
 
 	return user, nil
 }
@@ -46,25 +44,26 @@ func (user *User) setUserName(userName string) (err error) {
 	return nil
 }
 
-func (user *User) protectPassword(currentPassword string, changedPassword string) (string, error) {
+func (user *User) protectPassword(currentPassword string, changedPassword string) error {
 	if err := user.assertPasswordNotSame(currentPassword, changedPassword); err != nil {
-		return "", err
+		return err
 	}
 
 	if err := user.assertPasswordNotWeak(changedPassword); err != nil {
-		return "", err
+		return err
 	}
 
 	if err := user.assertUsernamePasswordNotSame(changedPassword); err != nil {
-		return "", err
+		return err
 	}
 
 	bcryptedPassword, err := bcrypt.GenerateFromPassword([]byte(changedPassword), 12)
 	if err != nil {
-		return "", err
+		return err
 	}
 
-	return string(bcryptedPassword), nil
+	user.password = string(bcryptedPassword)
+	return nil
 }
 
 func (user *User) assertPasswordNotSame(currentPassword string, changedPassword string) (err error) {
