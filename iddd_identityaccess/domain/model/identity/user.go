@@ -112,6 +112,7 @@ func (user *User) assertPasswordNotSame(currentPassword string, changedPassword 
 }
 
 func (user *User) assertUsernamePasswordNotSame(changedPassword string) (err error) {
+	defer ierrors.Wrap(&err, "user.assertUsernamePasswordNotSame(%s)", changedPassword)
 	if changedPassword == user.userName {
 		return fmt.Errorf("The username and password must not be the same.")
 	}

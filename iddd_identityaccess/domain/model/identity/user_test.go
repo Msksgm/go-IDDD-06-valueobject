@@ -153,21 +153,42 @@ func TestAssertPasswordNotSame(t *testing.T) {
 }
 
 func TestAssertUsernamePasswordNotSame(t *testing.T) {
-	u, err := uuid.NewRandom()
-	if err != nil {
-		t.Fatal(err)
-	}
-	uu := u.String()
-	tenantId := TenantId{id: uu}
+	t.Run("success", func(t *testing.T) {
+		u, err := uuid.NewRandom()
+		if err != nil {
+			t.Fatal(err)
+		}
+		uu := u.String()
+		tenantId := TenantId{id: uu}
 
-	userName := "user"
-	password := "qwerty!ASDFG#"
-	user := &User{tenantId: tenantId, userName: userName, password: password}
-	changedPassword := "qwerty!ASDFG#"
+		userName := "user"
+		password := "qwerty!ASDFG#"
+		user := &User{tenantId: tenantId, userName: userName, password: password}
+		changedPassword := "qwerty!ASDFG#"
 
-	if err := user.assertUsernamePasswordNotSame(changedPassword); err != nil {
-		t.Error(err)
-	}
+		if err := user.assertUsernamePasswordNotSame(changedPassword); err != nil {
+			t.Error(err)
+		}
+	})
+	t.Run("fail", func(t *testing.T) {
+		u, err := uuid.NewRandom()
+		if err != nil {
+			t.Fatal(err)
+		}
+		uu := u.String()
+		tenantId := TenantId{id: uu}
+
+		userName := "user"
+		password := "qwerty!ASDFG#"
+		user := &User{tenantId: tenantId, userName: userName, password: password}
+		changedPassword := "user"
+
+		err = user.assertUsernamePasswordNotSame(changedPassword)
+		want := fmt.Sprintf("user.assertUsernamePasswordNotSame(%s): The username and password must not be the same.", changedPassword)
+		if got := err.Error(); got != want {
+			t.Errorf("got %s, want %s", got, want)
+		}
+	})
 }
 
 func TestUserEquals(t *testing.T) {
