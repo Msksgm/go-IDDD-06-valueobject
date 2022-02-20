@@ -1,6 +1,7 @@
 package identity
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -10,41 +11,64 @@ import (
 )
 
 func TestNewUser(t *testing.T) {
-	u, err := uuid.NewRandom()
-	if err != nil {
-		t.Fatal(err)
-	}
-	uu := u.String()
+	t.Run("success", func(t *testing.T) {
+		u, err := uuid.NewRandom()
+		if err != nil {
+			t.Fatal(err)
+		}
+		uu := u.String()
 
-	tenantId, err := NewTenantId(uu)
-	if err != nil {
-		t.Fatal(err)
-	}
+		tenantId, err := NewTenantId(uu)
+		if err != nil {
+			t.Fatal(err)
+		}
 
-	userName := "userName"
-	password := "qwerty!ASDFG#"
-	bcryptedPassword, err := bcrypt.GenerateFromPassword([]byte(password), 12)
-	if err != nil {
-		t.Fatal(err)
-	}
+		userName := "userName"
+		password := "qwerty!ASDFG#"
+		bcryptedPassword, err := bcrypt.GenerateFromPassword([]byte(password), 12)
+		if err != nil {
+			t.Fatal(err)
+		}
 
-	got, err := NewUser(*tenantId, userName, password)
-	if err != nil {
-		t.Fatal(err)
-	}
+		got, err := NewUser(*tenantId, userName, password)
+		if err != nil {
+			t.Fatal(err)
+		}
 
-	want := &User{tenantId: TenantId{id: uu}, userName: userName, password: string(bcryptedPassword)}
+		want := &User{tenantId: TenantId{id: uu}, userName: userName, password: string(bcryptedPassword)}
 
-	opts := cmp.Options{
-		cmp.AllowUnexported(User{}, TenantId{}),
-		cmpopts.IgnoreFields(User{}, "password"),
-	}
-	if diff := cmp.Diff(want, got, opts); diff != "" {
-		t.Errorf("mismatch (-want, +got):\n%s", diff)
-	}
-	if err := bcrypt.CompareHashAndPassword([]byte(want.password), []byte(password)); err != nil {
-		t.Error(err)
-	}
+		opts := cmp.Options{
+			cmp.AllowUnexported(User{}, TenantId{}),
+			cmpopts.IgnoreFields(User{}, "password"),
+		}
+		if diff := cmp.Diff(want, got, opts); diff != "" {
+			t.Errorf("mismatch (-want, +got):\n%s", diff)
+		}
+		if err := bcrypt.CompareHashAndPassword([]byte(want.password), []byte(password)); err != nil {
+			t.Error(err)
+		}
+	})
+	t.Run("fail username is required.", func(t *testing.T) {
+		u, err := uuid.NewRandom()
+		if err != nil {
+			t.Fatal(err)
+		}
+		uu := u.String()
+
+		tenantId, err := NewTenantId(uu)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		userName := ""
+		password := "qwerty!ASDFG#"
+
+		_, err = NewUser(*tenantId, userName, password)
+		want := fmt.Sprintf("user.setUserName(%s): The username is required.", userName)
+		if got := err.Error(); got != want {
+			t.Errorf("got %s, want %s", got, want)
+		}
+	})
 }
 
 func TestUserEquals(t *testing.T) {

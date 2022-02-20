@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"unicode"
 
+	"github.com/Msksgm/go-IDDD-05-entity/iddd_common/ierrors"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -17,18 +18,12 @@ const STRONG_THRESHOL = 20
 
 func NewUser(tenantId TenantId, userName string, password string) (_ *User, err error) {
 	user := new(User)
-	if tenantId.id == "" {
-		return nil, fmt.Errorf("The tenantId is required.")
-	}
+
 	user.tenantId = tenantId
 
-	if userName == "" {
-		return nil, fmt.Errorf("The username is required.")
+	if err := user.setUserName(userName); err != nil {
+		return nil, err
 	}
-	if len(userName) < 3 || len(userName) > 250 {
-		return nil, fmt.Errorf("The username must be 3 to 250 characters.")
-	}
-	user.userName = userName
 
 	bcryptedPassword, err := user.protectedPassword("", password)
 	if err != nil {
@@ -39,7 +34,19 @@ func NewUser(tenantId TenantId, userName string, password string) (_ *User, err 
 	return user, nil
 }
 
-func (user User) protectedPassword(currentPassword string, changedPassword string) (string, error) {
+func (user *User) setUserName(userName string) (err error) {
+	defer ierrors.Wrap(&err, "user.setUserName(%s)", userName)
+	if userName == "" {
+		return fmt.Errorf("The username is required.")
+	}
+	if len(userName) < 3 || len(userName) > 250 {
+		return fmt.Errorf("The username must be 3 to 250 characters.")
+	}
+	user.userName = userName
+	return nil
+}
+
+func (user *User) protectedPassword(currentPassword string, changedPassword string) (string, error) {
 	if currentPassword == changedPassword {
 		return "", fmt.Errorf("The password is unchanged")
 	}
