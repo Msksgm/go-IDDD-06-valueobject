@@ -20,7 +20,7 @@ func NewTenant(tenantId TenantId, name string, active bool) (_ *Tenant, err erro
 	if err := tenant.setTenantId(tenantId); err != nil {
 		return nil, err
 	}
-	tenant.active = active
+	tenant.setActive(active)
 	return tenant, nil
 }
 
@@ -43,6 +43,10 @@ func (tenant *Tenant) setTenantId(tenantId TenantId) (err error) {
 	}
 	tenant.tenantId = tenantId
 	return nil
+}
+
+func (tenant *Tenant) setActive(active bool) {
+	tenant.active = active
 }
 
 func (tenant *Tenant) Equals(otherTenant Tenant) bool {
