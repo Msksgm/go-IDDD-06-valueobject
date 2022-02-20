@@ -47,8 +47,8 @@ func (user *User) setUserName(userName string) (err error) {
 }
 
 func (user *User) protectPassword(currentPassword string, changedPassword string) (string, error) {
-	if currentPassword == changedPassword {
-		return "", fmt.Errorf("The password is unchanged")
+	if err := user.assertPasswordNotSame(currentPassword, changedPassword); err != nil {
+		return "", err
 	}
 
 	if changedPassword == "" {
@@ -104,6 +104,7 @@ func (user *User) protectPassword(currentPassword string, changedPassword string
 }
 
 func (user *User) assertPasswordNotSame(currentPassword string, changedPassword string) (err error) {
+	defer ierrors.Wrap(&err, "user.assertPasswordNotSame(%s, %s)", currentPassword, changedPassword)
 	if currentPassword == changedPassword {
 		return fmt.Errorf("The password is unchanged")
 	}
