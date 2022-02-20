@@ -128,7 +128,7 @@ func TestAssertPasswordNotSame(t *testing.T) {
 		changedPassword := "ASDFG#qwerty!"
 
 		if err = user.assertPasswordNotSame(password, changedPassword); err != nil {
-			t.Fatal(err)
+			t.Error(err)
 		}
 	})
 	t.Run("fail", func(t *testing.T) {
@@ -150,6 +150,24 @@ func TestAssertPasswordNotSame(t *testing.T) {
 			t.Errorf("got %s, want %s", got, want)
 		}
 	})
+}
+
+func TestAssertUsernamePasswordNotSame(t *testing.T) {
+	u, err := uuid.NewRandom()
+	if err != nil {
+		t.Fatal(err)
+	}
+	uu := u.String()
+	tenantId := TenantId{id: uu}
+
+	userName := "user"
+	password := "qwerty!ASDFG#"
+	user := &User{tenantId: tenantId, userName: userName, password: password}
+	changedPassword := "qwerty!ASDFG#"
+
+	if err := user.assertUsernamePasswordNotSame(changedPassword); err != nil {
+		t.Error(err)
+	}
 }
 
 func TestUserEquals(t *testing.T) {

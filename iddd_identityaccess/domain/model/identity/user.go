@@ -91,8 +91,8 @@ func (user *User) protectPassword(currentPassword string, changedPassword string
 		return "", fmt.Errorf("The password must be stronger.")
 	}
 
-	if user.userName == changedPassword {
-		return "", fmt.Errorf("The username and password must not be the same.")
+	if err := user.assertUsernamePasswordNotSame(changedPassword); err != nil {
+		return "", err
 	}
 
 	bcryptedPassword, err := bcrypt.GenerateFromPassword([]byte(changedPassword), 12)
@@ -107,6 +107,13 @@ func (user *User) assertPasswordNotSame(currentPassword string, changedPassword 
 	defer ierrors.Wrap(&err, "user.assertPasswordNotSame(%s, %s)", currentPassword, changedPassword)
 	if currentPassword == changedPassword {
 		return fmt.Errorf("The password is unchanged")
+	}
+	return nil
+}
+
+func (user *User) assertUsernamePasswordNotSame(changedPassword string) (err error) {
+	if changedPassword == user.userName {
+		return fmt.Errorf("The username and password must not be the same.")
 	}
 	return nil
 }
