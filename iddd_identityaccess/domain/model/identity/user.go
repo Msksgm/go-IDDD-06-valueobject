@@ -95,3 +95,7 @@ func (user User) protectedPassword(currentPassword string, changedPassword strin
 
 	return string(bcryptedPassword), nil
 }
+
+func (user *User) Equals(other User) bool {
+	return user.tenantId.id == other.tenantId.id
+}
