@@ -25,7 +25,7 @@ func NewUser(tenantId TenantId, userName string, password string) (_ *User, err 
 		return nil, err
 	}
 
-	bcryptedPassword, err := user.protectedPassword("", password)
+	bcryptedPassword, err := user.protectPassword("", password)
 	if err != nil {
 		return nil, err
 	}
@@ -46,7 +46,7 @@ func (user *User) setUserName(userName string) (err error) {
 	return nil
 }
 
-func (user *User) protectedPassword(currentPassword string, changedPassword string) (string, error) {
+func (user *User) protectPassword(currentPassword string, changedPassword string) (string, error) {
 	if currentPassword == changedPassword {
 		return "", fmt.Errorf("The password is unchanged")
 	}
