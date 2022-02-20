@@ -9,10 +9,10 @@ import (
 type Tenant struct {
 	tenantId TenantId
 	name     string
-	activate bool
+	active   bool
 }
 
-func NewTenant(tenantId TenantId, name string, activate bool) (_ *Tenant, err error) {
+func NewTenant(tenantId TenantId, name string, active bool) (_ *Tenant, err error) {
 	tenant := new(Tenant)
 	if err := tenant.setName(name); err != nil {
 		return nil, err
@@ -20,7 +20,7 @@ func NewTenant(tenantId TenantId, name string, activate bool) (_ *Tenant, err er
 	if err := tenant.setTenantId(tenantId); err != nil {
 		return nil, err
 	}
-	tenant.activate = activate
+	tenant.active = active
 	return tenant, nil
 }
 
