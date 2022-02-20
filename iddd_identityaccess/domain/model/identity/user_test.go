@@ -192,20 +192,58 @@ func TestAssertUsernamePasswordNotSame(t *testing.T) {
 }
 
 func TestAssertPasswordNotWeak(t *testing.T) {
-	u, err := uuid.NewRandom()
-	if err != nil {
-		t.Fatal(err)
-	}
-	uu := u.String()
-	tenantId := TenantId{id: uu}
+	t.Run("success", func(t *testing.T) {
+		u, err := uuid.NewRandom()
+		if err != nil {
+			t.Fatal(err)
+		}
+		uu := u.String()
+		tenantId := TenantId{id: uu}
 
-	userName := "user"
-	password := "qwerty!ASDFG#"
-	user := &User{tenantId: tenantId, userName: userName, password: password}
-	changedPassword := "qwerty!ASDFG"
-	if err := user.assertPasswordNotWeak(changedPassword); err != nil {
-		t.Error(err)
-	}
+		userName := "user"
+		password := "qwerty!ASDFG#"
+		user := &User{tenantId: tenantId, userName: userName, password: password}
+		changedPassword := "qwerty!ASDFG"
+		if err := user.assertPasswordNotWeak(changedPassword); err != nil {
+			t.Error(err)
+		}
+	})
+	t.Run("fail password empty", func(t *testing.T) {
+		u, err := uuid.NewRandom()
+		if err != nil {
+			t.Fatal(err)
+		}
+		uu := u.String()
+		tenantId := TenantId{id: uu}
+
+		userName := "user"
+		password := "qwerty!ASDFG#"
+		user := &User{tenantId: tenantId, userName: userName, password: password}
+		changedPassword := ""
+		err = user.assertPasswordNotWeak(changedPassword)
+		want := fmt.Sprintf("user.assertPasswordNotWeak(%s): The password must not be empty", changedPassword)
+		if got := err.Error(); got != want {
+			t.Errorf("got %s, want %s", got, want)
+		}
+	})
+	t.Run("fail password is weak", func(t *testing.T) {
+		u, err := uuid.NewRandom()
+		if err != nil {
+			t.Fatal(err)
+		}
+		uu := u.String()
+		tenantId := TenantId{id: uu}
+
+		userName := "user"
+		password := "qwerty!ASDFG#"
+		user := &User{tenantId: tenantId, userName: userName, password: password}
+		changedPassword := "123456"
+		err = user.assertPasswordNotWeak(changedPassword)
+		want := fmt.Sprintf("user.assertPasswordNotWeak(%s): The password must be stronger.", changedPassword)
+		if got := err.Error(); got != want {
+			t.Errorf("got %s, want %s", got, want)
+		}
+	})
 }
 
 func TestUserEquals(t *testing.T) {
