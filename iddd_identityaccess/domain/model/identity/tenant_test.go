@@ -110,6 +110,25 @@ func TestNewTenant(t *testing.T) {
 	})
 }
 
+func TestDeactivate(t *testing.T) {
+	u, err := uuid.NewRandom()
+	if err != nil {
+		t.Fatal(err)
+	}
+	uu := u.String()
+
+	tenantId := TenantId{id: uu}
+	name := "TenantName"
+	acitve := true
+	tenant := Tenant{tenantId: tenantId, name: name, active: acitve}
+
+	tenant.deactivate()
+
+	if tenant.active {
+		t.Errorf("tenant.activa must be false, but true")
+	}
+}
+
 func TestEquals(t *testing.T) {
 	t.Run("equal", func(t *testing.T) {
 		u, err := uuid.NewRandom()
