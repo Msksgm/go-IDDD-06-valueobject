@@ -37,4 +37,12 @@ func TestNewFullName(t *testing.T) {
 			log.Fatal(err)
 		}
 	})
+	t.Run("fail first Name not start with a capital letter", func(t *testing.T) {
+		firstName, lastName := "firstName", "lastName"
+		_, err := NewFullName(firstName, lastName)
+		want := fmt.Sprintf("fullname.NewFullName(%s, %s): First name must be at least one character in length, starting with a capital letter.", firstName, lastName)
+		if got := err.Error(); got != want {
+			log.Fatal(err)
+		}
+	})
 }
