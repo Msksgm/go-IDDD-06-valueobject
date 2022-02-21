@@ -1,0 +1,41 @@
+package identity
+
+import (
+	"fmt"
+	"regexp"
+)
+
+type FullName struct {
+	firstName string
+	lastName  string
+}
+
+func NewFullName(firstName string, lastName string) (*FullName, error) {
+	fullName := new(FullName)
+
+	// set firstName
+	if firstName == "" {
+		return nil, fmt.Errorf("First name is required.")
+	}
+	if len(firstName) < 1 || 50 < len(firstName) {
+		return nil, fmt.Errorf("First name must be 50 characters or less.")
+	}
+	if !regexp.MustCompile(`[A-Z][a-z]*`).Match([]byte(firstName)) {
+		return nil, fmt.Errorf("First name must be at least one character in length, starting with a capital letter.")
+	}
+	fullName.firstName = firstName
+
+	// set lastName
+	if lastName == "" {
+		return nil, fmt.Errorf("First name is required.")
+	}
+	if len(lastName) < 1 || 50 < len(lastName) {
+		return nil, fmt.Errorf("First name must be 50 characters or less.")
+	}
+	if !regexp.MustCompile(`^[a-zA-Z'][ a-zA-Z'-]*[a-zA-Z']?`).Match([]byte(firstName)) {
+		return nil, fmt.Errorf("Last name must be at least one character in length.")
+	}
+	fullName.lastName = lastName
+
+	return fullName, nil
+}
