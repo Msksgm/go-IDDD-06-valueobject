@@ -61,4 +61,5 @@ func TestNewFullName(t *testing.T) {
 			log.Fatal(err)
 		}
 	})
+	// TODO add the test of "Last name must be at least one character in length" Error
 }
