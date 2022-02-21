@@ -11,17 +11,18 @@ type TenantId struct {
 
 func NewTenantId(uu string) (*TenantId, error) {
 	tenantId := new(TenantId)
-	if err := tenantId.setId(uu); err != nil {
+	tenantId, err := setId(tenantId, uu)
+	if err != nil {
 		return nil, err
 	}
 	return tenantId, nil
 }
 
-func (tenantId *TenantId) setId(uu string) (err error) {
+func setId(tenantId *TenantId, uu string) (_ *TenantId, err error) {
 	defer ierrors.Wrap(&err, "tenantid.setId(%s)", uu)
 	if _, err := uuid.Parse(uu); err != nil {
-		return err
+		return nil, err
 	}
 	tenantId.id = uu
-	return nil
+	return tenantId, nil
 }
