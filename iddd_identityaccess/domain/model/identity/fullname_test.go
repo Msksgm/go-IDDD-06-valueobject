@@ -29,4 +29,12 @@ func TestNewFullName(t *testing.T) {
 			log.Fatal(err)
 		}
 	})
+	t.Run("fail fistName is over 50 characters", func(t *testing.T) {
+		firstName, lastName := RandString(51), "lastName"
+		_, err := NewFullName(firstName, lastName)
+		want := fmt.Sprintf("fullname.NewFullName(%s, %s): First name must be 50 characters or less.", firstName, lastName)
+		if got := err.Error(); got != want {
+			log.Fatal(err)
+		}
+	})
 }
