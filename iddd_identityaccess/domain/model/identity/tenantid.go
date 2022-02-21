@@ -9,20 +9,15 @@ type TenantId struct {
 	id string
 }
 
-func NewTenantId(uu string) (*TenantId, error) {
+func NewTenantId(uu string) (_ *TenantId, err error) {
+	defer ierrors.Wrap(&err, "tenantid.NewTenantId(%s)", uu)
 	tenantId := new(TenantId)
-	tenantId, err := setId(tenantId, uu)
-	if err != nil {
-		return nil, err
-	}
-	return tenantId, nil
-}
 
-func setId(tenantId *TenantId, uu string) (_ *TenantId, err error) {
-	defer ierrors.Wrap(&err, "tenantid.setId(%s)", uu)
+	// setId
 	if _, err := uuid.Parse(uu); err != nil {
 		return nil, err
 	}
 	tenantId.id = uu
+
 	return tenantId, nil
 }
