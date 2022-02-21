@@ -1,6 +1,7 @@
 package identity
 
 import (
+	"fmt"
 	"log"
 	"testing"
 
@@ -8,14 +9,24 @@ import (
 )
 
 func TestNewFullName(t *testing.T) {
-	got, err := NewFullName("FirstName", "lastName")
-	if err != nil {
-		log.Fatal(err)
-	}
+	t.Run("success", func(t *testing.T) {
+		got, err := NewFullName("FirstName", "lastName")
+		if err != nil {
+			log.Fatal(err)
+		}
 
-	want := &FullName{firstName: "FirstName", lastName: "lastName"}
+		want := &FullName{firstName: "FirstName", lastName: "lastName"}
 
-	if diff := cmp.Diff(got, want, cmp.AllowUnexported(FullName{})); diff != "" {
-		t.Errorf("mismatch (-want, +got):\n%s", diff)
-	}
+		if diff := cmp.Diff(got, want, cmp.AllowUnexported(FullName{})); diff != "" {
+			t.Errorf("mismatch (-want, +got):\n%s", diff)
+		}
+	})
+	t.Run("fail fistName empty", func(t *testing.T) {
+		firstName, lastName := "", "lastName"
+		_, err := NewFullName(firstName, lastName)
+		want := fmt.Sprintf("fullname.NewFullName(%s, %s): First name is required.", firstName, lastName)
+		if got := err.Error(); got != want {
+			log.Fatal(err)
+		}
+	})
 }

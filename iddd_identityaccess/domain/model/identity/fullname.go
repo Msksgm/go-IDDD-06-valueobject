@@ -3,6 +3,8 @@ package identity
 import (
 	"fmt"
 	"regexp"
+
+	"github.com/Msksgm/go-IDDD-05-entity/iddd_common/ierrors"
 )
 
 type FullName struct {
@@ -10,7 +12,8 @@ type FullName struct {
 	lastName  string
 }
 
-func NewFullName(firstName string, lastName string) (*FullName, error) {
+func NewFullName(firstName string, lastName string) (_ *FullName, err error) {
+	defer ierrors.Wrap(&err, "fullname.NewFullName(%s, %s)", firstName, lastName)
 	fullName := new(FullName)
 
 	// set firstName
