@@ -2,6 +2,7 @@ package identity
 
 import (
 	"fmt"
+	"reflect"
 	"regexp"
 
 	"github.com/Msksgm/go-IDDD-05-entity/iddd_common/ierrors"
@@ -41,4 +42,11 @@ func NewFullName(firstName string, lastName string) (_ *FullName, err error) {
 	fullName.lastName = lastName
 
 	return fullName, nil
+}
+
+func (fullName *FullName) Equal(otherFullName *FullName) bool {
+	isFirstNameEqual := reflect.DeepEqual(fullName.firstName, otherFullName.firstName)
+	isLastNameEqual := reflect.DeepEqual(fullName.lastName, otherFullName.lastName)
+
+	return isFirstNameEqual && isLastNameEqual
 }

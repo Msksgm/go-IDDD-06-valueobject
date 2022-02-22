@@ -63,3 +63,16 @@ func TestNewFullName(t *testing.T) {
 	})
 	// TODO add the test of "Last name must be at least one character in length" Error
 }
+
+func TestFullNameEquals(t *testing.T) {
+	fullName, err := NewFullName("FirstName", "lastName")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	otherFullName := &FullName{firstName: "FirstName", lastName: "lastName"}
+
+	if !fullName.Equal(otherFullName) {
+		t.Errorf("fullName: %v must be equal to otherFullName %v", fullName, otherFullName)
+	}
+}
