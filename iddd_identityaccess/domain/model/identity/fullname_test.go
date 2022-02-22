@@ -61,7 +61,14 @@ func TestNewFullName(t *testing.T) {
 			log.Fatal(err)
 		}
 	})
-	// TODO add the test of "Last name must be at least one character in length" Error
+	t.Run("fail Last name must be at least one character in length.", func(t *testing.T) {
+		firstName, lastName := "FirstName", "#"
+		_, err := NewFullName(firstName, lastName)
+		want := fmt.Sprintf("fullname.NewFullName(%s, %s): Last name must be at least one character in length.", firstName, lastName)
+		if got := err.Error(); got != want {
+			log.Fatal(err)
+		}
+	})
 }
 
 func TestFullNameEquals(t *testing.T) {
