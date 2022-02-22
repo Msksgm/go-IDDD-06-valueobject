@@ -61,6 +61,15 @@ func (fullName *FullName) WithChangedFirstName(aFirstName string) (_ *FullName, 
 	return fullName, nil
 }
 
+func (fullName *FullName) WithChangedLastName(aLastName string) (_ *FullName, err error) {
+	defer ierrors.Wrap(&err, "fullname.WithChangedLastName(%s)", aLastName)
+	fullName, err = NewFullName(fullName.firstName, aLastName)
+	if err != nil {
+		return nil, err
+	}
+	return fullName, nil
+}
+
 func (fullName *FullName) Equal(otherFullName *FullName) bool {
 	isFirstNameEqual := reflect.DeepEqual(fullName.firstName, otherFullName.firstName)
 	isLastNameEqual := reflect.DeepEqual(fullName.lastName, otherFullName.lastName)
