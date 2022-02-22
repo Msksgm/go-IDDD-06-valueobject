@@ -102,3 +102,15 @@ func TestFistName(t *testing.T) {
 		t.Errorf("got %s, want %s", got, want)
 	}
 }
+
+func TestLastName(t *testing.T) {
+	fullName, err := NewFullName("FirstName", "lastName")
+	if err != nil {
+		log.Fatal(err)
+	}
+	got := fullName.LastName()
+	want := "lastName"
+	if got != want {
+		t.Errorf("got %s, want %s", got, want)
+	}
+}
