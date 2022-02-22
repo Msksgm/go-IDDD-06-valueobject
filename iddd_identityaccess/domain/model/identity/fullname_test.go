@@ -71,6 +71,19 @@ func TestNewFullName(t *testing.T) {
 	})
 }
 
+func TestAsFormattedName(t *testing.T) {
+	firstName, lastName := "FirstName", "lastName"
+	fullName, err := NewFullName(firstName, lastName)
+	if err != nil {
+		log.Fatal(err)
+	}
+	got := fullName.AsFormattedName()
+	want := "FirstName lastName"
+	if got != want {
+		t.Errorf("got %s, want %s", got, want)
+	}
+}
+
 func TestFullNameEquals(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		fullName, err := NewFullName("FirstName", "lastName")

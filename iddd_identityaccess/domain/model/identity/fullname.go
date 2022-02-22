@@ -44,6 +44,10 @@ func NewFullName(aFirstName string, aLastName string) (_ *FullName, err error) {
 	return fullName, nil
 }
 
+func (fullName *FullName) AsFormattedName() string {
+	return fmt.Sprintf("%s %s", fullName.firstName, fullName.lastName)
+}
+
 func (fullName *FullName) FirstName() string {
 	return fullName.firstName
 }
