@@ -44,6 +44,8 @@ func NewFullName(aFirstName string, aLastName string) (_ *FullName, err error) {
 	return fullName, nil
 }
 
+// TODO CopyFullName as shallow copy
+
 func (fullName *FullName) AsFormattedName() string {
 	return fmt.Sprintf("%s %s", fullName.firstName, fullName.lastName)
 }
@@ -79,4 +81,8 @@ func (fullName *FullName) Equal(otherFullName *FullName) bool {
 	isLastNameEqual := reflect.DeepEqual(fullName.lastName, otherFullName.lastName)
 
 	return isFirstNameEqual && isLastNameEqual
+}
+
+func (fullName *FullName) String() string {
+	return fmt.Sprintf("FullName [firstName=" + fullName.firstName + ", lastName=" + fullName.lastName + "]")
 }

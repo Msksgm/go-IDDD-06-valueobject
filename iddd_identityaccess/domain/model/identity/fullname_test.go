@@ -198,3 +198,16 @@ func TestWithChangedLastName(t *testing.T) {
 		}
 	})
 }
+
+func TestFullNameString(t *testing.T) {
+	firstName, lastName := "FirstName", "lastName"
+	fullName, err := NewFullName(firstName, lastName)
+	if err != nil {
+		log.Fatal(err)
+	}
+	got := fmt.Sprint(fullName)
+	want := fmt.Sprintf("FullName [firstName=" + firstName + ", lastName=" + lastName + "]")
+	if got != want {
+		t.Errorf("got %s, want %s", got, want)
+	}
+}
