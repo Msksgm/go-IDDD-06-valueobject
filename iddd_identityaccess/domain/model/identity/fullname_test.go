@@ -90,3 +90,15 @@ func TestFullNameEquals(t *testing.T) {
 		}
 	})
 }
+
+func TestFistName(t *testing.T) {
+	fullName, err := NewFullName("FirstName", "lastName")
+	if err != nil {
+		log.Fatal(err)
+	}
+	got := fullName.FirstName()
+	want := "FirstName"
+	if got != want {
+		t.Errorf("got %s, want %s", got, want)
+	}
+}

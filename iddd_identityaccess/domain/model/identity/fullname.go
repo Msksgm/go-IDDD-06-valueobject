@@ -44,6 +44,10 @@ func NewFullName(aFirstName string, aLastName string) (_ *FullName, err error) {
 	return fullName, nil
 }
 
+func (fullName *FullName) FirstName() string {
+	return fullName.firstName
+}
+
 func (fullName *FullName) Equal(otherFullName *FullName) bool {
 	isFirstNameEqual := reflect.DeepEqual(fullName.firstName, otherFullName.firstName)
 	isLastNameEqual := reflect.DeepEqual(fullName.lastName, otherFullName.lastName)
