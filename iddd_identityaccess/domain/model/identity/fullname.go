@@ -53,11 +53,12 @@ func (fullName *FullName) LastName() string {
 }
 
 func (fullName *FullName) WithChangedFirstName(aFirstName string) (_ *FullName, err error) {
+	defer ierrors.Wrap(&err, "fullname.WithChangedFirstName(%s)", aFirstName)
 	fullName, err = NewFullName(aFirstName, fullName.lastName)
 	if err != nil {
 		return nil, err
 	}
-	return fullName, err
+	return fullName, nil
 }
 
 func (fullName *FullName) Equal(otherFullName *FullName) bool {

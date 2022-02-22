@@ -116,15 +116,33 @@ func TestLastName(t *testing.T) {
 }
 
 func TestWithChangedFirstName(t *testing.T) {
-	fullName, err := NewFullName("FirstName", "lastName")
-	if err != nil {
-		log.Fatal(err)
-	}
-	changedFirstName := "ChangedFirstName"
-	got, err := fullName.WithChangedFirstName(changedFirstName)
-	want := &FullName{firstName: changedFirstName, lastName: "lastName"}
+	t.Run("success", func(t *testing.T) {
+		fullName, err := NewFullName("FirstName", "lastName")
+		if err != nil {
+			log.Fatal(err)
+		}
+		changedFirstName := "ChangedFirstName"
+		got, err := fullName.WithChangedFirstName(changedFirstName)
+		if err != nil {
+			log.Fatal(err)
+		}
+		want := &FullName{firstName: changedFirstName, lastName: "lastName"}
 
-	if diff := cmp.Diff(want, got, cmp.AllowUnexported(FullName{})); diff != "" {
-		t.Errorf("mismatch (-want, +got):\n%s", diff)
-	}
+		if diff := cmp.Diff(want, got, cmp.AllowUnexported(FullName{})); diff != "" {
+			t.Errorf("mismatch (-want, +got):\n%s", diff)
+		}
+	})
+	t.Run("fail", func(t *testing.T) {
+		firstName, lastName := "FirstName", "lastName"
+		fullName, err := NewFullName(firstName, lastName)
+		if err != nil {
+			log.Fatal(err)
+		}
+		changedFirstName := "changedFirstName"
+		_, err = fullName.WithChangedFirstName(changedFirstName)
+		want := fmt.Sprintf("fullname.WithChangedFirstName(%s): fullname.NewFullName(%v, %v): First name must be at least one character in length, starting with a capital letter.", changedFirstName, changedFirstName, lastName)
+		if got := err.Error(); got != want {
+			t.Errorf("got %s, want %s", got, want)
+		}
+	})
 }
