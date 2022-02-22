@@ -114,3 +114,17 @@ func TestLastName(t *testing.T) {
 		t.Errorf("got %s, want %s", got, want)
 	}
 }
+
+func TestWithChangedFirstName(t *testing.T) {
+	fullName, err := NewFullName("FirstName", "lastName")
+	if err != nil {
+		log.Fatal(err)
+	}
+	changedFirstName := "ChangedFirstName"
+	got, err := fullName.WithChangedFirstName(changedFirstName)
+	want := &FullName{firstName: changedFirstName, lastName: "lastName"}
+
+	if diff := cmp.Diff(want, got, cmp.AllowUnexported(FullName{})); diff != "" {
+		t.Errorf("mismatch (-want, +got):\n%s", diff)
+	}
+}
