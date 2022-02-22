@@ -13,33 +13,33 @@ type FullName struct {
 	lastName  string
 }
 
-func NewFullName(firstName string, lastName string) (_ *FullName, err error) {
-	defer ierrors.Wrap(&err, "fullname.NewFullName(%s, %s)", firstName, lastName)
+func NewFullName(aFirstName string, aLastName string) (_ *FullName, err error) {
+	defer ierrors.Wrap(&err, "fullname.NewFullName(%s, %s)", aFirstName, aLastName)
 	fullName := new(FullName)
 
 	// set firstName
-	if firstName == "" {
+	if aFirstName == "" {
 		return nil, fmt.Errorf("First name is required.")
 	}
-	if len(firstName) < 1 || 50 < len(firstName) {
+	if len(aFirstName) < 1 || 50 < len(aFirstName) {
 		return nil, fmt.Errorf("First name must be 50 characters or less.")
 	}
-	if !regexp.MustCompile(`^[A-Z][a-z]*`).MatchString(firstName) {
+	if !regexp.MustCompile(`^[A-Z][a-z]*`).MatchString(aFirstName) {
 		return nil, fmt.Errorf("First name must be at least one character in length, starting with a capital letter.")
 	}
-	fullName.firstName = firstName
+	fullName.firstName = aFirstName
 
 	// set lastName
-	if lastName == "" {
+	if aLastName == "" {
 		return nil, fmt.Errorf("Last name is required.")
 	}
-	if len(lastName) < 1 || 50 < len(lastName) {
+	if len(aLastName) < 1 || 50 < len(aLastName) {
 		return nil, fmt.Errorf("Last name must be 50 characters or less.")
 	}
-	if !regexp.MustCompile(`^[a-zA-Z'][ a-zA-Z'-]*[a-zA-Z']?`).MatchString(firstName) {
+	if !regexp.MustCompile(`^[a-zA-Z'][ a-zA-Z'-]*[a-zA-Z']?`).MatchString(aLastName) {
 		return nil, fmt.Errorf("Last name must be at least one character in length.")
 	}
-	fullName.lastName = lastName
+	fullName.lastName = aLastName
 
 	return fullName, nil
 }
