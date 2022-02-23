@@ -1,12 +1,17 @@
 package identity
 
 import (
+	"errors"
 	"fmt"
 	"log"
+	"reflect"
 	"testing"
 
+	"github.com/Msksgm/go-IDDD-05-entity/iddd_common/ierrors"
 	"github.com/google/go-cmp/cmp"
 )
+
+var argumentLengthError *ierrors.ArgumentLengthError
 
 func TestNewFullName(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
@@ -32,9 +37,8 @@ func TestNewFullName(t *testing.T) {
 	t.Run("fail fistName is over 50 characters", func(t *testing.T) {
 		firstName, lastName := RandString(51), "lastName"
 		_, err := NewFullName(firstName, lastName)
-		want := fmt.Sprintf("fullname.NewFullName(%s, %s): First name must be 50 characters or less.", firstName, lastName)
-		if got := err.Error(); got != want {
-			log.Fatal(err)
+		if !errors.As(err, &argumentLengthError) {
+			t.Errorf("err type:%v, expect type: %v", reflect.TypeOf(errors.Unwrap(err)), reflect.TypeOf(&argumentLengthError))
 		}
 	})
 	t.Run("fail first Name not start with a capital letter", func(t *testing.T) {

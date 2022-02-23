@@ -21,8 +21,9 @@ func NewFullName(aFirstName string, aLastName string) (_ *FullName, err error) {
 	if aFirstName == "" {
 		return nil, fmt.Errorf("First name is required.")
 	}
-	if len(aFirstName) < 1 || 50 < len(aFirstName) {
-		return nil, fmt.Errorf("First name must be 50 characters or less.")
+	firstNameRangeError := &ierrors.ArgumentLengthError{Arguments: ierrors.ArgumentLengthErrorArguments{String: aFirstName, Minimum: 1, Maximum: 50, Message: "First name must be 50 characters or less."}}
+	if err := firstNameRangeError.GetError(); err != nil {
+		return nil, err
 	}
 	if !regexp.MustCompile(`^[A-Z][a-z]*`).MatchString(aFirstName) {
 		return nil, fmt.Errorf("First name must be at least one character in length, starting with a capital letter.")
