@@ -175,7 +175,7 @@ func TestStateProvince(t *testing.T) {
 	}
 }
 
-func StreetAddress(t *testing.T) {
+func TestStreetAddress(t *testing.T) {
 	streetAddress, city, stateProvince, postalCode, countryCode := "streetAddress", "city", "stateProvince", "postalCode", "00"
 	newPostalAddress, err := NewPostalAddress(streetAddress, city, stateProvince, postalCode, countryCode)
 	if err != nil {
@@ -186,5 +186,19 @@ func StreetAddress(t *testing.T) {
 
 	if got != want {
 		t.Errorf("got %s, want %s", got, want)
+	}
+}
+
+func TestPostalAddressEqual(t *testing.T) {
+	streetAddress, city, stateProvince, postalCode, countryCode := "streetAddress", "city", "stateProvince", "postalCode", "00"
+	newPostalAddress, err := NewPostalAddress(streetAddress, city, stateProvince, postalCode, countryCode)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	otherPostalAddress := &PostalAddress{streetAddress: streetAddress, city: city, stateProvince: stateProvince, postalCode: postalCode, countryCode: countryCode}
+
+	if !newPostalAddress.Equals(otherPostalAddress) {
+		t.Errorf("newPostalAddress: %v must be equal to otherPostalAddress: %v", newPostalAddress, otherPostalAddress)
 	}
 }

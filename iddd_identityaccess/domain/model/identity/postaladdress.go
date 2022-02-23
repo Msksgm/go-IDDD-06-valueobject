@@ -2,6 +2,7 @@ package identity
 
 import (
 	"fmt"
+	"reflect"
 
 	"github.com/Msksgm/go-IDDD-05-entity/iddd_common/ierrors"
 )
@@ -83,4 +84,13 @@ func (postalAddress *PostalAddress) StateProvince() string {
 
 func (postalAddress *PostalAddress) StreetAddress() string {
 	return postalAddress.streetAddress
+}
+
+func (postalAddress *PostalAddress) Equals(otherPostalAddress *PostalAddress) bool {
+	isStreetAddressEqual := reflect.DeepEqual(postalAddress.StreetAddress(), otherPostalAddress.StreetAddress())
+	isCityEqual := reflect.DeepEqual(postalAddress.City(), otherPostalAddress.City())
+	isStateProvinceEqual := reflect.DeepEqual(postalAddress.StateProvince(), otherPostalAddress.StateProvince())
+	isCountryCodeEqual := reflect.DeepEqual(postalAddress.CountryCode(), otherPostalAddress.CountryCode())
+	isPostalCodeEqual := reflect.DeepEqual(postalAddress.PostalCode(), otherPostalAddress.PostalCode())
+	return isStreetAddressEqual && isCityEqual && isStateProvinceEqual && isCountryCodeEqual && isPostalCodeEqual
 }
