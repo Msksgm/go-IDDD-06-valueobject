@@ -2,6 +2,7 @@ package identity
 
 import (
 	"fmt"
+	"reflect"
 	"regexp"
 
 	"github.com/Msksgm/go-IDDD-05-entity/iddd_common/ierrors"
@@ -28,4 +29,8 @@ func NewTelephone(aNumber string) (_ *Telephone, err error) {
 	telephone.number = aNumber
 
 	return telephone, nil
+}
+
+func (telephone *Telephone) Equal(otherTelephone *Telephone) bool {
+	return reflect.DeepEqual(telephone.number, otherTelephone.number)
 }
