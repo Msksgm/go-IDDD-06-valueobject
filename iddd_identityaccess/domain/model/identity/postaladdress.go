@@ -45,6 +45,13 @@ func NewPostalAddress(aStreetAddress string, aCity string, aStateProvince string
 	}
 	postalAddress.postalCode = aPostalCode
 
+	// set StateProvince
+	if aStateProvince == "" {
+		return nil, fmt.Errorf("The state/province is required.")
+	}
+	if len(aStateProvince) < 2 || 100 < len(aStateProvince) {
+		return nil, fmt.Errorf("The state/province must be between 2 charcters and 100 characters")
+	}
 	postalAddress.stateProvince = aStateProvince
 	postalAddress.countryCode = aCountryCode
 	return postalAddress, nil

@@ -77,4 +77,28 @@ func TestNewPostalAddress(t *testing.T) {
 			t.Errorf("got %s, want %s", got, want)
 		}
 	})
+	t.Run("fail The state/province is required.", func(t *testing.T) {
+		streetAddress, city, stateProvince, postalCode, countryCode := "streetAddress", "city", "", "postalCode", "00"
+		_, err := NewPostalAddress(streetAddress, city, stateProvince, postalCode, countryCode)
+		want := fmt.Sprintf("postaladdress.NewPostalAddress(%s, %s, %s, %s, %s): The state/province is required.", streetAddress, city, stateProvince, postalCode, countryCode)
+		if got := err.Error(); got != want {
+			t.Errorf("got %s, want %s", got, want)
+		}
+	})
+	t.Run("fail The postal code must be 12 characters or less.", func(t *testing.T) {
+		streetAddress, city, stateProvince, postalCode, countryCode := "streetAddress", "city", RandString(1), "postalCode", "00"
+		_, err := NewPostalAddress(streetAddress, city, stateProvince, postalCode, countryCode)
+		want := fmt.Sprintf("postaladdress.NewPostalAddress(%s, %s, %s, %s, %s): The state/province must be between 2 charcters and 100 characters", streetAddress, city, stateProvince, postalCode, countryCode)
+		if got := err.Error(); got != want {
+			t.Errorf("got %s, want %s", got, want)
+		}
+	})
+	t.Run("fail The postal code must be 5 characters or more.", func(t *testing.T) {
+		streetAddress, city, stateProvince, postalCode, countryCode := "streetAddress", "city", RandString(101), "postalCode", "00"
+		_, err := NewPostalAddress(streetAddress, city, stateProvince, postalCode, countryCode)
+		want := fmt.Sprintf("postaladdress.NewPostalAddress(%s, %s, %s, %s, %s): The state/province must be between 2 charcters and 100 characters", streetAddress, city, stateProvince, postalCode, countryCode)
+		if got := err.Error(); got != want {
+			t.Errorf("got %s, want %s", got, want)
+		}
+	})
 }
