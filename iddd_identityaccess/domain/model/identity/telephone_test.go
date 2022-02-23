@@ -94,3 +94,16 @@ func TestNumber(t *testing.T) {
 		t.Errorf("got %s, want %s", got, want)
 	}
 }
+
+func TestTelephoneString(t *testing.T) {
+	number := "090-1234-5678"
+	telephone, err := NewTelephone(number)
+	if err != nil {
+		t.Fatal(err)
+	}
+	got := fmt.Sprint(telephone)
+	want := fmt.Sprintf("Telephone [number=%v]", number)
+	if got != want {
+		t.Errorf("got %s, want %s", got, want)
+	}
+}

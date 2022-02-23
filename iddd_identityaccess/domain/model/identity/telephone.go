@@ -40,3 +40,7 @@ func (telephone *Telephone) Number() string {
 func (telephone *Telephone) Equal(otherTelephone *Telephone) bool {
 	return reflect.DeepEqual(telephone.number, otherTelephone.number)
 }
+
+func (telephone *Telephone) String() string {
+	return fmt.Sprintf("Telephone [number=%v]", telephone.number)
+}
