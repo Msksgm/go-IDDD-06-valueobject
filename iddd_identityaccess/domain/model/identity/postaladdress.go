@@ -64,3 +64,23 @@ func NewPostalAddress(aStreetAddress string, aCity string, aStateProvince string
 	postalAddress.countryCode = aCountryCode
 	return postalAddress, nil
 }
+
+func (postalAddress *PostalAddress) City() string {
+	return postalAddress.city
+}
+
+func (postalAddress *PostalAddress) CountryCode() string {
+	return postalAddress.countryCode
+}
+
+func (postalAddress *PostalAddress) PostalCode() string {
+	return postalAddress.postalCode
+}
+
+func (postalAddress *PostalAddress) StateProvince() string {
+	return postalAddress.stateProvince
+}
+
+func (postalAddress *PostalAddress) StreetAddress() string {
+	return postalAddress.streetAddress
+}

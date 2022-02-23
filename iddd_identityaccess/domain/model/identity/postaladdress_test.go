@@ -118,3 +118,73 @@ func TestNewPostalAddress(t *testing.T) {
 		}
 	})
 }
+
+func TestCity(t *testing.T) {
+	streetAddress, city, stateProvince, postalCode, countryCode := "streetAddress", "city", "stateProvince", "postalCode", "00"
+	newPostalAddress, err := NewPostalAddress(streetAddress, city, stateProvince, postalCode, countryCode)
+	if err != nil {
+		log.Fatal(err)
+	}
+	got := newPostalAddress.City()
+	want := city
+
+	if got != want {
+		t.Errorf("got %s, want %s", got, want)
+	}
+}
+
+func TestCountryCode(t *testing.T) {
+	streetAddress, city, stateProvince, postalCode, countryCode := "streetAddress", "city", "stateProvince", "postalCode", "00"
+	newPostalAddress, err := NewPostalAddress(streetAddress, city, stateProvince, postalCode, countryCode)
+	if err != nil {
+		log.Fatal(err)
+	}
+	got := newPostalAddress.CountryCode()
+	want := countryCode
+
+	if got != want {
+		t.Errorf("got %s, want %s", got, want)
+	}
+}
+
+func TestPostalCode(t *testing.T) {
+	streetAddress, city, stateProvince, postalCode, countryCode := "streetAddress", "city", "stateProvince", "postalCode", "00"
+	newPostalAddress, err := NewPostalAddress(streetAddress, city, stateProvince, postalCode, countryCode)
+	if err != nil {
+		log.Fatal(err)
+	}
+	got := newPostalAddress.PostalCode()
+	want := postalCode
+
+	if got != want {
+		t.Errorf("got %s, want %s", got, want)
+	}
+}
+
+func TestStateProvince(t *testing.T) {
+	streetAddress, city, stateProvince, postalCode, countryCode := "streetAddress", "city", "stateProvince", "postalCode", "00"
+	newPostalAddress, err := NewPostalAddress(streetAddress, city, stateProvince, postalCode, countryCode)
+	if err != nil {
+		log.Fatal(err)
+	}
+	got := newPostalAddress.StateProvince()
+	want := stateProvince
+
+	if got != want {
+		t.Errorf("got %s, want %s", got, want)
+	}
+}
+
+func StreetAddress(t *testing.T) {
+	streetAddress, city, stateProvince, postalCode, countryCode := "streetAddress", "city", "stateProvince", "postalCode", "00"
+	newPostalAddress, err := NewPostalAddress(streetAddress, city, stateProvince, postalCode, countryCode)
+	if err != nil {
+		log.Fatal(err)
+	}
+	got := newPostalAddress.StreetAddress()
+	want := streetAddress
+
+	if got != want {
+		t.Errorf("got %s, want %s", got, want)
+	}
+}
