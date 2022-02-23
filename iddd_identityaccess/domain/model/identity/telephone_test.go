@@ -55,14 +55,29 @@ func TestNewTelephone(t *testing.T) {
 }
 
 func TestTelephoneEqual(t *testing.T) {
-	number := "090-1234-5678"
-	telephone, err := NewTelephone(number)
-	if err != nil {
-		t.Fatal(err)
-	}
-	otherTelephone := &Telephone{number: number}
+	t.Run("equal", func(t *testing.T) {
+		number := "090-1234-5678"
+		telephone, err := NewTelephone(number)
+		if err != nil {
+			t.Fatal(err)
+		}
+		otherTelephone := &Telephone{number: number}
 
-	if !telephone.Equal(otherTelephone) {
-		t.Errorf("telephone: %v must be equal to otherTelephone %v", telephone, otherTelephone)
-	}
+		if !telephone.Equal(otherTelephone) {
+			t.Errorf("telephone: %v must be equal to otherTelephone %v", telephone, otherTelephone)
+		}
+	})
+	t.Run("not equal", func(t *testing.T) {
+		number := "090-1234-5678"
+		telephone, err := NewTelephone(number)
+		if err != nil {
+			t.Fatal(err)
+		}
+		otherNumber := "090-0000-0000"
+		otherTelephone := &Telephone{number: otherNumber}
+
+		if telephone.Equal(otherTelephone) {
+			t.Errorf("telephone: %v must be not equal to otherTelephone %v", telephone, otherTelephone)
+		}
+	})
 }
