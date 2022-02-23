@@ -101,4 +101,20 @@ func TestNewPostalAddress(t *testing.T) {
 			t.Errorf("got %s, want %s", got, want)
 		}
 	})
+	t.Run("fail The country is required.", func(t *testing.T) {
+		streetAddress, city, stateProvince, postalCode, countryCode := "streetAddress", "city", "stateProvince", "postalCode", ""
+		_, err := NewPostalAddress(streetAddress, city, stateProvince, postalCode, countryCode)
+		want := fmt.Sprintf("postaladdress.NewPostalAddress(%s, %s, %s, %s, %s): The country is required.", streetAddress, city, stateProvince, postalCode, countryCode)
+		if got := err.Error(); got != want {
+			t.Errorf("got %s, want %s", got, want)
+		}
+	})
+	t.Run("fail The country code must be two characters.", func(t *testing.T) {
+		streetAddress, city, stateProvince, postalCode, countryCode := "streetAddress", "city", "stateProvince", "postalCode", "000"
+		_, err := NewPostalAddress(streetAddress, city, stateProvince, postalCode, countryCode)
+		want := fmt.Sprintf("postaladdress.NewPostalAddress(%s, %s, %s, %s, %s): The country code must be two characters.", streetAddress, city, stateProvince, postalCode, countryCode)
+		if got := err.Error(); got != want {
+			t.Errorf("got %s, want %s", got, want)
+		}
+	})
 }
