@@ -2,6 +2,7 @@ package identity
 
 import (
 	"fmt"
+	"reflect"
 	"regexp"
 
 	"github.com/Msksgm/go-IDDD-05-entity/iddd_common/ierrors"
@@ -25,4 +26,16 @@ func NewEmailAddress(address string) (_ *EmailAddress, err error) {
 	}
 	emailAddress.address = address
 	return emailAddress, nil
+}
+
+func (emailAddress *EmailAddress) Address() string {
+	return emailAddress.address
+}
+
+func (emailAddress *EmailAddress) Equals(otherEmailAddress EmailAddress) bool {
+	return reflect.DeepEqual(emailAddress.address, otherEmailAddress.address)
+}
+
+func (emailAddress *EmailAddress) String() string {
+	return fmt.Sprintf("EmailAddress [address=%s]", emailAddress.address)
 }
