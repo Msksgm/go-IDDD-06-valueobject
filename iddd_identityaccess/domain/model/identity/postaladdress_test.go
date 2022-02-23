@@ -28,4 +28,12 @@ func TestNewPostalAddress(t *testing.T) {
 			t.Errorf("got %s, want %s", got, want)
 		}
 	})
+	t.Run("fail The street address is required.", func(t *testing.T) {
+		streetAddress, city, stateProvince, postalCode, countryCode := RandString(101), "city", "stateProvince", "postalCode", "00"
+		_, err := NewPostalAddress(streetAddress, city, stateProvince, postalCode, countryCode)
+		want := "The street address must be 100 characters or less."
+		if got := err.Error(); got != want {
+			t.Errorf("got %s, want %s", got, want)
+		}
+	})
 }
