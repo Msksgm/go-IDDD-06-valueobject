@@ -35,4 +35,12 @@ func TestNewEmailAddress(t *testing.T) {
 			t.Errorf("got %s, want %s", got, want)
 		}
 	})
+	t.Run("fail Email address format is invalid.", func(t *testing.T) {
+		address := "badmail"
+		_, err := NewEmailAddress(address)
+		want := fmt.Sprintf("emailaddress.NewEmailAddress(%s): Email address format is invalid.", address)
+		if got := err.Error(); want != got {
+			t.Errorf("got %s, want %s", got, want)
+		}
+	})
 }
