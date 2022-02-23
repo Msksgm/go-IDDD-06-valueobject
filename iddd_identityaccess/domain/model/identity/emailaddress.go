@@ -12,19 +12,19 @@ type EmailAddress struct {
 	address string
 }
 
-func NewEmailAddress(address string) (_ *EmailAddress, err error) {
-	defer ierrors.Wrap(&err, "emailaddress.NewEmailAddress(%s)", address)
+func NewEmailAddress(anAddress string) (_ *EmailAddress, err error) {
+	defer ierrors.Wrap(&err, "emailaddress.NewEmailAddress(%s)", anAddress)
 	emailAddress := new(EmailAddress)
-	if address == "" {
+	if anAddress == "" {
 		return nil, fmt.Errorf("The email address is required.")
 	}
-	if len(address) < 1 || 100 < len(address) {
+	if len(anAddress) < 1 || 100 < len(anAddress) {
 		return nil, fmt.Errorf("Email address must be 100 characters or less.")
 	}
-	if !regexp.MustCompile(`^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$`).MatchString(address) {
+	if !regexp.MustCompile(`^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$`).MatchString(anAddress) {
 		return nil, fmt.Errorf("Email address format is invalid.")
 	}
-	emailAddress.address = address
+	emailAddress.address = anAddress
 	return emailAddress, nil
 }
 
