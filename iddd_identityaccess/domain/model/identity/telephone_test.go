@@ -81,3 +81,16 @@ func TestTelephoneEqual(t *testing.T) {
 		}
 	})
 }
+
+func TestNumber(t *testing.T) {
+	number := "090-1234-5678"
+	telephone, err := NewTelephone(number)
+	if err != nil {
+		t.Fatal(err)
+	}
+	got := telephone.Number()
+	want := number
+	if got != want {
+		t.Errorf("got %s, want %s", got, want)
+	}
+}
