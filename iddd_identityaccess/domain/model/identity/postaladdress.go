@@ -66,6 +66,8 @@ func NewPostalAddress(aStreetAddress string, aCity string, aStateProvince string
 	return postalAddress, nil
 }
 
+// TODO add shallow copy of PostalAddress
+
 func (postalAddress *PostalAddress) City() string {
 	return postalAddress.city
 }
