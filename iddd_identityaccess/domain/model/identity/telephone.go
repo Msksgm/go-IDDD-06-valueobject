@@ -16,6 +16,9 @@ func NewTelephone(aNumber string) (_ *Telephone, err error) {
 	if aNumber == "" {
 		return nil, fmt.Errorf("Telephone number is required.")
 	}
+	if len(aNumber) < 5 || 20 < len(aNumber) {
+		return nil, fmt.Errorf("Telephone number must be between 5 and 20 characters.")
+	}
 	telephone.number = aNumber
 	return telephone, nil
 }

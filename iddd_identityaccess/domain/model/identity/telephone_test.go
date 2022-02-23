@@ -28,4 +28,20 @@ func TestNewTelephone(t *testing.T) {
 			t.Errorf("got %s, want %s", got, want)
 		}
 	})
+	t.Run("fail Telephone number is less than 5 characters.", func(t *testing.T) {
+		number := RandString(4)
+		_, err := NewTelephone(number)
+		want := fmt.Sprintf("telephone.NewTelephone(%s): Telephone number must be between 5 and 20 characters.", number)
+		if got := err.Error(); got != want {
+			t.Errorf("got %s, want %s", got, want)
+		}
+	})
+	t.Run("fail Telephone number is more than 20 characters", func(t *testing.T) {
+		number := RandString(21)
+		_, err := NewTelephone(number)
+		want := fmt.Sprintf("telephone.NewTelephone(%s): Telephone number must be between 5 and 20 characters.", number)
+		if got := err.Error(); got != want {
+			t.Errorf("got %s, want %s", got, want)
+		}
+	})
 }
