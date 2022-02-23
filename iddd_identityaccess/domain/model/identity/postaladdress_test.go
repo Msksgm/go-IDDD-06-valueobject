@@ -202,3 +202,16 @@ func TestPostalAddressEqual(t *testing.T) {
 		t.Errorf("newPostalAddress: %v must be equal to otherPostalAddress: %v", newPostalAddress, otherPostalAddress)
 	}
 }
+
+func TestPostalAddressString(t *testing.T) {
+	streetAddress, city, stateProvince, postalCode, countryCode := "streetAddress", "city", "stateProvince", "postalCode", "00"
+	newPostalAddress, err := NewPostalAddress(streetAddress, city, stateProvince, postalCode, countryCode)
+	if err != nil {
+		log.Fatal(err)
+	}
+	got := newPostalAddress.String()
+	want := fmt.Sprintf("PostalAddress [streetAddress=%s, city=%s, stateProvince=%s, postalCode=%s, countryCode=%s]", streetAddress, city, stateProvince, postalCode, countryCode)
+	if got != want {
+		t.Errorf("got %s, want %s", got, want)
+	}
+}

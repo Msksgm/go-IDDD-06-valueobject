@@ -94,3 +94,7 @@ func (postalAddress *PostalAddress) Equals(otherPostalAddress *PostalAddress) bo
 	isPostalCodeEqual := reflect.DeepEqual(postalAddress.PostalCode(), otherPostalAddress.PostalCode())
 	return isStreetAddressEqual && isCityEqual && isStateProvinceEqual && isCountryCodeEqual && isPostalCodeEqual
 }
+
+func (postaladdress *PostalAddress) String() string {
+	return fmt.Sprintf("PostalAddress [streetAddress=%s, city=%s, stateProvince=%s, postalCode=%s, countryCode=%s]", postaladdress.streetAddress, postaladdress.city, postaladdress.stateProvince, postaladdress.postalCode, postaladdress.countryCode)
+}
