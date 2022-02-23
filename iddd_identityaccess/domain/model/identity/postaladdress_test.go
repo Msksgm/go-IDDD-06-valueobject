@@ -1,6 +1,7 @@
 package identity
 
 import (
+	"fmt"
 	"log"
 	"testing"
 
@@ -23,7 +24,7 @@ func TestNewPostalAddress(t *testing.T) {
 	t.Run("fail The street address is required.", func(t *testing.T) {
 		streetAddress, city, stateProvince, postalCode, countryCode := "", "city", "stateProvince", "postalCode", "00"
 		_, err := NewPostalAddress(streetAddress, city, stateProvince, postalCode, countryCode)
-		want := "The street address is required."
+		want := fmt.Sprintf("postaladdress.NewPostalAddress(%s, %s, %s, %s, %s): The street address is required.", streetAddress, city, stateProvince, postalCode, countryCode)
 		if got := err.Error(); got != want {
 			t.Errorf("got %s, want %s", got, want)
 		}
@@ -31,7 +32,7 @@ func TestNewPostalAddress(t *testing.T) {
 	t.Run("fail The street address is required.", func(t *testing.T) {
 		streetAddress, city, stateProvince, postalCode, countryCode := RandString(101), "city", "stateProvince", "postalCode", "00"
 		_, err := NewPostalAddress(streetAddress, city, stateProvince, postalCode, countryCode)
-		want := "The street address must be 100 characters or less."
+		want := fmt.Sprintf("postaladdress.NewPostalAddress(%s, %s, %s, %s, %s): The street address must be 100 characters or less.", streetAddress, city, stateProvince, postalCode, countryCode)
 		if got := err.Error(); got != want {
 			t.Errorf("got %s, want %s", got, want)
 		}
@@ -39,7 +40,7 @@ func TestNewPostalAddress(t *testing.T) {
 	t.Run("fail The street city is required.", func(t *testing.T) {
 		streetAddress, city, stateProvince, postalCode, countryCode := "streetAddress", "", "stateProvince", "postalCode", "00"
 		_, err := NewPostalAddress(streetAddress, city, stateProvince, postalCode, countryCode)
-		want := "The street city is required."
+		want := fmt.Sprintf("postaladdress.NewPostalAddress(%s, %s, %s, %s, %s): The street city is required.", streetAddress, city, stateProvince, postalCode, countryCode)
 		if got := err.Error(); got != want {
 			t.Errorf("got %s, want %s", got, want)
 		}
@@ -47,7 +48,7 @@ func TestNewPostalAddress(t *testing.T) {
 	t.Run("fail The street city is required.", func(t *testing.T) {
 		streetAddress, city, stateProvince, postalCode, countryCode := "streetAddress", RandString(101), "stateProvince", "postalCode", "00"
 		_, err := NewPostalAddress(streetAddress, city, stateProvince, postalCode, countryCode)
-		want := "The street city must be 100 characters or less."
+		want := fmt.Sprintf("postaladdress.NewPostalAddress(%s, %s, %s, %s, %s): The street city must be 100 characters or less.", streetAddress, city, stateProvince, postalCode, countryCode)
 		if got := err.Error(); got != want {
 			t.Errorf("got %s, want %s", got, want)
 		}

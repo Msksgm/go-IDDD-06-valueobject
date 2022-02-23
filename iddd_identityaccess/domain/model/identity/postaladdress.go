@@ -1,6 +1,10 @@
 package identity
 
-import "fmt"
+import (
+	"fmt"
+
+	"github.com/Msksgm/go-IDDD-05-entity/iddd_common/ierrors"
+)
 
 type PostalAddress struct {
 	streetAddress string
@@ -11,6 +15,7 @@ type PostalAddress struct {
 }
 
 func NewPostalAddress(aStreetAddress string, aCity string, aStateProvince string, aPostalCode string, aCountryCode string) (_ *PostalAddress, err error) {
+	defer ierrors.Wrap(&err, "postaladdress.NewPostalAddress(%s, %s, %s, %s, %s)", aStreetAddress, aCity, aStateProvince, aPostalCode, aCountryCode)
 	postalAddress := new(PostalAddress)
 
 	// set StreetAddress
