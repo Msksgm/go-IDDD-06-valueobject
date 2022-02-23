@@ -1,5 +1,7 @@
 package identity
 
+import "fmt"
+
 type PostalAddress struct {
 	streetAddress string
 	city          string
@@ -10,6 +12,11 @@ type PostalAddress struct {
 
 func NewPostalAddress(aStreetAddress string, aCity string, aStateProvince string, aPostalCode string, aCountryCode string) (_ *PostalAddress, err error) {
 	postalAddress := new(PostalAddress)
+
+	// set StreetAddress
+	if aStreetAddress == "" {
+		return nil, fmt.Errorf("The street address is required.")
+	}
 	postalAddress.streetAddress = aStreetAddress
 	postalAddress.city = aCity
 	postalAddress.stateProvince = aStateProvince
