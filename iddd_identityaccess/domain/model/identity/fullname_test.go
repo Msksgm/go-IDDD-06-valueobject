@@ -11,7 +11,10 @@ import (
 	"github.com/google/go-cmp/cmp"
 )
 
-var argumentLengthError *ierrors.ArgumentLengthError
+var (
+	argumentLengthError   *ierrors.ArgumentLengthError
+	argumentNotEmptyError *ierrors.ArgumentNotEmptyError
+)
 
 func TestNewFullName(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
@@ -29,9 +32,8 @@ func TestNewFullName(t *testing.T) {
 	t.Run("fail fistName empty", func(t *testing.T) {
 		firstName, lastName := "", "lastName"
 		_, err := NewFullName(firstName, lastName)
-		want := fmt.Sprintf("fullname.NewFullName(%s, %s): First name is required.", firstName, lastName)
-		if got := err.Error(); got != want {
-			log.Fatal(err)
+		if !errors.As(err, &argumentNotEmptyError) {
+			t.Errorf("err type:%v, expect type: %v", reflect.TypeOf(errors.Unwrap(err)), reflect.TypeOf(&argumentNotEmptyError))
 		}
 	})
 	t.Run("fail fistName is over 50 characters", func(t *testing.T) {

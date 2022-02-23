@@ -2,6 +2,7 @@ package ierrors
 
 import (
 	"fmt"
+	"strings"
 )
 
 func Wrap(errp *error, format string, args ...interface{}) {
@@ -36,4 +37,29 @@ func (ArgumentLengthErrorArguments *ArgumentLengthError) GetError() error {
 
 func (ArgumentLengthErrorArguments *ArgumentLengthError) Error() string {
 	return ArgumentLengthErrorArguments.Arguments.Message
+}
+
+type ArgumentNotEmptyErrorArguments struct {
+	String  string
+	Message string
+}
+
+type ArgumentNotEmptyError struct {
+	Arguments ArgumentNotEmptyErrorArguments
+}
+
+func (ArgumentNotEmptyErrorArguments *ArgumentNotEmptyError) GetArguments() ArgumentNotEmptyErrorArguments {
+	return ArgumentNotEmptyErrorArguments.Arguments
+}
+
+func (ArgumentNotEmptyErrorArguments *ArgumentNotEmptyError) GetError() error {
+	args := ArgumentNotEmptyErrorArguments.Arguments
+	if strings.TrimSpace(args.String) == "" {
+		return ArgumentNotEmptyErrorArguments
+	}
+	return nil
+}
+
+func (ArgumentNotEmptyErrorArguments *ArgumentNotEmptyError) Error() string {
+	return ArgumentNotEmptyErrorArguments.Arguments.Message
 }
