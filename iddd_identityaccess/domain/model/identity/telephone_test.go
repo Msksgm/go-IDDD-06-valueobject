@@ -9,7 +9,7 @@ import (
 
 func TestNewTelephone(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
-		number := "09012345678"
+		number := "090-1234-5678"
 		got, err := NewTelephone(number)
 		if err != nil {
 			t.Fatal(err)
@@ -40,6 +40,14 @@ func TestNewTelephone(t *testing.T) {
 		number := RandString(21)
 		_, err := NewTelephone(number)
 		want := fmt.Sprintf("telephone.NewTelephone(%s): Telephone number must be between 5 and 20 characters.", number)
+		if got := err.Error(); got != want {
+			t.Errorf("got %s, want %s", got, want)
+		}
+	})
+	t.Run("fail Telephone number or its format is invalid.", func(t *testing.T) {
+		number := "abc-defg-heij"
+		_, err := NewTelephone(number)
+		want := fmt.Sprintf("telephone.NewTelephone(%s): Telephone number or its format is invalid.", number)
 		if got := err.Error(); got != want {
 			t.Errorf("got %s, want %s", got, want)
 		}
