@@ -16,6 +16,9 @@ func NewEmailAddress(address string) (_ *EmailAddress, err error) {
 	if address == "" {
 		return nil, fmt.Errorf("The email address is required.")
 	}
+	if len(address) < 1 || 100 < len(address) {
+		return nil, fmt.Errorf("Email address must be 100 characters or less.")
+	}
 	emailAddress.address = address
 	return emailAddress, nil
 }

@@ -27,4 +27,12 @@ func TestNewEmailAddress(t *testing.T) {
 			t.Errorf("got %s, want %s", got, want)
 		}
 	})
+	t.Run("fail Email address must be 100 characters or less.", func(t *testing.T) {
+		address := RandString(101)
+		_, err := NewEmailAddress(address)
+		want := fmt.Sprintf("emailaddress.NewEmailAddress(%s): Email address must be 100 characters or less.", address)
+		if got := err.Error(); want != got {
+			t.Errorf("got %s, want %s", got, want)
+		}
+	})
 }
