@@ -28,6 +28,8 @@ func NewEmailAddress(anAddress string) (_ *EmailAddress, err error) {
 	return emailAddress, nil
 }
 
+// TODO add the shallow copy of EmailAddress
+
 func (emailAddress *EmailAddress) Address() string {
 	return emailAddress.address
 }

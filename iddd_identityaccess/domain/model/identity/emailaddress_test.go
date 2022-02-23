@@ -44,3 +44,41 @@ func TestNewEmailAddress(t *testing.T) {
 		}
 	})
 }
+
+func TestAddress(t *testing.T) {
+	address := "email@sample.com"
+	newAddress, err := NewEmailAddress(address)
+	if err != nil {
+		t.Error(err)
+	}
+	got := newAddress.Address()
+	want := address
+	if want != got {
+		t.Errorf("got %s, want %s", got, want)
+	}
+}
+
+func TestEmailAddressEquals(t *testing.T) {
+	address := "email@sample.com"
+	newEmailAddress, err := NewEmailAddress(address)
+	if err != nil {
+		t.Error(err)
+	}
+	otherEmailAddress := &EmailAddress{address: address}
+	if !newEmailAddress.Equals(*otherEmailAddress) {
+		t.Errorf("newEmailAddress: %v must be equal to %v", newEmailAddress, otherEmailAddress)
+	}
+}
+
+func TestEmailAddressString(t *testing.T) {
+	address := "email@sample.com"
+	newEmailAddress, err := NewEmailAddress(address)
+	if err != nil {
+		t.Error(err)
+	}
+	got := fmt.Sprint(newEmailAddress)
+	want := fmt.Sprintf("EmailAddress [address=%s]", address)
+	if got != want {
+		t.Errorf("got %s, want %s", got, want)
+	}
+}
