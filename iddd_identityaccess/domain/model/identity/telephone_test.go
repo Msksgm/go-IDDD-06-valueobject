@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/Msksgm/go-IDDD-05-entity/iddd_common/utils"
 	"github.com/google/go-cmp/cmp"
 )
 
@@ -29,7 +30,7 @@ func TestNewTelephone(t *testing.T) {
 		}
 	})
 	t.Run("fail Telephone number is less than 5 characters.", func(t *testing.T) {
-		number := RandString(4)
+		number := utils.RandString(4)
 		_, err := NewTelephone(number)
 		want := fmt.Sprintf("telephone.NewTelephone(%s): Telephone number must be between 5 and 20 characters.", number)
 		if got := err.Error(); got != want {
@@ -37,7 +38,7 @@ func TestNewTelephone(t *testing.T) {
 		}
 	})
 	t.Run("fail Telephone number is more than 20 characters", func(t *testing.T) {
-		number := RandString(21)
+		number := utils.RandString(21)
 		_, err := NewTelephone(number)
 		want := fmt.Sprintf("telephone.NewTelephone(%s): Telephone number must be between 5 and 20 characters.", number)
 		if got := err.Error(); got != want {

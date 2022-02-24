@@ -2,27 +2,12 @@ package identity
 
 import (
 	"fmt"
-	"math/rand"
 	"testing"
-	"time"
 
+	"github.com/Msksgm/go-IDDD-05-entity/iddd_common/utils"
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/uuid"
 )
-
-func init() {
-	rand.Seed(time.Now().UnixNano())
-}
-
-var Rs1Letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
-
-func RandString(n int) string {
-	b := make([]rune, n)
-	for i := range b {
-		b[i] = Rs1Letters[rand.Intn(len(Rs1Letters))]
-	}
-	return string(b)
-}
 
 func TestNewTenant(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
@@ -84,7 +69,7 @@ func TestNewTenant(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		name := RandString(101)
+		name := utils.RandString(101)
 		active := true
 		tenant, err := NewTenant(*tenantId, name, active)
 		want := fmt.Sprintf("tenant.setName(%s): The tenant description must be 100 characters or less.", name)

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/Msksgm/go-IDDD-05-entity/iddd_common/utils"
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/google/uuid"
@@ -102,7 +103,7 @@ func TestNewUser(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		userName := RandString(251)
+		userName := utils.RandString(251)
 		password := "qwerty!ASDFG#"
 
 		_, err = NewUser(*tenantId, userName, password)
