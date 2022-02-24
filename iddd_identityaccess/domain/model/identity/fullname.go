@@ -18,8 +18,7 @@ func NewFullName(aFirstName string, aLastName string) (_ *FullName, err error) {
 	fullName := new(FullName)
 
 	// set firstName
-	firstNameNotEmpty := &ierrors.ArgumentNotEmptyError{Arguments: ierrors.ArgumentNotEmptyErrorArguments{String: aFirstName, Message: "First name is required."}}
-	if err := firstNameNotEmpty.GetError(); err != nil {
+	if err := ierrors.NewArgumentNotEmptyError(aFirstName, "First name is required.").GetError(); err != nil {
 		return nil, err
 	}
 	if err := ierrors.NewArgumentLengthError(aFirstName, 1, 50, "First name must be 50 characters or less.").GetError(); err != nil {

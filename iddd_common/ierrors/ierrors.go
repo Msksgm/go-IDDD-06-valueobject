@@ -44,6 +44,11 @@ func (ArgumentLengthError *ArgumentLengthError) Error() string {
 	return ArgumentLengthError.Arguments.Message
 }
 
+func NewArgumentNotEmptyError(aString string, aMessage string) *ArgumentNotEmptyError {
+	arguments := ArgumentNotEmptyErrorArguments{String: aString, Message: aMessage}
+	return &ArgumentNotEmptyError{Arguments: arguments}
+}
+
 type ArgumentNotEmptyErrorArguments struct {
 	String  string
 	Message string
