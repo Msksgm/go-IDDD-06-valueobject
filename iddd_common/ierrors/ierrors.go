@@ -73,3 +73,33 @@ func (ArgumentNotEmptyError *ArgumentNotEmptyError) GetError() error {
 func (ArgumentNotEmptyError *ArgumentNotEmptyError) Error() string {
 	return ArgumentNotEmptyError.Arguments.Message
 }
+
+func NewArgumentTrueErrorArguments(aBool bool, aMessage string) *ArgumentTrueError {
+	arguments := ArgumentTrueErrorArguments{Bool: aBool, Message: aMessage}
+	return &ArgumentTrueError{Arguments: arguments}
+}
+
+type ArgumentTrueErrorArguments struct {
+	Bool    bool
+	Message string
+}
+
+type ArgumentTrueError struct {
+	Arguments ArgumentTrueErrorArguments
+}
+
+func (ArgumentTrueError *ArgumentTrueError) GetArguments() ArgumentTrueErrorArguments {
+	return ArgumentTrueError.Arguments
+}
+
+func (ArgumentTrueError *ArgumentTrueError) GetError() error {
+	args := ArgumentTrueError.Arguments
+	if !args.Bool {
+		return ArgumentTrueError
+	}
+	return nil
+}
+
+func (ArgumentTrueError *ArgumentTrueError) Error() string {
+	return ArgumentTrueError.Arguments.Message
+}

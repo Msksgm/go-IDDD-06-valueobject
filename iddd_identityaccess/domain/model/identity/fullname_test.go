@@ -14,6 +14,7 @@ import (
 var (
 	argumentLengthError   *ierrors.ArgumentLengthError
 	argumentNotEmptyError *ierrors.ArgumentNotEmptyError
+	argumentTrueError     *ierrors.ArgumentTrueError
 )
 
 func TestNewFullName(t *testing.T) {
@@ -46,9 +47,8 @@ func TestNewFullName(t *testing.T) {
 	t.Run("fail first Name not start with a capital letter", func(t *testing.T) {
 		firstName, lastName := "firstName", "lastName"
 		_, err := NewFullName(firstName, lastName)
-		want := fmt.Sprintf("fullname.NewFullName(%s, %s): First name must be at least one character in length, starting with a capital letter.", firstName, lastName)
-		if got := err.Error(); got != want {
-			log.Fatal(err)
+		if !errors.As(err, &argumentTrueError) {
+			t.Errorf("err type:%v, expect type: %v", reflect.TypeOf(errors.Unwrap(err)), reflect.TypeOf(&argumentTrueError))
 		}
 	})
 	t.Run("fail Last name must be 50 characters or less.", func(t *testing.T) {
