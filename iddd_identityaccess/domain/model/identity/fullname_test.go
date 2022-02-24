@@ -51,28 +51,25 @@ func TestNewFullName(t *testing.T) {
 			t.Errorf("err type:%v, expect type: %v", reflect.TypeOf(errors.Unwrap(err)), reflect.TypeOf(&argumentTrueError))
 		}
 	})
-	t.Run("fail Last name must be 50 characters or less.", func(t *testing.T) {
+	t.Run("fail Last name is empty.", func(t *testing.T) {
 		firstName, lastName := "FirstName", ""
 		_, err := NewFullName(firstName, lastName)
-		want := fmt.Sprintf("fullname.NewFullName(%s, %s): Last name is required.", firstName, lastName)
-		if got := err.Error(); got != want {
-			log.Fatal(err)
+		if !errors.As(err, &argumentNotEmptyError) {
+			t.Errorf("err type:%v, expect type: %v", reflect.TypeOf(errors.Unwrap(err)), reflect.TypeOf(&argumentNotEmptyError))
 		}
 	})
 	t.Run("fail Last name must be 50 characters or less.", func(t *testing.T) {
 		firstName, lastName := "FirstName", RandString(51)
 		_, err := NewFullName(firstName, lastName)
-		want := fmt.Sprintf("fullname.NewFullName(%s, %s): Last name must be 50 characters or less.", firstName, lastName)
-		if got := err.Error(); got != want {
-			log.Fatal(err)
+		if !errors.As(err, &argumentLengthError) {
+			t.Errorf("err type:%v, expect type: %v", reflect.TypeOf(errors.Unwrap(err)), reflect.TypeOf(&argumentLengthError))
 		}
 	})
 	t.Run("fail Last name must be at least one character in length.", func(t *testing.T) {
 		firstName, lastName := "FirstName", "#"
 		_, err := NewFullName(firstName, lastName)
-		want := fmt.Sprintf("fullname.NewFullName(%s, %s): Last name must be at least one character in length.", firstName, lastName)
-		if got := err.Error(); got != want {
-			log.Fatal(err)
+		if !errors.As(err, &argumentTrueError) {
+			t.Errorf("err type:%v, expect type: %v", reflect.TypeOf(errors.Unwrap(err)), reflect.TypeOf(&argumentTrueError))
 		}
 	})
 }
@@ -198,9 +195,8 @@ func TestWithChangedLastName(t *testing.T) {
 		}
 		changedLastName := ""
 		_, err = fullName.WithChangedLastName(changedLastName)
-		want := fmt.Sprintf("fullname.WithChangedLastName(%s): fullname.NewFullName(%v, %v): Last name is required.", changedLastName, firstName, changedLastName)
-		if got := err.Error(); got != want {
-			t.Errorf("got %s, want %s", got, want)
+		if !errors.As(err, &argumentNotEmptyError) {
+			t.Errorf("err type:%v, expect type: %v", reflect.TypeOf(errors.Unwrap(errors.Unwrap(err))), reflect.TypeOf(&argumentNotEmptyError))
 		}
 	})
 }

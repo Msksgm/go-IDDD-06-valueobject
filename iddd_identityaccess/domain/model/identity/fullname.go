@@ -30,14 +30,14 @@ func NewFullName(aFirstName string, aLastName string) (_ *FullName, err error) {
 	fullName.firstName = aFirstName
 
 	// set lastName
-	if aLastName == "" {
-		return nil, fmt.Errorf("Last name is required.")
+	if err := ierrors.NewArgumentNotEmptyError(aLastName, "Last name is required.").GetError(); err != nil {
+		return nil, err
 	}
-	if len(aLastName) < 1 || 50 < len(aLastName) {
-		return nil, fmt.Errorf("Last name must be 50 characters or less.")
+	if err := ierrors.NewArgumentLengthError(aLastName, 1, 50, "Last name must be 50 characters or less.").GetError(); err != nil {
+		return nil, err
 	}
-	if !regexp.MustCompile(`^[a-zA-Z'][ a-zA-Z'-]*[a-zA-Z']?`).MatchString(aLastName) {
-		return nil, fmt.Errorf("Last name must be at least one character in length.")
+	if err := ierrors.NewArgumentTrueErrorArguments(regexp.MustCompile(`^[a-zA-Z'][ a-zA-Z'-]*[a-zA-Z']?`).MatchString(aLastName), "Last name must be at least one character in length.").GetError(); err != nil {
+		return nil, err
 	}
 	fullName.lastName = aLastName
 
