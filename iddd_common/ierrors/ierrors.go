@@ -11,6 +11,11 @@ func Wrap(errp *error, format string, args ...interface{}) {
 	}
 }
 
+func NewArgumentLengthError(aString string, aMinimum int, aMaximum int, aMessage string) *ArgumentLengthError {
+	arguments := ArgumentLengthErrorArguments{String: aString, Minimum: aMinimum, Maximum: aMaximum, Message: aMessage}
+	return &ArgumentLengthError{Arguments: arguments}
+}
+
 type ArgumentLengthErrorArguments struct {
 	String  string
 	Minimum int
