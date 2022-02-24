@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/Msksgm/go-IDDD-05-entity/iddd_common/utils"
+	"github.com/Msksgm/go-IDDD-05-entity/iddd_identityaccess/domain/model/identity/tenantid"
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/google/uuid"
@@ -19,7 +20,7 @@ func TestNewUser(t *testing.T) {
 		}
 		uu := u.String()
 
-		tenantId, err := NewTenantId(uu)
+		tenantId, err := tenantid.NewTenantId(uu)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -36,10 +37,10 @@ func TestNewUser(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		want := &User{tenantId: TenantId{id: uu}, userName: userName, password: string(bcryptedPassword)}
+		want := &User{tenantId: *tenantId, userName: userName, password: string(bcryptedPassword)}
 
 		opts := cmp.Options{
-			cmp.AllowUnexported(User{}, TenantId{}),
+			cmp.AllowUnexported(User{}, tenantid.TenantId{}),
 			cmpopts.IgnoreFields(User{}, "password"),
 		}
 		if diff := cmp.Diff(want, got, opts); diff != "" {
@@ -56,7 +57,7 @@ func TestNewUser(t *testing.T) {
 		}
 		uu := u.String()
 
-		tenantId, err := NewTenantId(uu)
+		tenantId, err := tenantid.NewTenantId(uu)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -77,7 +78,7 @@ func TestNewUser(t *testing.T) {
 		}
 		uu := u.String()
 
-		tenantId, err := NewTenantId(uu)
+		tenantId, err := tenantid.NewTenantId(uu)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -98,7 +99,7 @@ func TestNewUser(t *testing.T) {
 		}
 		uu := u.String()
 
-		tenantId, err := NewTenantId(uu)
+		tenantId, err := tenantid.NewTenantId(uu)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -121,11 +122,14 @@ func TestAssertPasswordNotSame(t *testing.T) {
 			t.Fatal(err)
 		}
 		uu := u.String()
-		tenantId := TenantId{id: uu}
+		tenantId, err := tenantid.NewTenantId(uu)
+		if err != nil {
+			t.Fatal(err)
+		}
 
 		userName := "user"
 		password := "qwerty!ASDFG#"
-		user := &User{tenantId: tenantId, userName: userName, password: password}
+		user := &User{tenantId: *tenantId, userName: userName, password: password}
 		changedPassword := "ASDFG#qwerty!"
 
 		if err = user.assertPasswordNotSame(password, changedPassword); err != nil {
@@ -138,11 +142,14 @@ func TestAssertPasswordNotSame(t *testing.T) {
 			t.Fatal(err)
 		}
 		uu := u.String()
-		tenantId := TenantId{id: uu}
+		tenantId, err := tenantid.NewTenantId(uu)
+		if err != nil {
+			t.Fatal(err)
+		}
 
 		userName := "user"
 		password := "qwerty!ASDFG#"
-		user := &User{tenantId: tenantId, userName: userName, password: password}
+		user := &User{tenantId: *tenantId, userName: userName, password: password}
 		changedPassword := "qwerty!ASDFG#"
 
 		err = user.assertPasswordNotSame(password, changedPassword)
@@ -160,11 +167,14 @@ func TestAssertUsernamePasswordNotSame(t *testing.T) {
 			t.Fatal(err)
 		}
 		uu := u.String()
-		tenantId := TenantId{id: uu}
+		tenantId, err := tenantid.NewTenantId(uu)
+		if err != nil {
+			t.Fatal(err)
+		}
 
 		userName := "user"
 		password := "qwerty!ASDFG#"
-		user := &User{tenantId: tenantId, userName: userName, password: password}
+		user := &User{tenantId: *tenantId, userName: userName, password: password}
 		changedPassword := "qwerty!ASDFG#"
 
 		if err := user.assertUsernamePasswordNotSame(changedPassword); err != nil {
@@ -177,11 +187,14 @@ func TestAssertUsernamePasswordNotSame(t *testing.T) {
 			t.Fatal(err)
 		}
 		uu := u.String()
-		tenantId := TenantId{id: uu}
+		tenantId, err := tenantid.NewTenantId(uu)
+		if err != nil {
+			t.Fatal(err)
+		}
 
 		userName := "user"
 		password := "qwerty!ASDFG#"
-		user := &User{tenantId: tenantId, userName: userName, password: password}
+		user := &User{tenantId: *tenantId, userName: userName, password: password}
 		changedPassword := "user"
 
 		err = user.assertUsernamePasswordNotSame(changedPassword)
@@ -199,11 +212,14 @@ func TestAssertPasswordNotWeak(t *testing.T) {
 			t.Fatal(err)
 		}
 		uu := u.String()
-		tenantId := TenantId{id: uu}
+		tenantId, err := tenantid.NewTenantId(uu)
+		if err != nil {
+			t.Fatal(err)
+		}
 
 		userName := "user"
 		password := "qwerty!ASDFG#"
-		user := &User{tenantId: tenantId, userName: userName, password: password}
+		user := &User{tenantId: *tenantId, userName: userName, password: password}
 		changedPassword := "qwerty!ASDFG"
 		if err := user.assertPasswordNotWeak(changedPassword); err != nil {
 			t.Error(err)
@@ -215,11 +231,14 @@ func TestAssertPasswordNotWeak(t *testing.T) {
 			t.Fatal(err)
 		}
 		uu := u.String()
-		tenantId := TenantId{id: uu}
+		tenantId, err := tenantid.NewTenantId(uu)
+		if err != nil {
+			t.Fatal(err)
+		}
 
 		userName := "user"
 		password := "qwerty!ASDFG#"
-		user := &User{tenantId: tenantId, userName: userName, password: password}
+		user := &User{tenantId: *tenantId, userName: userName, password: password}
 		changedPassword := ""
 		err = user.assertPasswordNotWeak(changedPassword)
 		want := fmt.Sprintf("user.assertPasswordNotWeak(%s): The password must not be empty", changedPassword)
@@ -233,11 +252,14 @@ func TestAssertPasswordNotWeak(t *testing.T) {
 			t.Fatal(err)
 		}
 		uu := u.String()
-		tenantId := TenantId{id: uu}
+		tenantId, err := tenantid.NewTenantId(uu)
+		if err != nil {
+			t.Fatal(err)
+		}
 
 		userName := "user"
 		password := "qwerty!ASDFG#"
-		user := &User{tenantId: tenantId, userName: userName, password: password}
+		user := &User{tenantId: *tenantId, userName: userName, password: password}
 		changedPassword := "123456"
 		err = user.assertPasswordNotWeak(changedPassword)
 		want := fmt.Sprintf("user.assertPasswordNotWeak(%s): The password must be stronger.", changedPassword)
@@ -255,7 +277,7 @@ func TestUserEquals(t *testing.T) {
 		}
 		uu := u.String()
 
-		tenantId, err := NewTenantId(uu)
+		tenantId, err := tenantid.NewTenantId(uu)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -272,7 +294,7 @@ func TestUserEquals(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		other := &User{tenantId: TenantId{id: uu}, userName: userName, password: string(bcryptedPassword)}
+		other := &User{tenantId: *tenantId, userName: userName, password: string(bcryptedPassword)}
 
 		if !user.Equals(*other) {
 			t.Errorf("user: %v must be equal to other :%v", user, other)
@@ -284,7 +306,10 @@ func TestUserEquals(t *testing.T) {
 			t.Fatal(err)
 		}
 		uu1 := u1.String()
-		tenantId1 := &TenantId{id: uu1}
+		tenantId1, err := tenantid.NewTenantId(uu1)
+		if err != nil {
+			t.Fatal(err)
+		}
 
 		userName := "userName"
 		password := "qwerty!ASDFG#"
@@ -303,7 +328,10 @@ func TestUserEquals(t *testing.T) {
 			t.Fatal(err)
 		}
 		uu2 := u2.String()
-		tenantId2 := &TenantId{id: uu2}
+		tenantId2, err := tenantid.NewTenantId(uu2)
+		if err != nil {
+			t.Fatal(err)
+		}
 
 		other := &User{tenantId: *tenantId2, userName: userName, password: string(bcryptedPassword)}
 

@@ -4,22 +4,25 @@ import (
 	"fmt"
 
 	"github.com/Msksgm/go-IDDD-05-entity/iddd_common/ierrors"
+	"github.com/Msksgm/go-IDDD-05-entity/iddd_identityaccess/domain/model/identity/tenantid"
 )
 
 type Tenant struct {
-	tenantId TenantId
+	tenantId tenantid.TenantId
 	name     string
 	active   bool
 }
 
-func NewTenant(tenantId TenantId, name string, active bool) (_ *Tenant, err error) {
+func NewTenant(tenantId tenantid.TenantId, name string, active bool) (_ *Tenant, err error) {
 	tenant := new(Tenant)
 	if err := tenant.setName(name); err != nil {
 		return nil, err
 	}
-	if err := tenant.setTenantId(tenantId); err != nil {
-		return nil, err
-	}
+	tenant.tenantId = tenantId
+	// TODO delete
+	// if err := tenant.setTenantId(tenantId); err != nil {
+	// 	return nil, err
+	// }
 	tenant.setActive(active)
 	return tenant, nil
 }
@@ -36,14 +39,15 @@ func (tenant *Tenant) setName(name string) (err error) {
 	return nil
 }
 
-func (tenant *Tenant) setTenantId(tenantId TenantId) (err error) {
-	defer ierrors.Wrap(&err, "tenant.setTenantId(%s)", tenantId)
-	if tenantId.id == "" {
-		return fmt.Errorf("TenentId is required.")
-	}
-	tenant.tenantId = tenantId
-	return nil
-}
+// TODO delete setTenantId
+// func (tenant *Tenant) setTenantId(tenantId tenantid.TenantId) (err error) {
+// 	defer ierrors.Wrap(&err, "tenant.setTenantId(%s)", tenantId)
+// 	if tenantId.id == "" {
+// 		return fmt.Errorf("TenentId is required.")
+// 	}
+// 	tenant.tenantId = tenantId
+// 	return nil
+// }
 
 func (tenant *Tenant) setActive(active bool) {
 	tenant.active = active

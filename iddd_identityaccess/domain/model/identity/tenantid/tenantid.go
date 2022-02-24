@@ -1,4 +1,4 @@
-package identity
+package tenantid
 
 import (
 	"github.com/Msksgm/go-IDDD-05-entity/iddd_common/ierrors"

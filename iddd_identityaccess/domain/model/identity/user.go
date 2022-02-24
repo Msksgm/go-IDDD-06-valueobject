@@ -5,18 +5,19 @@ import (
 	"unicode"
 
 	"github.com/Msksgm/go-IDDD-05-entity/iddd_common/ierrors"
+	"github.com/Msksgm/go-IDDD-05-entity/iddd_identityaccess/domain/model/identity/tenantid"
 	"golang.org/x/crypto/bcrypt"
 )
 
 type User struct {
-	tenantId TenantId
+	tenantId tenantid.TenantId
 	userName string
 	password string
 }
 
 const STRONG_THRESHOL = 20
 
-func NewUser(tenantId TenantId, userName string, password string) (_ *User, err error) {
+func NewUser(tenantId tenantid.TenantId, userName string, password string) (_ *User, err error) {
 	user := new(User)
 
 	user.tenantId = tenantId
@@ -129,5 +130,5 @@ func (user *User) assertUsernamePasswordNotSame(changedPassword string) (err err
 }
 
 func (user *User) Equals(other User) bool {
-	return user.tenantId.id == other.tenantId.id
+	return user.tenantId == other.tenantId
 }

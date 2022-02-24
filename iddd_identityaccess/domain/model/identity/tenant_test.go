@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/Msksgm/go-IDDD-05-entity/iddd_common/utils"
+	"github.com/Msksgm/go-IDDD-05-entity/iddd_identityaccess/domain/model/identity/tenantid"
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/uuid"
 )
@@ -17,7 +18,7 @@ func TestNewTenant(t *testing.T) {
 		}
 		uu := u.String()
 
-		tenantId, err := NewTenantId(uu)
+		tenantId, err := tenantid.NewTenantId(uu)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -28,9 +29,9 @@ func TestNewTenant(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		want := &Tenant{tenantId: TenantId{id: uu}, name: "TenantName", active: true}
+		want := &Tenant{tenantId: *tenantId, name: "TenantName", active: true}
 
-		if diff := cmp.Diff(want, got, cmp.AllowUnexported(Tenant{}, TenantId{})); diff != "" {
+		if diff := cmp.Diff(want, got, cmp.AllowUnexported(Tenant{}, tenantid.TenantId{})); diff != "" {
 			t.Errorf("mismatch (-want, +got):\n%s", diff)
 		}
 	})
@@ -41,7 +42,7 @@ func TestNewTenant(t *testing.T) {
 		}
 		uu := u.String()
 
-		tenantId, err := NewTenantId(uu)
+		tenantId, err := tenantid.NewTenantId(uu)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -64,7 +65,7 @@ func TestNewTenant(t *testing.T) {
 		}
 		uu := u.String()
 
-		tenantId, err := NewTenantId(uu)
+		tenantId, err := tenantid.NewTenantId(uu)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -80,19 +81,20 @@ func TestNewTenant(t *testing.T) {
 			t.Errorf("tenant should be nil, but %v", tenant)
 		}
 	})
-	t.Run("fail empty tenantId", func(t *testing.T) {
-		tenantId := TenantId{id: ""}
-		name := "TenantName"
-		active := true
-		tenant, err := NewTenant(tenantId, name, active)
-		want := fmt.Sprintf("tenant.setTenantId(%s): TenentId is required.", tenantId)
-		if got := err.Error(); want != got {
-			t.Errorf("got %s, want %s", got, want)
-		}
-		if tenant != nil {
-			t.Errorf("tenant should be nil, but %v", tenant)
-		}
-	})
+	// TODO delete setTenantId and "fail empty tenantId test"
+	// t.Run("fail empty tenantId", func(t *testing.T) {
+	// 	tenantId := TenantId{id: ""}
+	// 	name := "TenantName"
+	// 	active := true
+	// 	tenant, err := NewTenant(tenantId, name, active)
+	// 	want := fmt.Sprintf("tenant.setTenantId(%s): TenentId is required.", tenantId)
+	// 	if got := err.Error(); want != got {
+	// 		t.Errorf("got %s, want %s", got, want)
+	// 	}
+	// 	if tenant != nil {
+	// 		t.Errorf("tenant should be nil, but %v", tenant)
+	// 	}
+	// })
 }
 
 func TestDeactivate(t *testing.T) {
@@ -103,10 +105,13 @@ func TestDeactivate(t *testing.T) {
 		}
 		uu := u.String()
 
-		tenantId := TenantId{id: uu}
+		tenantId, err := tenantid.NewTenantId(uu)
+		if err != nil {
+			t.Fatal(err)
+		}
 		name := "TenantName"
 		acitve := true
-		tenant := Tenant{tenantId: tenantId, name: name, active: acitve}
+		tenant := Tenant{tenantId: *tenantId, name: name, active: acitve}
 
 		tenant.deactivate()
 
@@ -121,10 +126,13 @@ func TestDeactivate(t *testing.T) {
 		}
 		uu := u.String()
 
-		tenantId := TenantId{id: uu}
+		tenantId, err := tenantid.NewTenantId(uu)
+		if err != nil {
+			t.Fatal(err)
+		}
 		name := "TenantName"
 		acitve := false
-		tenant := Tenant{tenantId: tenantId, name: name, active: acitve}
+		tenant := Tenant{tenantId: *tenantId, name: name, active: acitve}
 
 		tenant.deactivate()
 
@@ -142,10 +150,13 @@ func TestActivate(t *testing.T) {
 		}
 		uu := u.String()
 
-		tenantId := TenantId{id: uu}
+		tenantId, err := tenantid.NewTenantId(uu)
+		if err != nil {
+			t.Fatal(err)
+		}
 		name := "TenantName"
 		acitve := false
-		tenant := Tenant{tenantId: tenantId, name: name, active: acitve}
+		tenant := Tenant{tenantId: *tenantId, name: name, active: acitve}
 
 		tenant.activate()
 
@@ -160,10 +171,13 @@ func TestActivate(t *testing.T) {
 		}
 		uu := u.String()
 
-		tenantId := TenantId{id: uu}
+		tenantId, err := tenantid.NewTenantId(uu)
+		if err != nil {
+			t.Fatal(err)
+		}
 		name := "TenantName"
 		acitve := true
-		tenant := Tenant{tenantId: tenantId, name: name, active: acitve}
+		tenant := Tenant{tenantId: *tenantId, name: name, active: acitve}
 
 		tenant.activate()
 
@@ -181,7 +195,10 @@ func TestEquals(t *testing.T) {
 		}
 		uu := u.String()
 
-		tenantId := &TenantId{id: uu}
+		tenantId, err := tenantid.NewTenantId(uu)
+		if err != nil {
+			t.Fatal(err)
+		}
 
 		name1 := "TenantName1"
 		tenant1 := &Tenant{tenantId: *tenantId, name: name1}
@@ -199,14 +216,20 @@ func TestEquals(t *testing.T) {
 			t.Fatal(err)
 		}
 		uu1 := u1.String()
-		tenantId1 := &TenantId{id: uu1}
+		tenantId1, err := tenantid.NewTenantId(uu1)
+		if err != nil {
+			t.Fatal(err)
+		}
 
 		u2, err := uuid.NewRandom()
 		if err != nil {
 			t.Fatal(err)
 		}
 		uu2 := u2.String()
-		tenantId2 := &TenantId{id: uu2}
+		tenantId2, err := tenantid.NewTenantId(uu2)
+		if err != nil {
+			t.Fatal(err)
+		}
 
 		name := "TenantName"
 		tenant1 := &Tenant{tenantId: *tenantId1, name: name}
