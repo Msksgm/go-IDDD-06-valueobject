@@ -35,11 +35,11 @@ func NewUser(tenantId tenantid.TenantId, userName string, password string) (_ *U
 
 func (user *User) setUserName(userName string) (err error) {
 	defer ierrors.Wrap(&err, "user.setUserName(%s)", userName)
-	if userName == "" {
-		return fmt.Errorf("The username is required.")
+	if err := ierrors.NewArgumentNotEmptyError(userName, "First name is required.").GetError(); err != nil {
+		return err
 	}
-	if len(userName) < 3 || len(userName) > 250 {
-		return fmt.Errorf("The username must be 3 to 250 characters.")
+	if err := ierrors.NewArgumentLengthError(userName, 3, 250, "The username must be 3 to 250 characters.").GetError(); err != nil {
+		return err
 	}
 	user.userName = userName
 	return nil

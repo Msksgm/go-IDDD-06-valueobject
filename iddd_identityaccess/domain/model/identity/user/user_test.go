@@ -1,15 +1,23 @@
 package user
 
 import (
+	"errors"
 	"fmt"
+	"reflect"
 	"testing"
 
+	"github.com/Msksgm/go-IDDD-05-entity/iddd_common/ierrors"
 	"github.com/Msksgm/go-IDDD-05-entity/iddd_common/utils"
 	"github.com/Msksgm/go-IDDD-05-entity/iddd_identityaccess/domain/model/identity/tenantid"
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
+)
+
+var (
+	argumentLengthError   *ierrors.ArgumentLengthError
+	argumentNotEmptyError *ierrors.ArgumentNotEmptyError
 )
 
 func TestNewUser(t *testing.T) {
@@ -66,9 +74,8 @@ func TestNewUser(t *testing.T) {
 		password := "qwerty!ASDFG#"
 
 		_, err = NewUser(*tenantId, userName, password)
-		want := fmt.Sprintf("user.setUserName(%s): The username is required.", userName)
-		if got := err.Error(); got != want {
-			t.Errorf("got %s, want %s", got, want)
+		if !errors.As(err, &argumentNotEmptyError) {
+			t.Errorf("err type:%v, expect type: %v", reflect.TypeOf(errors.Unwrap(err)), reflect.TypeOf(&argumentNotEmptyError))
 		}
 	})
 	t.Run("fail username is lower than 3 characters.", func(t *testing.T) {
@@ -87,9 +94,8 @@ func TestNewUser(t *testing.T) {
 		password := "qwerty!ASDFG#"
 
 		_, err = NewUser(*tenantId, userName, password)
-		want := fmt.Sprintf("user.setUserName(%s): The username must be 3 to 250 characters.", userName)
-		if got := err.Error(); got != want {
-			t.Errorf("got %s, want %s", got, want)
+		if !errors.As(err, &argumentLengthError) {
+			t.Errorf("err type:%v, expect type: %v", reflect.TypeOf(errors.Unwrap(err)), reflect.TypeOf(&argumentLengthError))
 		}
 	})
 	t.Run("fail username is over than 250 characters.", func(t *testing.T) {
@@ -108,9 +114,8 @@ func TestNewUser(t *testing.T) {
 		password := "qwerty!ASDFG#"
 
 		_, err = NewUser(*tenantId, userName, password)
-		want := fmt.Sprintf("user.setUserName(%s): The username must be 3 to 250 characters.", userName)
-		if got := err.Error(); got != want {
-			t.Errorf("got %s, want %s", got, want)
+		if !errors.As(err, &argumentLengthError) {
+			t.Errorf("err type:%v, expect type: %v", reflect.TypeOf(errors.Unwrap(err)), reflect.TypeOf(&argumentLengthError))
 		}
 	})
 }
