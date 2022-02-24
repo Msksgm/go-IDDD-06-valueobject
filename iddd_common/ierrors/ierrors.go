@@ -22,21 +22,21 @@ type ArgumentLengthError struct {
 	Arguments ArgumentLengthErrorArguments
 }
 
-func (ArgumentLengthErrorArguments *ArgumentLengthError) GetArguments() ArgumentLengthErrorArguments {
-	return ArgumentLengthErrorArguments.Arguments
+func (ArgumentLengthError *ArgumentLengthError) GetArguments() ArgumentLengthErrorArguments {
+	return ArgumentLengthError.Arguments
 }
 
-func (ArgumentLengthErrorArguments *ArgumentLengthError) GetError() error {
-	args := ArgumentLengthErrorArguments.Arguments
+func (ArgumentLengthError *ArgumentLengthError) GetError() error {
+	args := ArgumentLengthError.Arguments
 	length := len(args.String)
 	if length < args.Minimum || length > args.Maximum {
-		return ArgumentLengthErrorArguments
+		return ArgumentLengthError
 	}
 	return nil
 }
 
-func (ArgumentLengthErrorArguments *ArgumentLengthError) Error() string {
-	return ArgumentLengthErrorArguments.Arguments.Message
+func (ArgumentLengthError *ArgumentLengthError) Error() string {
+	return ArgumentLengthError.Arguments.Message
 }
 
 type ArgumentNotEmptyErrorArguments struct {
@@ -48,18 +48,18 @@ type ArgumentNotEmptyError struct {
 	Arguments ArgumentNotEmptyErrorArguments
 }
 
-func (ArgumentNotEmptyErrorArguments *ArgumentNotEmptyError) GetArguments() ArgumentNotEmptyErrorArguments {
-	return ArgumentNotEmptyErrorArguments.Arguments
+func (ArgumentNotEmptyError *ArgumentNotEmptyError) GetArguments() ArgumentNotEmptyErrorArguments {
+	return ArgumentNotEmptyError.Arguments
 }
 
-func (ArgumentNotEmptyErrorArguments *ArgumentNotEmptyError) GetError() error {
-	args := ArgumentNotEmptyErrorArguments.Arguments
+func (ArgumentNotEmptyError *ArgumentNotEmptyError) GetError() error {
+	args := ArgumentNotEmptyError.Arguments
 	if strings.TrimSpace(args.String) == "" {
-		return ArgumentNotEmptyErrorArguments
+		return ArgumentNotEmptyError
 	}
 	return nil
 }
 
-func (ArgumentNotEmptyErrorArguments *ArgumentNotEmptyError) Error() string {
-	return ArgumentNotEmptyErrorArguments.Arguments.Message
+func (ArgumentNotEmptyError *ArgumentNotEmptyError) Error() string {
+	return ArgumentNotEmptyError.Arguments.Message
 }
