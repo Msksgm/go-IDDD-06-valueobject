@@ -17,14 +17,14 @@ func NewTelephone(aNumber string) (_ *Telephone, err error) {
 	telephone := new(Telephone)
 
 	// set number
-	if aNumber == "" {
-		return nil, fmt.Errorf("Telephone number is required.")
+	if err := ierrors.NewArgumentNotEmptyError(aNumber, "Telephone number is required.").GetError(); err != nil {
+		return nil, err
 	}
-	if len(aNumber) < 5 || 20 < len(aNumber) {
-		return nil, fmt.Errorf("Telephone number must be between 5 and 20 characters.")
+	if err := ierrors.NewArgumentLengthError(aNumber, 5, 20, "Telephone number must be between 5 and 20 characters.").GetError(); err != nil {
+		return nil, err
 	}
-	if !regexp.MustCompile(`^0\d{2,3}-\d{1,4}-\d{4}$`).MatchString(aNumber) {
-		return nil, fmt.Errorf("Telephone number or its format is invalid.")
+	if err := ierrors.NewArgumentTrueErrorArguments(regexp.MustCompile(`^0\d{2,3}-\d{1,4}-\d{4}$`).MatchString(aNumber), "First name must be at least one character in length, starting with a capital letter.").GetError(); err != nil {
+		return nil, err
 	}
 	telephone.number = aNumber
 

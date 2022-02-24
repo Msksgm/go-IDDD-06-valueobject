@@ -1,11 +1,20 @@
 package telephone
 
 import (
+	"errors"
 	"fmt"
+	"reflect"
 	"testing"
 
+	"github.com/Msksgm/go-IDDD-05-entity/iddd_common/ierrors"
 	"github.com/Msksgm/go-IDDD-05-entity/iddd_common/utils"
 	"github.com/google/go-cmp/cmp"
+)
+
+var (
+	argumentLengthError   *ierrors.ArgumentLengthError
+	argumentNotEmptyError *ierrors.ArgumentNotEmptyError
+	argumentTrueError     *ierrors.ArgumentTrueError
 )
 
 func TestNewTelephone(t *testing.T) {
@@ -24,33 +33,29 @@ func TestNewTelephone(t *testing.T) {
 	t.Run("fail Telephone number is required.", func(t *testing.T) {
 		number := ""
 		_, err := NewTelephone(number)
-		want := fmt.Sprintf("telephone.NewTelephone(%s): Telephone number is required.", number)
-		if got := err.Error(); got != want {
-			t.Errorf("got %s, want %s", got, want)
+		if !errors.As(err, &argumentNotEmptyError) {
+			t.Errorf("err type:%v, expect type: %v", reflect.TypeOf(errors.Unwrap(err)), reflect.TypeOf(&argumentNotEmptyError))
 		}
 	})
 	t.Run("fail Telephone number is less than 5 characters.", func(t *testing.T) {
 		number := utils.RandString(4)
 		_, err := NewTelephone(number)
-		want := fmt.Sprintf("telephone.NewTelephone(%s): Telephone number must be between 5 and 20 characters.", number)
-		if got := err.Error(); got != want {
-			t.Errorf("got %s, want %s", got, want)
+		if !errors.As(err, &argumentLengthError) {
+			t.Errorf("err type:%v, expect type: %v", reflect.TypeOf(errors.Unwrap(err)), reflect.TypeOf(&argumentLengthError))
 		}
 	})
 	t.Run("fail Telephone number is more than 20 characters", func(t *testing.T) {
 		number := utils.RandString(21)
 		_, err := NewTelephone(number)
-		want := fmt.Sprintf("telephone.NewTelephone(%s): Telephone number must be between 5 and 20 characters.", number)
-		if got := err.Error(); got != want {
-			t.Errorf("got %s, want %s", got, want)
+		if !errors.As(err, &argumentLengthError) {
+			t.Errorf("err type:%v, expect type: %v", reflect.TypeOf(errors.Unwrap(err)), reflect.TypeOf(&argumentLengthError))
 		}
 	})
 	t.Run("fail Telephone number or its format is invalid.", func(t *testing.T) {
 		number := "abc-defg-heij"
 		_, err := NewTelephone(number)
-		want := fmt.Sprintf("telephone.NewTelephone(%s): Telephone number or its format is invalid.", number)
-		if got := err.Error(); got != want {
-			t.Errorf("got %s, want %s", got, want)
+		if !errors.As(err, &argumentTrueError) {
+			t.Errorf("err type:%v, expect type: %v", reflect.TypeOf(errors.Unwrap(err)), reflect.TypeOf(&argumentTrueError))
 		}
 	})
 }
