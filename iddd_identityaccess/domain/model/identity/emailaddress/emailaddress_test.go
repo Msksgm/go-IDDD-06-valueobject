@@ -1,11 +1,20 @@
 package emailaddress
 
 import (
+	"errors"
 	"fmt"
+	"reflect"
 	"testing"
 
+	"github.com/Msksgm/go-IDDD-05-entity/iddd_common/ierrors"
 	"github.com/Msksgm/go-IDDD-05-entity/iddd_common/utils"
 	"github.com/google/go-cmp/cmp"
+)
+
+var (
+	argumentLengthError   *ierrors.ArgumentLengthError
+	argumentNotEmptyError *ierrors.ArgumentNotEmptyError
+	argumentTrueError     *ierrors.ArgumentTrueError
 )
 
 func TestNewEmailAddress(t *testing.T) {
@@ -23,25 +32,22 @@ func TestNewEmailAddress(t *testing.T) {
 	t.Run("fail the email address is required.", func(t *testing.T) {
 		address := ""
 		_, err := NewEmailAddress(address)
-		want := fmt.Sprintf("emailaddress.NewEmailAddress(%s): The email address is required.", address)
-		if got := err.Error(); want != got {
-			t.Errorf("got %s, want %s", got, want)
+		if !errors.As(err, &argumentNotEmptyError) {
+			t.Errorf("err type:%v, expect type: %v", reflect.TypeOf(errors.Unwrap(err)), reflect.TypeOf(&argumentNotEmptyError))
 		}
 	})
 	t.Run("fail Email address must be 100 characters or less.", func(t *testing.T) {
 		address := utils.RandString(101)
 		_, err := NewEmailAddress(address)
-		want := fmt.Sprintf("emailaddress.NewEmailAddress(%s): Email address must be 100 characters or less.", address)
-		if got := err.Error(); want != got {
-			t.Errorf("got %s, want %s", got, want)
+		if !errors.As(err, &argumentLengthError) {
+			t.Errorf("err type:%v, expect type: %v", reflect.TypeOf(errors.Unwrap(err)), reflect.TypeOf(&argumentLengthError))
 		}
 	})
 	t.Run("fail Email address format is invalid.", func(t *testing.T) {
 		address := "badmail"
 		_, err := NewEmailAddress(address)
-		want := fmt.Sprintf("emailaddress.NewEmailAddress(%s): Email address format is invalid.", address)
-		if got := err.Error(); want != got {
-			t.Errorf("got %s, want %s", got, want)
+		if !errors.As(err, &argumentTrueError) {
+			t.Errorf("err type:%v, expect type: %v", reflect.TypeOf(errors.Unwrap(err)), reflect.TypeOf(&argumentTrueError))
 		}
 	})
 }

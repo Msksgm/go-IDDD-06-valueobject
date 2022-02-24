@@ -15,14 +15,14 @@ type EmailAddress struct {
 func NewEmailAddress(anAddress string) (_ *EmailAddress, err error) {
 	defer ierrors.Wrap(&err, "emailaddress.NewEmailAddress(%s)", anAddress)
 	emailAddress := new(EmailAddress)
-	if anAddress == "" {
-		return nil, fmt.Errorf("The email address is required.")
+	if err := ierrors.NewArgumentNotEmptyError(anAddress, "The email address is required.").GetError(); err != nil {
+		return nil, err
 	}
-	if len(anAddress) < 1 || 100 < len(anAddress) {
-		return nil, fmt.Errorf("Email address must be 100 characters or less.")
+	if err := ierrors.NewArgumentLengthError(anAddress, 1, 100, "Email address must be 100 characters or less.").GetError(); err != nil {
+		return nil, err
 	}
-	if !regexp.MustCompile(`^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$`).MatchString(anAddress) {
-		return nil, fmt.Errorf("Email address format is invalid.")
+	if err := ierrors.NewArgumentTrueErrorArguments(regexp.MustCompile(`^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$`).MatchString(anAddress), "Email address format is invalid.").GetError(); err != nil {
+		return nil, err
 	}
 	emailAddress.address = anAddress
 	return emailAddress, nil
