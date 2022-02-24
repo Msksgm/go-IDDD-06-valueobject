@@ -1,12 +1,20 @@
 package postaladdress
 
 import (
+	"errors"
 	"fmt"
 	"log"
+	"reflect"
 	"testing"
 
+	"github.com/Msksgm/go-IDDD-05-entity/iddd_common/ierrors"
 	"github.com/Msksgm/go-IDDD-05-entity/iddd_common/utils"
 	"github.com/google/go-cmp/cmp"
+)
+
+var (
+	argumentLengthError   *ierrors.ArgumentLengthError
+	argumentNotEmptyError *ierrors.ArgumentNotEmptyError
 )
 
 func TestNewPostalAddress(t *testing.T) {
@@ -25,97 +33,85 @@ func TestNewPostalAddress(t *testing.T) {
 	t.Run("fail The street address is required.", func(t *testing.T) {
 		streetAddress, city, stateProvince, postalCode, countryCode := "", "city", "stateProvince", "postalCode", "00"
 		_, err := NewPostalAddress(streetAddress, city, stateProvince, postalCode, countryCode)
-		want := fmt.Sprintf("postaladdress.NewPostalAddress(%s, %s, %s, %s, %s): The street address is required.", streetAddress, city, stateProvince, postalCode, countryCode)
-		if got := err.Error(); got != want {
-			t.Errorf("got %s, want %s", got, want)
+		if !errors.As(err, &argumentNotEmptyError) {
+			t.Errorf("err type:%v, expect type: %v", reflect.TypeOf(errors.Unwrap(err)), reflect.TypeOf(&argumentNotEmptyError))
 		}
 	})
 	t.Run("fail The street address is required.", func(t *testing.T) {
 		streetAddress, city, stateProvince, postalCode, countryCode := utils.RandString(101), "city", "stateProvince", "postalCode", "00"
 		_, err := NewPostalAddress(streetAddress, city, stateProvince, postalCode, countryCode)
-		want := fmt.Sprintf("postaladdress.NewPostalAddress(%s, %s, %s, %s, %s): The street address must be 100 characters or less.", streetAddress, city, stateProvince, postalCode, countryCode)
-		if got := err.Error(); got != want {
-			t.Errorf("got %s, want %s", got, want)
+		if !errors.As(err, &argumentLengthError) {
+			t.Errorf("err type:%v, expect type: %v", reflect.TypeOf(errors.Unwrap(err)), reflect.TypeOf(&argumentLengthError))
 		}
 	})
 	t.Run("fail The street city is required.", func(t *testing.T) {
 		streetAddress, city, stateProvince, postalCode, countryCode := "streetAddress", "", "stateProvince", "postalCode", "00"
 		_, err := NewPostalAddress(streetAddress, city, stateProvince, postalCode, countryCode)
-		want := fmt.Sprintf("postaladdress.NewPostalAddress(%s, %s, %s, %s, %s): The street city is required.", streetAddress, city, stateProvince, postalCode, countryCode)
-		if got := err.Error(); got != want {
-			t.Errorf("got %s, want %s", got, want)
+		if !errors.As(err, &argumentNotEmptyError) {
+			t.Errorf("err type:%v, expect type: %v", reflect.TypeOf(errors.Unwrap(err)), reflect.TypeOf(&argumentNotEmptyError))
 		}
 	})
 	t.Run("fail The street city is required.", func(t *testing.T) {
 		streetAddress, city, stateProvince, postalCode, countryCode := "streetAddress", utils.RandString(101), "stateProvince", "postalCode", "00"
 		_, err := NewPostalAddress(streetAddress, city, stateProvince, postalCode, countryCode)
-		want := fmt.Sprintf("postaladdress.NewPostalAddress(%s, %s, %s, %s, %s): The street city must be 100 characters or less.", streetAddress, city, stateProvince, postalCode, countryCode)
-		if got := err.Error(); got != want {
-			t.Errorf("got %s, want %s", got, want)
+		if !errors.As(err, &argumentLengthError) {
+			t.Errorf("err type:%v, expect type: %v", reflect.TypeOf(errors.Unwrap(err)), reflect.TypeOf(&argumentLengthError))
 		}
 	})
 	t.Run("fail The postal code is required.", func(t *testing.T) {
 		streetAddress, city, stateProvince, postalCode, countryCode := "streetAddress", "city", "stateProvince", "", "00"
 		_, err := NewPostalAddress(streetAddress, city, stateProvince, postalCode, countryCode)
-		want := fmt.Sprintf("postaladdress.NewPostalAddress(%s, %s, %s, %s, %s): The postal code is required.", streetAddress, city, stateProvince, postalCode, countryCode)
-		if got := err.Error(); got != want {
-			t.Errorf("got %s, want %s", got, want)
+		if !errors.As(err, &argumentNotEmptyError) {
+			t.Errorf("err type:%v, expect type: %v", reflect.TypeOf(errors.Unwrap(err)), reflect.TypeOf(&argumentLengthError))
 		}
 	})
 	t.Run("fail The postal code must be 12 characters or less.", func(t *testing.T) {
 		streetAddress, city, stateProvince, postalCode, countryCode := "streetAddress", "city", "stateProvince", utils.RandString(13), "00"
 		_, err := NewPostalAddress(streetAddress, city, stateProvince, postalCode, countryCode)
-		want := fmt.Sprintf("postaladdress.NewPostalAddress(%s, %s, %s, %s, %s): The postal code must be between 5 characters and 12 characters.", streetAddress, city, stateProvince, postalCode, countryCode)
-		if got := err.Error(); got != want {
-			t.Errorf("got %s, want %s", got, want)
+		if !errors.As(err, &argumentLengthError) {
+			t.Errorf("err type:%v, expect type: %v", reflect.TypeOf(errors.Unwrap(err)), reflect.TypeOf(&argumentLengthError))
 		}
 	})
 	t.Run("fail The postal code must be 5 characters or more.", func(t *testing.T) {
 		streetAddress, city, stateProvince, postalCode, countryCode := "streetAddress", "city", "stateProvince", utils.RandString(4), "00"
 		_, err := NewPostalAddress(streetAddress, city, stateProvince, postalCode, countryCode)
-		want := fmt.Sprintf("postaladdress.NewPostalAddress(%s, %s, %s, %s, %s): The postal code must be between 5 characters and 12 characters.", streetAddress, city, stateProvince, postalCode, countryCode)
-		if got := err.Error(); got != want {
-			t.Errorf("got %s, want %s", got, want)
+		if !errors.As(err, &argumentLengthError) {
+			t.Errorf("err type:%v, expect type: %v", reflect.TypeOf(errors.Unwrap(err)), reflect.TypeOf(&argumentLengthError))
 		}
 	})
 	t.Run("fail The state/province is required.", func(t *testing.T) {
 		streetAddress, city, stateProvince, postalCode, countryCode := "streetAddress", "city", "", "postalCode", "00"
 		_, err := NewPostalAddress(streetAddress, city, stateProvince, postalCode, countryCode)
-		want := fmt.Sprintf("postaladdress.NewPostalAddress(%s, %s, %s, %s, %s): The state/province is required.", streetAddress, city, stateProvince, postalCode, countryCode)
-		if got := err.Error(); got != want {
-			t.Errorf("got %s, want %s", got, want)
+		if !errors.As(err, &argumentNotEmptyError) {
+			t.Errorf("err type:%v, expect type: %v", reflect.TypeOf(errors.Unwrap(err)), reflect.TypeOf(&argumentLengthError))
 		}
 	})
 	t.Run("fail The postal code must be 12 characters or less.", func(t *testing.T) {
 		streetAddress, city, stateProvince, postalCode, countryCode := "streetAddress", "city", utils.RandString(1), "postalCode", "00"
 		_, err := NewPostalAddress(streetAddress, city, stateProvince, postalCode, countryCode)
-		want := fmt.Sprintf("postaladdress.NewPostalAddress(%s, %s, %s, %s, %s): The state/province must be between 2 charcters and 100 characters", streetAddress, city, stateProvince, postalCode, countryCode)
-		if got := err.Error(); got != want {
-			t.Errorf("got %s, want %s", got, want)
+		if !errors.As(err, &argumentLengthError) {
+			t.Errorf("err type:%v, expect type: %v", reflect.TypeOf(errors.Unwrap(err)), reflect.TypeOf(&argumentLengthError))
 		}
 	})
 	t.Run("fail The postal code must be 5 characters or more.", func(t *testing.T) {
 		streetAddress, city, stateProvince, postalCode, countryCode := "streetAddress", "city", utils.RandString(101), "postalCode", "00"
 		_, err := NewPostalAddress(streetAddress, city, stateProvince, postalCode, countryCode)
-		want := fmt.Sprintf("postaladdress.NewPostalAddress(%s, %s, %s, %s, %s): The state/province must be between 2 charcters and 100 characters", streetAddress, city, stateProvince, postalCode, countryCode)
-		if got := err.Error(); got != want {
-			t.Errorf("got %s, want %s", got, want)
+		if !errors.As(err, &argumentLengthError) {
+			t.Errorf("err type:%v, expect type: %v", reflect.TypeOf(errors.Unwrap(err)), reflect.TypeOf(&argumentLengthError))
 		}
 	})
 	t.Run("fail The country is required.", func(t *testing.T) {
 		streetAddress, city, stateProvince, postalCode, countryCode := "streetAddress", "city", "stateProvince", "postalCode", ""
 		_, err := NewPostalAddress(streetAddress, city, stateProvince, postalCode, countryCode)
-		want := fmt.Sprintf("postaladdress.NewPostalAddress(%s, %s, %s, %s, %s): The country is required.", streetAddress, city, stateProvince, postalCode, countryCode)
-		if got := err.Error(); got != want {
-			t.Errorf("got %s, want %s", got, want)
+		if !errors.As(err, &argumentNotEmptyError) {
+			t.Errorf("err type:%v, expect type: %v", reflect.TypeOf(errors.Unwrap(err)), reflect.TypeOf(&argumentLengthError))
 		}
 	})
 	t.Run("fail The country code must be two characters.", func(t *testing.T) {
 		streetAddress, city, stateProvince, postalCode, countryCode := "streetAddress", "city", "stateProvince", "postalCode", "000"
 		_, err := NewPostalAddress(streetAddress, city, stateProvince, postalCode, countryCode)
-		want := fmt.Sprintf("postaladdress.NewPostalAddress(%s, %s, %s, %s, %s): The country code must be two characters.", streetAddress, city, stateProvince, postalCode, countryCode)
-		if got := err.Error(); got != want {
-			t.Errorf("got %s, want %s", got, want)
+		if !errors.As(err, &argumentLengthError) {
+			t.Errorf("err type:%v, expect type: %v", reflect.TypeOf(errors.Unwrap(err)), reflect.TypeOf(&argumentLengthError))
 		}
 	})
 }

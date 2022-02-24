@@ -20,47 +20,47 @@ func NewPostalAddress(aStreetAddress string, aCity string, aStateProvince string
 	postalAddress := new(PostalAddress)
 
 	// set StreetAddress
-	if aStreetAddress == "" {
-		return nil, fmt.Errorf("The street address is required.")
+	if err := ierrors.NewArgumentNotEmptyError(aStreetAddress, "The street address is required.").GetError(); err != nil {
+		return nil, err
 	}
-	if len(aStreetAddress) < 1 || 100 < len(aStreetAddress) {
-		return nil, fmt.Errorf("The street address must be 100 characters or less.")
+	if err := ierrors.NewArgumentLengthError(aStreetAddress, 1, 100, "The street address must be 100 characters or less.").GetError(); err != nil {
+		return nil, err
 	}
 	postalAddress.streetAddress = aStreetAddress
 
 	// set City
-	if aCity == "" {
-		return nil, fmt.Errorf("The street city is required.")
+	if err := ierrors.NewArgumentNotEmptyError(aCity, "The street city is required.").GetError(); err != nil {
+		return nil, err
 	}
-	if len(aCity) < 1 || 100 < len(aCity) {
-		return nil, fmt.Errorf("The street city must be 100 characters or less.")
+	if err := ierrors.NewArgumentLengthError(aCity, 1, 100, "The street city must be 100 characters or less.").GetError(); err != nil {
+		return nil, err
 	}
 	postalAddress.city = aCity
 
 	// set PostalCode
-	if aPostalCode == "" {
-		return nil, fmt.Errorf("The postal code is required.")
+	if err := ierrors.NewArgumentNotEmptyError(aPostalCode, "The postal code is required.").GetError(); err != nil {
+		return nil, err
 	}
-	if len(aPostalCode) < 5 || 12 < len(aPostalCode) {
-		return nil, fmt.Errorf("The postal code must be between 5 characters and 12 characters.")
+	if err := ierrors.NewArgumentLengthError(aPostalCode, 5, 12, "The postal code must be between 5 characters and 12 characters.").GetError(); err != nil {
+		return nil, err
 	}
 	postalAddress.postalCode = aPostalCode
 
 	// set StateProvince
-	if aStateProvince == "" {
-		return nil, fmt.Errorf("The state/province is required.")
+	if err := ierrors.NewArgumentNotEmptyError(aStateProvince, "The state/province is required.").GetError(); err != nil {
+		return nil, err
 	}
-	if len(aStateProvince) < 2 || 100 < len(aStateProvince) {
-		return nil, fmt.Errorf("The state/province must be between 2 charcters and 100 characters")
+	if err := ierrors.NewArgumentLengthError(aStateProvince, 2, 100, "The state/province must be between 2 charcters and 100 characters").GetError(); err != nil {
+		return nil, err
 	}
 	postalAddress.stateProvince = aStateProvince
 
 	// set CountryCode
-	if aCountryCode == "" {
-		return nil, fmt.Errorf("The country is required.")
+	if err := ierrors.NewArgumentNotEmptyError(aCountryCode, "The country is required.").GetError(); err != nil {
+		return nil, err
 	}
-	if len(aCountryCode) < 2 || 2 < len(aCountryCode) {
-		return nil, fmt.Errorf("The country code must be two characters.")
+	if err := ierrors.NewArgumentLengthError(aCountryCode, 2, 2, "The country code must be two characters.").GetError(); err != nil {
+		return nil, err
 	}
 	postalAddress.countryCode = aCountryCode
 	return postalAddress, nil
