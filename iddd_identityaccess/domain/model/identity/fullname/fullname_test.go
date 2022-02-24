@@ -1,4 +1,4 @@
-package identity
+package fullname
 
 import (
 	"errors"
@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	"github.com/Msksgm/go-IDDD-05-entity/iddd_common/ierrors"
+	"github.com/Msksgm/go-IDDD-05-entity/iddd_common/utils"
 	"github.com/google/go-cmp/cmp"
 )
 
@@ -38,7 +39,7 @@ func TestNewFullName(t *testing.T) {
 		}
 	})
 	t.Run("fail fistName is over 50 characters", func(t *testing.T) {
-		firstName, lastName := RandString(51), "lastName"
+		firstName, lastName := utils.RandString(51), "lastName"
 		_, err := NewFullName(firstName, lastName)
 		if !errors.As(err, &argumentLengthError) {
 			t.Errorf("err type:%v, expect type: %v", reflect.TypeOf(errors.Unwrap(err)), reflect.TypeOf(&argumentLengthError))
@@ -59,7 +60,7 @@ func TestNewFullName(t *testing.T) {
 		}
 	})
 	t.Run("fail Last name must be 50 characters or less.", func(t *testing.T) {
-		firstName, lastName := "FirstName", RandString(51)
+		firstName, lastName := "FirstName", utils.RandString(51)
 		_, err := NewFullName(firstName, lastName)
 		if !errors.As(err, &argumentLengthError) {
 			t.Errorf("err type:%v, expect type: %v", reflect.TypeOf(errors.Unwrap(err)), reflect.TypeOf(&argumentLengthError))
