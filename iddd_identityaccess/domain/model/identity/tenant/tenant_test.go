@@ -1,13 +1,20 @@
 package tenant
 
 import (
-	"fmt"
+	"errors"
+	"reflect"
 	"testing"
 
+	"github.com/Msksgm/go-IDDD-05-entity/iddd_common/ierrors"
 	"github.com/Msksgm/go-IDDD-05-entity/iddd_common/utils"
 	"github.com/Msksgm/go-IDDD-05-entity/iddd_identityaccess/domain/model/identity/tenantid"
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/uuid"
+)
+
+var (
+	argumentLengthError   *ierrors.ArgumentLengthError
+	argumentNotEmptyError *ierrors.ArgumentNotEmptyError
 )
 
 func TestNewTenant(t *testing.T) {
@@ -49,13 +56,9 @@ func TestNewTenant(t *testing.T) {
 
 		name := ""
 		active := true
-		tenant, err := NewTenant(*tenantId, name, active)
-		want := fmt.Sprintf("tenant.setName(%s): The tenant name is required.", name)
-		if got := err.Error(); want != got {
-			t.Errorf("got %s, want %s", got, want)
-		}
-		if tenant != nil {
-			t.Errorf("tenant should be nil, but %v", tenant)
+		_, err = NewTenant(*tenantId, name, active)
+		if !errors.As(err, &argumentNotEmptyError) {
+			t.Errorf("err type:%v, expect type: %v", reflect.TypeOf(errors.Unwrap(err)), reflect.TypeOf(&argumentNotEmptyError))
 		}
 	})
 	t.Run("fail over 100 characters name", func(t *testing.T) {
@@ -72,13 +75,9 @@ func TestNewTenant(t *testing.T) {
 
 		name := utils.RandString(101)
 		active := true
-		tenant, err := NewTenant(*tenantId, name, active)
-		want := fmt.Sprintf("tenant.setName(%s): The tenant description must be 100 characters or less.", name)
-		if got := err.Error(); want != got {
-			t.Errorf("got %s, want %s", got, want)
-		}
-		if tenant != nil {
-			t.Errorf("tenant should be nil, but %v", tenant)
+		_, err = NewTenant(*tenantId, name, active)
+		if !errors.As(err, &argumentLengthError) {
+			t.Errorf("err type:%v, expect type: %v", reflect.TypeOf(errors.Unwrap(err)), reflect.TypeOf(&argumentLengthError))
 		}
 	})
 }

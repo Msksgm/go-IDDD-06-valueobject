@@ -1,8 +1,6 @@
 package tenant
 
 import (
-	"fmt"
-
 	"github.com/Msksgm/go-IDDD-05-entity/iddd_common/ierrors"
 	"github.com/Msksgm/go-IDDD-05-entity/iddd_identityaccess/domain/model/identity/tenantid"
 )
@@ -26,11 +24,11 @@ func NewTenant(tenantId tenantid.TenantId, name string, active bool) (_ *Tenant,
 
 func (tenant *Tenant) setName(name string) (err error) {
 	defer ierrors.Wrap(&err, "tenant.setName(%s)", name)
-	if name == "" {
-		return fmt.Errorf("The tenant name is required.")
+	if err := ierrors.NewArgumentNotEmptyError(name, "The tenant name is required.").GetError(); err != nil {
+		return err
 	}
-	if len(name) < 1 || len(name) > 100 {
-		return fmt.Errorf("The tenant description must be 100 characters or less.")
+	if err := ierrors.NewArgumentLengthError(name, 1, 100, "The tenant description must be 100 characters or less.").GetError(); err != nil {
+		return err
 	}
 	tenant.name = name
 	return nil
