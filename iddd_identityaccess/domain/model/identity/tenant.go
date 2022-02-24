@@ -18,11 +18,8 @@ func NewTenant(tenantId tenantid.TenantId, name string, active bool) (_ *Tenant,
 	if err := tenant.setName(name); err != nil {
 		return nil, err
 	}
+	// setTenantId
 	tenant.tenantId = tenantId
-	// TODO delete
-	// if err := tenant.setTenantId(tenantId); err != nil {
-	// 	return nil, err
-	// }
 	tenant.setActive(active)
 	return tenant, nil
 }
@@ -38,16 +35,6 @@ func (tenant *Tenant) setName(name string) (err error) {
 	tenant.name = name
 	return nil
 }
-
-// TODO delete setTenantId
-// func (tenant *Tenant) setTenantId(tenantId tenantid.TenantId) (err error) {
-// 	defer ierrors.Wrap(&err, "tenant.setTenantId(%s)", tenantId)
-// 	if tenantId.id == "" {
-// 		return fmt.Errorf("TenentId is required.")
-// 	}
-// 	tenant.tenantId = tenantId
-// 	return nil
-// }
 
 func (tenant *Tenant) setActive(active bool) {
 	tenant.active = active

@@ -81,20 +81,6 @@ func TestNewTenant(t *testing.T) {
 			t.Errorf("tenant should be nil, but %v", tenant)
 		}
 	})
-	// TODO delete setTenantId and "fail empty tenantId test"
-	// t.Run("fail empty tenantId", func(t *testing.T) {
-	// 	tenantId := TenantId{id: ""}
-	// 	name := "TenantName"
-	// 	active := true
-	// 	tenant, err := NewTenant(tenantId, name, active)
-	// 	want := fmt.Sprintf("tenant.setTenantId(%s): TenentId is required.", tenantId)
-	// 	if got := err.Error(); want != got {
-	// 		t.Errorf("got %s, want %s", got, want)
-	// 	}
-	// 	if tenant != nil {
-	// 		t.Errorf("tenant should be nil, but %v", tenant)
-	// 	}
-	// })
 }
 
 func TestDeactivate(t *testing.T) {
