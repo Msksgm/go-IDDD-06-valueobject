@@ -1,6 +1,7 @@
 package contactinformation
 
 import (
+	"fmt"
 	"log"
 	"testing"
 
@@ -248,5 +249,17 @@ func TestSecondaryTelephone(t *testing.T) {
 	}
 	if diff := cmp.Diff(contactInformation, copiedContactInformation, opts); diff != "" {
 		t.Errorf("mismatch (-want, +got):\n%s", diff)
+	}
+}
+
+func TestString(t *testing.T) {
+	contactInformation, err := NewContactInformation(*emailAddress, *postalAddress, *primaryTelephone, *secondaryTelephone)
+	if err != nil {
+		t.Fatal(err)
+	}
+	got := fmt.Sprint(contactInformation)
+	want := fmt.Sprintf("ContactInfomation [emailAddress=%v, postalAddress=%v, primaryTelephone=%v, secondaryTelephone=%v]", *emailAddress, *postalAddress, *primaryTelephone, *secondaryTelephone)
+	if got != want {
+		t.Errorf("got %s, want %s", got, want)
 	}
 }

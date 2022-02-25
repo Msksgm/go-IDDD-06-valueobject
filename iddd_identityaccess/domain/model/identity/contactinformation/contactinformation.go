@@ -1,6 +1,8 @@
 package contactinformation
 
 import (
+	"fmt"
+
 	"github.com/Msksgm/go-IDDD-05-entity/iddd_identityaccess/domain/model/identity/emailaddress"
 	"github.com/Msksgm/go-IDDD-05-entity/iddd_identityaccess/domain/model/identity/postaladdress"
 	"github.com/Msksgm/go-IDDD-05-entity/iddd_identityaccess/domain/model/identity/telephone"
@@ -80,10 +82,14 @@ func (contactInformation *ContactInformation) SecondaryTelephone() *telephone.Te
 	return &contactInformation.secondaryTelephone
 }
 
-func (contactInformation ContactInformation) Equals(otheContactInformation ContactInformation) bool {
+func (contactInformation *ContactInformation) Equals(otheContactInformation ContactInformation) bool {
 	isEmailAddressEqual := contactInformation.emailAddress.Equals(otheContactInformation.emailAddress)
 	isPostalAddressEqual := contactInformation.postalAddress.Equals(otheContactInformation.postalAddress)
 	isPrimaryTelephoneEqual := contactInformation.primaryTelephone.Equals(otheContactInformation.primaryTelephone)
 	isSecondaryTelephoneEqual := contactInformation.secondaryTelephone.Equals(otheContactInformation.secondaryTelephone)
 	return isEmailAddressEqual && isPostalAddressEqual && isPrimaryTelephoneEqual && isSecondaryTelephoneEqual
+}
+
+func (contactInformation *ContactInformation) String() string {
+	return fmt.Sprintf("ContactInfomation [emailAddress=%v, postalAddress=%v, primaryTelephone=%v, secondaryTelephone=%v]", contactInformation.emailAddress, contactInformation.postalAddress, contactInformation.primaryTelephone, contactInformation.secondaryTelephone)
 }
