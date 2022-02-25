@@ -69,8 +69,7 @@ func TestChangeEmailAddress(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	changedEmalAddressString := "changed@email.com"
-	changedEmailAddress, err := emailaddress.NewEmailAddress(changedEmalAddressString)
+	changedEmailAddress, err := emailaddress.NewEmailAddress("changed@email.com")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -88,7 +87,11 @@ func TestChangeEmailAddress(t *testing.T) {
 	}
 
 	if copiedContactInformation.Equals(*contactInformation2) {
-		t.Fatalf("contactInfomation: %v must not be equal to copiedContactInformation: %v", copiedContactInformation, contactInformation2)
+		t.Fatalf("contactInfomationj: %v must not be equal to copiedContactInformation: %v", copiedContactInformation, contactInformation2)
+	}
+
+	if contactInformation2.EmailAddress().Address() != "changed@email.com" {
+		t.Fatalf("contactInformation2.EmailAddress().Address(): %v must not be equal to copiedContactInformation: %v", contactInformation2.EmailAddress().Address(), changedEmailAddress)
 	}
 
 	opts := cmp.Options{

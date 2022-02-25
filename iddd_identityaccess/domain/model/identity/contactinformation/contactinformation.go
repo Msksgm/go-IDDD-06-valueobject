@@ -32,12 +32,24 @@ func CopyContactInfomation(aContactInformation ContactInformation) (*ContactInfo
 	return copiedContactInformation, nil
 }
 
-func (contactInformation ContactInformation) ChangeEmailAddress(aEmailaddress emailaddress.EmailAddress) (*ContactInformation, error) {
+func (contactInformation *ContactInformation) ChangeEmailAddress(aEmailaddress emailaddress.EmailAddress) (*ContactInformation, error) {
 	newContactInformation, err := NewContactInformation(aEmailaddress, contactInformation.postalAddress, contactInformation.primaryTelephone, contactInformation.secondaryTelephone)
 	if err != nil {
 		return nil, err
 	}
 	return newContactInformation, nil
+}
+
+func (contactInformation *ContactInformation) ChangePostalAddress(aPostalAddress postaladdress.PostalAddress) (*ContactInformation, error) {
+	newContactInformation, err := NewContactInformation(contactInformation.emailAddress, aPostalAddress, contactInformation.primaryTelephone, contactInformation.secondaryTelephone)
+	if err != nil {
+		return nil, err
+	}
+	return newContactInformation, nil
+}
+
+func (contactInformation *ContactInformation) EmailAddress() *emailaddress.EmailAddress {
+	return &contactInformation.emailAddress
 }
 
 func (contactInformation ContactInformation) Equals(otheContactInformation ContactInformation) bool {
