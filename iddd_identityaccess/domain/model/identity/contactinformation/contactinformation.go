@@ -48,12 +48,24 @@ func (contactInformation *ContactInformation) ChangePostalAddress(aPostalAddress
 	return newContactInformation, nil
 }
 
+func (contactInformation *ContactInformation) ChangePrimaryTelephone(aTelephone telephone.Telephone) (*ContactInformation, error) {
+	newContactInformation, err := NewContactInformation(contactInformation.emailAddress, contactInformation.postalAddress, aTelephone, contactInformation.secondaryTelephone)
+	if err != nil {
+		return nil, err
+	}
+	return newContactInformation, nil
+}
+
 func (contactInformation *ContactInformation) EmailAddress() *emailaddress.EmailAddress {
 	return &contactInformation.emailAddress
 }
 
 func (contactInformation *ContactInformation) PostalAddress() *postaladdress.PostalAddress {
 	return &contactInformation.postalAddress
+}
+
+func (contactInformation *ContactInformation) PrimaryTelephone() *telephone.Telephone {
+	return &contactInformation.primaryTelephone
 }
 
 func (contactInformation ContactInformation) Equals(otheContactInformation ContactInformation) bool {

@@ -15,7 +15,7 @@ const (
 	address                                                     = "sample@mail.com"
 	streetAddress, city, stateProvince, postalCode, countryCode = "streetAddress", "city", "stateProvince", "postalCode", "00"
 	primaryNumber                                               = "090-1234-5678"
-	secondaryNumber                                             = "090-1234-5678"
+	secondaryNumber                                             = "090-5678-1234"
 )
 
 var (
@@ -91,7 +91,7 @@ func TestChangeEmailAddress(t *testing.T) {
 	}
 
 	if contactInformation2.EmailAddress().Address() != "changed@email.com" {
-		t.Fatalf("contactInformation2.EmailAddress().Address(): %v must not be equal to copiedContactInformation: %v", contactInformation2.EmailAddress().Address(), changedEmailAddress)
+		t.Fatalf("contactInformation2.EmailAddress().Address(): %v must be equal to copiedContactInformation: %v", contactInformation2.EmailAddress().Address(), changedEmailAddress)
 	}
 
 	opts := cmp.Options{
@@ -151,12 +151,56 @@ func TestPostalAddress(t *testing.T) {
 	}
 
 	if contactInformation2.PostalAddress().StreetAddress() != changedPostalAddress.StreetAddress() {
-		t.Fatalf("contactInformation2.PostalAddress().StreetAddress(): %v must not be equal to copiedContactInformation: %v", contactInformation2.PostalAddress().StreetAddress(), changedPostalAddress.StreetAddress())
+		t.Fatalf("contactInformation2.PostalAddress().StreetAddress(): %v must be equal to copiedContactInformation: %v", contactInformation2.PostalAddress().StreetAddress(), changedPostalAddress.StreetAddress())
 	}
 
 	opts := cmp.Options{
 		cmp.AllowUnexported(ContactInformation{}, emailaddress.EmailAddress{}, postaladdress.PostalAddress{}, telephone.Telephone{}),
 		cmpopts.IgnoreFields(postaladdress.PostalAddress{}),
+	}
+	if diff := cmp.Diff(contactInformation, copiedContactInformation, opts); diff != "" {
+		t.Errorf("mismatch (-want, +got):\n%s", diff)
+	}
+}
+
+func TestPrimaryTelephone(t *testing.T) {
+	contactInformation, err := NewContactInformation(*emailAddress, *postalAddress, *primaryTelephone, *secondaryTelephone)
+	if err != nil {
+		t.Fatal(err)
+	}
+	copiedContactInformation, err := CopyContactInfomation(*contactInformation)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	changedPrimaryTelephone, err := telephone.NewTelephone("090-0000-0000")
+	if err != nil {
+		t.Fatal(err)
+	}
+	contactInformation2, err := contactInformation.ChangePrimaryTelephone(*changedPrimaryTelephone)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if !(*contactInformation == *copiedContactInformation) {
+		t.Fatalf("contactInfomation: %v must be equal to copiedContactInformation: %v", contactInformation, copiedContactInformation)
+	}
+
+	if contactInformation.Equals(*contactInformation2) {
+		t.Fatalf("contactInfomation: %v must not be equal to copiedContactInformation: %v", contactInformation, contactInformation2)
+	}
+
+	if copiedContactInformation.Equals(*contactInformation2) {
+		t.Fatalf("contactInfomation: %v must not be equal to copiedContactInformation: %v", copiedContactInformation, contactInformation2)
+	}
+
+	if contactInformation2.PrimaryTelephone().Number() != changedPrimaryTelephone.Number() {
+		t.Fatalf("contactInformation2.PrimaryTelephone().Number(): %v must be equal to copiedContactInformation: %v", contactInformation2.PrimaryTelephone().Number(), changedPrimaryTelephone.Number())
+	}
+
+	opts := cmp.Options{
+		cmp.AllowUnexported(ContactInformation{}, emailaddress.EmailAddress{}, postaladdress.PostalAddress{}, telephone.Telephone{}),
+		cmpopts.IgnoreFields(telephone.Telephone{}),
 	}
 	if diff := cmp.Diff(contactInformation, copiedContactInformation, opts); diff != "" {
 		t.Errorf("mismatch (-want, +got):\n%s", diff)
