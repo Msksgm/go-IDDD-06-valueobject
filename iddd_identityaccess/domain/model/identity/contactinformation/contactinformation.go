@@ -52,6 +52,10 @@ func (contactInformation *ContactInformation) EmailAddress() *emailaddress.Email
 	return &contactInformation.emailAddress
 }
 
+func (contactInformation *ContactInformation) PostalAddress() *postaladdress.PostalAddress {
+	return &contactInformation.postalAddress
+}
+
 func (contactInformation ContactInformation) Equals(otheContactInformation ContactInformation) bool {
 	isEmailAddressEqual := contactInformation.emailAddress.Equals(otheContactInformation.emailAddress)
 	isPostalAddressEqual := contactInformation.postalAddress.Equals(otheContactInformation.postalAddress)
