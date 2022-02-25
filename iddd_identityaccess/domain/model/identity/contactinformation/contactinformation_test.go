@@ -8,6 +8,7 @@ import (
 	"github.com/Msksgm/go-IDDD-05-entity/iddd_identityaccess/domain/model/identity/postaladdress"
 	"github.com/Msksgm/go-IDDD-05-entity/iddd_identityaccess/domain/model/identity/telephone"
 	"github.com/google/go-cmp/cmp"
+	"github.com/google/go-cmp/cmp/cmpopts"
 )
 
 const (
@@ -54,6 +55,47 @@ func TestNewContactInfomation(t *testing.T) {
 
 	allowUnexported := cmp.AllowUnexported(ContactInformation{}, emailaddress.EmailAddress{}, postaladdress.PostalAddress{}, telephone.Telephone{})
 	if diff := cmp.Diff(want, got, allowUnexported); diff != "" {
+		t.Errorf("mismatch (-want, +got):\n%s", diff)
+	}
+}
+
+func TestChangeEmailAddress(t *testing.T) {
+	contactInformation, err := NewContactInformation(*emailAddress, *postalAddress, *primaryTelephone, *secondaryTelephone)
+	if err != nil {
+		t.Fatal(err)
+	}
+	copiedContactInformation, err := CopyContactInfomation(*contactInformation)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	changedEmalAddressString := "changed@email.com"
+	changedEmailAddress, err := emailaddress.NewEmailAddress(changedEmalAddressString)
+	if err != nil {
+		t.Fatal(err)
+	}
+	contactInformation2, err := contactInformation.ChangeEmailAddress(*changedEmailAddress)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if !(*contactInformation == *copiedContactInformation) {
+		t.Fatalf("contactInfomation: %v must be equal to copiedContactInformation: %v", contactInformation, copiedContactInformation)
+	}
+
+	if contactInformation.Equals(*contactInformation2) {
+		t.Fatalf("contactInfomation: %v must not be equal to copiedContactInformation: %v", contactInformation, contactInformation2)
+	}
+
+	if copiedContactInformation.Equals(*contactInformation2) {
+		t.Fatalf("contactInfomation: %v must not be equal to copiedContactInformation: %v", copiedContactInformation, contactInformation2)
+	}
+
+	opts := cmp.Options{
+		cmp.AllowUnexported(ContactInformation{}, emailaddress.EmailAddress{}, postaladdress.PostalAddress{}, telephone.Telephone{}),
+		cmpopts.IgnoreFields(emailaddress.EmailAddress{}),
+	}
+	if diff := cmp.Diff(contactInformation, copiedContactInformation, opts); diff != "" {
 		t.Errorf("mismatch (-want, +got):\n%s", diff)
 	}
 }

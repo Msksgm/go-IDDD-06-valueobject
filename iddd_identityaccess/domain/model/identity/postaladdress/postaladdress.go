@@ -88,7 +88,7 @@ func (postalAddress *PostalAddress) StreetAddress() string {
 	return postalAddress.streetAddress
 }
 
-func (postalAddress *PostalAddress) Equals(otherPostalAddress *PostalAddress) bool {
+func (postalAddress *PostalAddress) Equals(otherPostalAddress PostalAddress) bool {
 	isStreetAddressEqual := reflect.DeepEqual(postalAddress.StreetAddress(), otherPostalAddress.StreetAddress())
 	isCityEqual := reflect.DeepEqual(postalAddress.City(), otherPostalAddress.City())
 	isStateProvinceEqual := reflect.DeepEqual(postalAddress.StateProvince(), otherPostalAddress.StateProvince())

@@ -37,7 +37,7 @@ func (telephone *Telephone) Number() string {
 	return telephone.number
 }
 
-func (telephone *Telephone) Equal(otherTelephone *Telephone) bool {
+func (telephone *Telephone) Equals(otherTelephone Telephone) bool {
 	return reflect.DeepEqual(telephone.number, otherTelephone.number)
 }
 

@@ -23,3 +23,27 @@ func NewContactInformation(aEmailaddress emailaddress.EmailAddress, aPostalAddre
 
 	return contactInformation, nil
 }
+
+func CopyContactInfomation(aContactInformation ContactInformation) (*ContactInformation, error) {
+	copiedContactInformation, err := NewContactInformation(aContactInformation.emailAddress, aContactInformation.postalAddress, aContactInformation.primaryTelephone, aContactInformation.secondaryTelephone)
+	if err != nil {
+		return nil, err
+	}
+	return copiedContactInformation, nil
+}
+
+func (contactInformation ContactInformation) ChangeEmailAddress(aEmailaddress emailaddress.EmailAddress) (*ContactInformation, error) {
+	newContactInformation, err := NewContactInformation(aEmailaddress, contactInformation.postalAddress, contactInformation.primaryTelephone, contactInformation.secondaryTelephone)
+	if err != nil {
+		return nil, err
+	}
+	return newContactInformation, nil
+}
+
+func (contactInformation ContactInformation) Equals(otheContactInformation ContactInformation) bool {
+	isEmailAddressEqual := contactInformation.emailAddress.Equals(otheContactInformation.emailAddress)
+	isPostalAddressEqual := contactInformation.postalAddress.Equals(otheContactInformation.postalAddress)
+	isPrimaryTelephoneEqual := contactInformation.primaryTelephone.Equals(otheContactInformation.primaryTelephone)
+	isSecondaryTelephoneEqual := contactInformation.secondaryTelephone.Equals(otheContactInformation.secondaryTelephone)
+	return isEmailAddressEqual && isPostalAddressEqual && isPrimaryTelephoneEqual && isSecondaryTelephoneEqual
+}

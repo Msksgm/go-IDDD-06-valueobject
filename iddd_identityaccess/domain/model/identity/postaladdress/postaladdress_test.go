@@ -195,7 +195,7 @@ func TestPostalAddressEqual(t *testing.T) {
 
 	otherPostalAddress := &PostalAddress{streetAddress: streetAddress, city: city, stateProvince: stateProvince, postalCode: postalCode, countryCode: countryCode}
 
-	if !newPostalAddress.Equals(otherPostalAddress) {
+	if !newPostalAddress.Equals(*otherPostalAddress) {
 		t.Errorf("newPostalAddress: %v must be equal to otherPostalAddress: %v", newPostalAddress, otherPostalAddress)
 	}
 }

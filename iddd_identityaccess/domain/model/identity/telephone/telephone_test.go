@@ -69,7 +69,7 @@ func TestTelephoneEqual(t *testing.T) {
 		}
 		otherTelephone := &Telephone{number: number}
 
-		if !telephone.Equal(otherTelephone) {
+		if !telephone.Equals(*otherTelephone) {
 			t.Errorf("telephone: %v must be equal to otherTelephone %v", telephone, otherTelephone)
 		}
 	})
@@ -82,7 +82,7 @@ func TestTelephoneEqual(t *testing.T) {
 		otherNumber := "090-0000-0000"
 		otherTelephone := &Telephone{number: otherNumber}
 
-		if telephone.Equal(otherTelephone) {
+		if telephone.Equals(*otherTelephone) {
 			t.Errorf("telephone: %v must be not equal to otherTelephone %v", telephone, otherTelephone)
 		}
 	})
