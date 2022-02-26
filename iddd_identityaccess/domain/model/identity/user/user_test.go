@@ -15,6 +15,11 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+const (
+	userName = "userName"
+	password = "qwerty!ASDFG#"
+)
+
 var (
 	argumentLengthError   *ierrors.ArgumentLengthError
 	argumentNotEmptyError *ierrors.ArgumentNotEmptyError
@@ -33,8 +38,6 @@ func TestNewUser(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		userName := "userName"
-		password := "qwerty!ASDFG#"
 		bcryptedPassword, err := bcrypt.GenerateFromPassword([]byte(password), 12)
 		if err != nil {
 			t.Fatal(err)
@@ -70,10 +73,7 @@ func TestNewUser(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		userName := ""
-		password := "qwerty!ASDFG#"
-
-		_, err = NewUser(*tenantId, userName, password)
+		_, err = NewUser(*tenantId, "", password)
 		if !errors.As(err, &argumentNotEmptyError) {
 			t.Errorf("err type:%v, expect type: %v", reflect.TypeOf(errors.Unwrap(err)), reflect.TypeOf(&argumentNotEmptyError))
 		}
@@ -90,10 +90,7 @@ func TestNewUser(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		userName := "na"
-		password := "qwerty!ASDFG#"
-
-		_, err = NewUser(*tenantId, userName, password)
+		_, err = NewUser(*tenantId, "na", password)
 		if !errors.As(err, &argumentLengthError) {
 			t.Errorf("err type:%v, expect type: %v", reflect.TypeOf(errors.Unwrap(err)), reflect.TypeOf(&argumentLengthError))
 		}
@@ -110,10 +107,7 @@ func TestNewUser(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		userName := utils.RandString(251)
-		password := "qwerty!ASDFG#"
-
-		_, err = NewUser(*tenantId, userName, password)
+		_, err = NewUser(*tenantId, utils.RandString(251), password)
 		if !errors.As(err, &argumentLengthError) {
 			t.Errorf("err type:%v, expect type: %v", reflect.TypeOf(errors.Unwrap(err)), reflect.TypeOf(&argumentLengthError))
 		}
@@ -132,8 +126,6 @@ func TestAssertPasswordNotSame(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		userName := "user"
-		password := "qwerty!ASDFG#"
 		user := &User{tenantId: *tenantId, userName: userName, password: password}
 		changedPassword := "ASDFG#qwerty!"
 
@@ -153,7 +145,6 @@ func TestAssertPasswordNotSame(t *testing.T) {
 		}
 
 		userName := "user"
-		password := "qwerty!ASDFG#"
 		user := &User{tenantId: *tenantId, userName: userName, password: password}
 		changedPassword := "qwerty!ASDFG#"
 
@@ -177,8 +168,6 @@ func TestAssertUsernamePasswordNotSame(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		userName := "user"
-		password := "qwerty!ASDFG#"
 		user := &User{tenantId: *tenantId, userName: userName, password: password}
 		changedPassword := "qwerty!ASDFG#"
 
@@ -197,10 +186,8 @@ func TestAssertUsernamePasswordNotSame(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		userName := "user"
-		password := "qwerty!ASDFG#"
 		user := &User{tenantId: *tenantId, userName: userName, password: password}
-		changedPassword := "user"
+		changedPassword := "userName"
 
 		err = user.assertUsernamePasswordNotSame(changedPassword)
 		want := fmt.Sprintf("user.assertUsernamePasswordNotSame(%s): The username and password must not be the same.", changedPassword)
@@ -222,8 +209,6 @@ func TestAssertPasswordNotWeak(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		userName := "user"
-		password := "qwerty!ASDFG#"
 		user := &User{tenantId: *tenantId, userName: userName, password: password}
 		changedPassword := "qwerty!ASDFG"
 		if err := user.assertPasswordNotWeak(changedPassword); err != nil {
@@ -241,8 +226,6 @@ func TestAssertPasswordNotWeak(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		userName := "user"
-		password := "qwerty!ASDFG#"
 		user := &User{tenantId: *tenantId, userName: userName, password: password}
 		changedPassword := ""
 		err = user.assertPasswordNotWeak(changedPassword)
@@ -262,8 +245,6 @@ func TestAssertPasswordNotWeak(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		userName := "user"
-		password := "qwerty!ASDFG#"
 		user := &User{tenantId: *tenantId, userName: userName, password: password}
 		changedPassword := "123456"
 		err = user.assertPasswordNotWeak(changedPassword)
@@ -287,8 +268,6 @@ func TestUserEquals(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		userName := "userName"
-		password := "qwerty!ASDFG#"
 		bcryptedPassword, err := bcrypt.GenerateFromPassword([]byte(password), 12)
 		if err != nil {
 			t.Fatal(err)
@@ -316,8 +295,6 @@ func TestUserEquals(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		userName := "userName"
-		password := "qwerty!ASDFG#"
 		bcryptedPassword, err := bcrypt.GenerateFromPassword([]byte(password), 12)
 		if err != nil {
 			t.Fatal(err)
