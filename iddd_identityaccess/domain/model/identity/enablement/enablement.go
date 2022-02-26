@@ -1,6 +1,7 @@
 package enablement
 
 import (
+	"fmt"
 	"reflect"
 	"time"
 
@@ -54,4 +55,8 @@ func (enablement *Enablement) Equals(otheEnablement *Enablement) bool {
 	isStartDateEqual := reflect.DeepEqual(enablement.startDate, enablement.startDate)
 	isEndDateEqual := reflect.DeepEqual(enablement.endDate, enablement.endDate)
 	return isEnabledEqual && isStartDateEqual && isEndDateEqual
+}
+
+func (enablement *Enablement) String() string {
+	return fmt.Sprintf("Enablement [enabled=%v, endDate=%v, startDate=%v]", enablement.enabled, enablement.endDate, enablement.startDate)
 }

@@ -2,6 +2,7 @@ package enablement
 
 import (
 	"errors"
+	"fmt"
 	"log"
 	"reflect"
 	"testing"
@@ -101,4 +102,15 @@ func TestIsTimeExpired(t *testing.T) {
 			t.Errorf("enablement.IsTimeExpired() must be false, when enablement: %v", enablement)
 		}
 	})
+}
+
+func TestString(t *testing.T) {
+	enablement, err := NewEnablement(enabled, startDate, endDate)
+	if err != nil {
+		t.Fatal(err)
+	}
+	want := fmt.Sprintf("Enablement [enabled=%v, endDate=%v, startDate=%v]", enablement.enabled, enablement.endDate, enablement.startDate)
+	if got := fmt.Sprint(enablement); want != got {
+		t.Errorf("got %s, want %s", got, want)
+	}
 }
