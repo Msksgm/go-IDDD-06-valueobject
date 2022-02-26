@@ -21,3 +21,7 @@ func NewTenantId(uu string) (_ *TenantId, err error) {
 
 	return tenantId, nil
 }
+
+func (tenantId *TenantId) Equals(otherTeanntId *TenantId) bool {
+	return tenantId.id == otherTeanntId.id
+}

@@ -41,3 +41,22 @@ func TestNewTenantId(t *testing.T) {
 		}
 	})
 }
+
+func TestEquals(t *testing.T) {
+	u, err := uuid.NewRandom()
+	if err != nil {
+		t.Fatal(err)
+	}
+	uu := u.String()
+
+	tenantId, err := NewTenantId(uu)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	otherTenantId := &TenantId{id: uu}
+
+	if !tenantId.Equals(otherTenantId) {
+		t.Errorf("tenantId: %v must be euqal to otherTenantId %v", tenantId, otherTenantId)
+	}
+}
