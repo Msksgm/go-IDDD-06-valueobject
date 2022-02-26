@@ -21,7 +21,10 @@ const (
 	password = "qwerty!ASDFG#"
 )
 
-var tenantId *tenantid.TenantId
+var (
+	tenantId         *tenantid.TenantId
+	bcryptedPassword []byte
+)
 
 func init() {
 	u, err := uuid.NewRandom()
@@ -30,6 +33,10 @@ func init() {
 	}
 	uu := u.String()
 	tenantId, err = tenantid.NewTenantId(uu)
+	if err != nil {
+		log.Fatal(err)
+	}
+	bcryptedPassword, err = bcrypt.GenerateFromPassword([]byte(password), 12)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -42,11 +49,6 @@ var (
 
 func TestNewUser(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
-		bcryptedPassword, err := bcrypt.GenerateFromPassword([]byte(password), 12)
-		if err != nil {
-			t.Fatal(err)
-		}
-
 		got, err := NewUser(*tenantId, userName, password)
 		if err != nil {
 			t.Fatal(err)
@@ -157,11 +159,6 @@ func TestAssertPasswordNotWeak(t *testing.T) {
 
 func TestUserEquals(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
-		bcryptedPassword, err := bcrypt.GenerateFromPassword([]byte(password), 12)
-		if err != nil {
-			t.Fatal(err)
-		}
-
 		user, err := NewUser(*tenantId, userName, password)
 		if err != nil {
 			t.Fatal(err)
@@ -174,11 +171,6 @@ func TestUserEquals(t *testing.T) {
 		}
 	})
 	t.Run("fail tenantId is not equal", func(t *testing.T) {
-		bcryptedPassword, err := bcrypt.GenerateFromPassword([]byte(password), 12)
-		if err != nil {
-			t.Fatal(err)
-		}
-
 		user, err := NewUser(*tenantId, userName, password)
 		if err != nil {
 			t.Fatal(err)
