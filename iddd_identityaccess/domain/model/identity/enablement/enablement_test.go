@@ -2,6 +2,7 @@ package enablement
 
 import (
 	"errors"
+	"log"
 	"reflect"
 	"testing"
 	"time"
@@ -12,25 +13,30 @@ import (
 
 const (
 	timeFormat = "2006-01-02 15:04:05"
+	enabled    = true
 )
 
 var (
 	jst                = time.FixedZone("Asia/Tokyo", 9*60*60)
 	argumentFalseError *ierrors.ArgumentFalseError
+	startDate          time.Time
+	endDate            time.Time
+	err                error
 )
+
+func init() {
+	startDate, err = time.ParseInLocation(timeFormat, "2020-01-01 00:00:00", jst)
+	if err != nil {
+		log.Fatal(err)
+	}
+	endDate, err = time.ParseInLocation(timeFormat, "2030-01-01 00:00:00", jst)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
 
 func TestNewEnablement(t *testing.T) {
 	t.Run("sucess", func(t *testing.T) {
-		enabled := true
-		startDate, err := time.ParseInLocation(timeFormat, "2020-01-01 00:00:00", jst)
-		if err != nil {
-			t.Fatal(err)
-		}
-		endDate, err := time.ParseInLocation(timeFormat, "2030-01-01 00:00:00", jst)
-		if err != nil {
-			t.Fatal(err)
-		}
-
 		got, err := NewEnablement(enabled, startDate, endDate)
 		if err != nil {
 			t.Fatal(err)
@@ -42,12 +48,7 @@ func TestNewEnablement(t *testing.T) {
 			t.Errorf("mismatch (-want, +got):\n%s", diff)
 		}
 	})
-	t.Run("fail", func(t *testing.T) {
-		enabled := true
-		startDate, err := time.ParseInLocation(timeFormat, "2020-01-01 00:00:00", jst)
-		if err != nil {
-			t.Fatal(err)
-		}
+	t.Run("fail startDate is after than endDate", func(t *testing.T) {
 		endDate, err := time.ParseInLocation(timeFormat, "2010-01-01 00:00:00", jst)
 		if err != nil {
 			t.Fatal(err)

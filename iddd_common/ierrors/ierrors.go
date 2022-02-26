@@ -103,3 +103,33 @@ func (ArgumentTrueError *ArgumentTrueError) GetError() error {
 func (ArgumentTrueError *ArgumentTrueError) Error() string {
 	return ArgumentTrueError.Arguments.Message
 }
+
+func NewArgumentFalseError(aBool bool, aMessage string) *ArgumentFalseError {
+	arguments := ArgumentFalseErrorArguments{isFalse: aBool, message: aMessage}
+	return &ArgumentFalseError{arguments: arguments}
+}
+
+type ArgumentFalseErrorArguments struct {
+	isFalse bool
+	message string
+}
+
+type ArgumentFalseError struct {
+	arguments ArgumentFalseErrorArguments
+}
+
+func (argumentFalseError *ArgumentFalseError) GetArguments() ArgumentFalseErrorArguments {
+	return argumentFalseError.arguments
+}
+
+func (argumentFalseError *ArgumentFalseError) GetError() error {
+	args := argumentFalseError.arguments
+	if args.isFalse {
+		return argumentFalseError
+	}
+	return nil
+}
+
+func (argumentFalseError *ArgumentFalseError) Error() string {
+	return argumentFalseError.arguments.message
+}
