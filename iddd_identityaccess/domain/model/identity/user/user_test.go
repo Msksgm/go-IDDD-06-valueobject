@@ -3,6 +3,7 @@ package user
 import (
 	"errors"
 	"fmt"
+	"log"
 	"reflect"
 	"testing"
 
@@ -20,6 +21,20 @@ const (
 	password = "qwerty!ASDFG#"
 )
 
+var tenantId *tenantid.TenantId
+
+func init() {
+	u, err := uuid.NewRandom()
+	if err != nil {
+		log.Fatal(err)
+	}
+	uu := u.String()
+	tenantId, err = tenantid.NewTenantId(uu)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
 var (
 	argumentLengthError   *ierrors.ArgumentLengthError
 	argumentNotEmptyError *ierrors.ArgumentNotEmptyError
@@ -27,17 +42,6 @@ var (
 
 func TestNewUser(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
-		u, err := uuid.NewRandom()
-		if err != nil {
-			t.Fatal(err)
-		}
-		uu := u.String()
-
-		tenantId, err := tenantid.NewTenantId(uu)
-		if err != nil {
-			t.Fatal(err)
-		}
-
 		bcryptedPassword, err := bcrypt.GenerateFromPassword([]byte(password), 12)
 		if err != nil {
 			t.Fatal(err)
@@ -62,52 +66,19 @@ func TestNewUser(t *testing.T) {
 		}
 	})
 	t.Run("fail username is required.", func(t *testing.T) {
-		u, err := uuid.NewRandom()
-		if err != nil {
-			t.Fatal(err)
-		}
-		uu := u.String()
-
-		tenantId, err := tenantid.NewTenantId(uu)
-		if err != nil {
-			t.Fatal(err)
-		}
-
-		_, err = NewUser(*tenantId, "", password)
+		_, err := NewUser(*tenantId, "", password)
 		if !errors.As(err, &argumentNotEmptyError) {
 			t.Errorf("err type:%v, expect type: %v", reflect.TypeOf(errors.Unwrap(err)), reflect.TypeOf(&argumentNotEmptyError))
 		}
 	})
 	t.Run("fail username is lower than 3 characters.", func(t *testing.T) {
-		u, err := uuid.NewRandom()
-		if err != nil {
-			t.Fatal(err)
-		}
-		uu := u.String()
-
-		tenantId, err := tenantid.NewTenantId(uu)
-		if err != nil {
-			t.Fatal(err)
-		}
-
-		_, err = NewUser(*tenantId, "na", password)
+		_, err := NewUser(*tenantId, "na", password)
 		if !errors.As(err, &argumentLengthError) {
 			t.Errorf("err type:%v, expect type: %v", reflect.TypeOf(errors.Unwrap(err)), reflect.TypeOf(&argumentLengthError))
 		}
 	})
 	t.Run("fail username is over than 250 characters.", func(t *testing.T) {
-		u, err := uuid.NewRandom()
-		if err != nil {
-			t.Fatal(err)
-		}
-		uu := u.String()
-
-		tenantId, err := tenantid.NewTenantId(uu)
-		if err != nil {
-			t.Fatal(err)
-		}
-
-		_, err = NewUser(*tenantId, utils.RandString(251), password)
+		_, err := NewUser(*tenantId, utils.RandString(251), password)
 		if !errors.As(err, &argumentLengthError) {
 			t.Errorf("err type:%v, expect type: %v", reflect.TypeOf(errors.Unwrap(err)), reflect.TypeOf(&argumentLengthError))
 		}
@@ -116,39 +87,18 @@ func TestNewUser(t *testing.T) {
 
 func TestAssertPasswordNotSame(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
-		u, err := uuid.NewRandom()
-		if err != nil {
-			t.Fatal(err)
-		}
-		uu := u.String()
-		tenantId, err := tenantid.NewTenantId(uu)
-		if err != nil {
-			t.Fatal(err)
-		}
-
 		user := &User{tenantId: *tenantId, userName: userName, password: password}
 		changedPassword := "ASDFG#qwerty!"
 
-		if err = user.assertPasswordNotSame(password, changedPassword); err != nil {
+		if err := user.assertPasswordNotSame(password, changedPassword); err != nil {
 			t.Error(err)
 		}
 	})
 	t.Run("fail", func(t *testing.T) {
-		u, err := uuid.NewRandom()
-		if err != nil {
-			t.Fatal(err)
-		}
-		uu := u.String()
-		tenantId, err := tenantid.NewTenantId(uu)
-		if err != nil {
-			t.Fatal(err)
-		}
-
-		userName := "user"
 		user := &User{tenantId: *tenantId, userName: userName, password: password}
 		changedPassword := "qwerty!ASDFG#"
 
-		err = user.assertPasswordNotSame(password, changedPassword)
+		err := user.assertPasswordNotSame(password, changedPassword)
 		want := fmt.Sprintf("user.assertPasswordNotSame(%s, %s): The password is unchanged", password, changedPassword)
 		if got := err.Error(); got != want {
 			t.Errorf("got %s, want %s", got, want)
@@ -158,16 +108,6 @@ func TestAssertPasswordNotSame(t *testing.T) {
 
 func TestAssertUsernamePasswordNotSame(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
-		u, err := uuid.NewRandom()
-		if err != nil {
-			t.Fatal(err)
-		}
-		uu := u.String()
-		tenantId, err := tenantid.NewTenantId(uu)
-		if err != nil {
-			t.Fatal(err)
-		}
-
 		user := &User{tenantId: *tenantId, userName: userName, password: password}
 		changedPassword := "qwerty!ASDFG#"
 
@@ -176,20 +116,10 @@ func TestAssertUsernamePasswordNotSame(t *testing.T) {
 		}
 	})
 	t.Run("fail", func(t *testing.T) {
-		u, err := uuid.NewRandom()
-		if err != nil {
-			t.Fatal(err)
-		}
-		uu := u.String()
-		tenantId, err := tenantid.NewTenantId(uu)
-		if err != nil {
-			t.Fatal(err)
-		}
-
 		user := &User{tenantId: *tenantId, userName: userName, password: password}
 		changedPassword := "userName"
 
-		err = user.assertUsernamePasswordNotSame(changedPassword)
+		err := user.assertUsernamePasswordNotSame(changedPassword)
 		want := fmt.Sprintf("user.assertUsernamePasswordNotSame(%s): The username and password must not be the same.", changedPassword)
 		if got := err.Error(); got != want {
 			t.Errorf("got %s, want %s", got, want)
@@ -199,16 +129,6 @@ func TestAssertUsernamePasswordNotSame(t *testing.T) {
 
 func TestAssertPasswordNotWeak(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
-		u, err := uuid.NewRandom()
-		if err != nil {
-			t.Fatal(err)
-		}
-		uu := u.String()
-		tenantId, err := tenantid.NewTenantId(uu)
-		if err != nil {
-			t.Fatal(err)
-		}
-
 		user := &User{tenantId: *tenantId, userName: userName, password: password}
 		changedPassword := "qwerty!ASDFG"
 		if err := user.assertPasswordNotWeak(changedPassword); err != nil {
@@ -216,38 +136,18 @@ func TestAssertPasswordNotWeak(t *testing.T) {
 		}
 	})
 	t.Run("fail password empty", func(t *testing.T) {
-		u, err := uuid.NewRandom()
-		if err != nil {
-			t.Fatal(err)
-		}
-		uu := u.String()
-		tenantId, err := tenantid.NewTenantId(uu)
-		if err != nil {
-			t.Fatal(err)
-		}
-
 		user := &User{tenantId: *tenantId, userName: userName, password: password}
 		changedPassword := ""
-		err = user.assertPasswordNotWeak(changedPassword)
+		err := user.assertPasswordNotWeak(changedPassword)
 		want := fmt.Sprintf("user.assertPasswordNotWeak(%s): The password must not be empty", changedPassword)
 		if got := err.Error(); got != want {
 			t.Errorf("got %s, want %s", got, want)
 		}
 	})
 	t.Run("fail password is weak", func(t *testing.T) {
-		u, err := uuid.NewRandom()
-		if err != nil {
-			t.Fatal(err)
-		}
-		uu := u.String()
-		tenantId, err := tenantid.NewTenantId(uu)
-		if err != nil {
-			t.Fatal(err)
-		}
-
 		user := &User{tenantId: *tenantId, userName: userName, password: password}
 		changedPassword := "123456"
-		err = user.assertPasswordNotWeak(changedPassword)
+		err := user.assertPasswordNotWeak(changedPassword)
 		want := fmt.Sprintf("user.assertPasswordNotWeak(%s): The password must be stronger.", changedPassword)
 		if got := err.Error(); got != want {
 			t.Errorf("got %s, want %s", got, want)
@@ -257,17 +157,6 @@ func TestAssertPasswordNotWeak(t *testing.T) {
 
 func TestUserEquals(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
-		u, err := uuid.NewRandom()
-		if err != nil {
-			t.Fatal(err)
-		}
-		uu := u.String()
-
-		tenantId, err := tenantid.NewTenantId(uu)
-		if err != nil {
-			t.Fatal(err)
-		}
-
 		bcryptedPassword, err := bcrypt.GenerateFromPassword([]byte(password), 12)
 		if err != nil {
 			t.Fatal(err)
@@ -285,22 +174,12 @@ func TestUserEquals(t *testing.T) {
 		}
 	})
 	t.Run("fail tenantId is not equal", func(t *testing.T) {
-		u1, err := uuid.NewRandom()
-		if err != nil {
-			t.Fatal(err)
-		}
-		uu1 := u1.String()
-		tenantId1, err := tenantid.NewTenantId(uu1)
-		if err != nil {
-			t.Fatal(err)
-		}
-
 		bcryptedPassword, err := bcrypt.GenerateFromPassword([]byte(password), 12)
 		if err != nil {
 			t.Fatal(err)
 		}
 
-		user, err := NewUser(*tenantId1, userName, password)
+		user, err := NewUser(*tenantId, userName, password)
 		if err != nil {
 			t.Fatal(err)
 		}
