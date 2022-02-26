@@ -162,3 +162,16 @@ func TestEmailAddress(t *testing.T) {
 		t.Errorf("mismatch (-want, +got):\n%s", diff)
 	}
 }
+
+func TestName(t *testing.T) {
+	person, err := NewPerson(*tenantId, *fullName, *contactInformation)
+	if err != nil {
+		t.Fatal(err)
+	}
+	want := *fullName
+	got := person.Name()
+	allowUnexported := cmp.AllowUnexported(Person{}, tenantid.TenantId{}, fullname.FullName{}, contactinformation.ContactInformation{}, emailaddress.EmailAddress{}, postaladdress.PostalAddress{}, telephone.Telephone{})
+	if diff := cmp.Diff(want, got, allowUnexported); diff != "" {
+		t.Errorf("mismatch (-want, +got):\n%s", diff)
+	}
+}

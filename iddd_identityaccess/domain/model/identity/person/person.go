@@ -39,3 +39,7 @@ func (person *Person) ContactInformation() contactinformation.ContactInformation
 func (person *Person) EmailAddress() emailaddress.EmailAddress {
 	return *person.contactInformation.EmailAddress()
 }
+
+func (person *Person) Name() fullname.FullName {
+	return person.name
+}
