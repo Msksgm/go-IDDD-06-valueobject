@@ -25,3 +25,8 @@ func (person *Person) ChangeContactInformation(aContactInformation contactinform
 	person.contactInformation = aContactInformation
 	return nil
 }
+
+func (person *Person) ChangeName(aName fullname.FullName) error {
+	person.name = aName
+	return nil
+}

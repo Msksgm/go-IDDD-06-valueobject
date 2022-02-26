@@ -109,3 +109,30 @@ func TestChangeContactInformation(t *testing.T) {
 		t.Errorf("mismatch (-want, +got):\n%s", diff)
 	}
 }
+
+func TestChangeName(t *testing.T) {
+	person, err := NewPerson(*tenantId, *fullName, *contactInformation)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	changedFirstName := "ChangedFirstName"
+	changedFullName, err := fullName.WithChangedFirstName(changedFirstName)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	if err := person.ChangeName(*changedFullName); err != nil {
+		t.Fatal(err)
+	}
+
+	want, err := NewPerson(*tenantId, *changedFullName, *contactInformation)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	allowUnexported := cmp.AllowUnexported(Person{}, tenantid.TenantId{}, fullname.FullName{}, contactinformation.ContactInformation{}, emailaddress.EmailAddress{}, postaladdress.PostalAddress{}, telephone.Telephone{})
+	if diff := cmp.Diff(want, person, allowUnexported); diff != "" {
+		t.Errorf("mismatch (-want, +got):\n%s", diff)
+	}
+}
