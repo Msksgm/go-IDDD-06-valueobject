@@ -30,3 +30,7 @@ func (person *Person) ChangeName(aName fullname.FullName) error {
 	person.name = aName
 	return nil
 }
+
+func (person *Person) ContactInformation() contactinformation.ContactInformation {
+	return person.contactInformation
+}
