@@ -2,6 +2,7 @@ package person
 
 import (
 	"github.com/Msksgm/go-IDDD-05-entity/iddd_identityaccess/domain/model/identity/contactinformation"
+	"github.com/Msksgm/go-IDDD-05-entity/iddd_identityaccess/domain/model/identity/emailaddress"
 	"github.com/Msksgm/go-IDDD-05-entity/iddd_identityaccess/domain/model/identity/fullname"
 	"github.com/Msksgm/go-IDDD-05-entity/iddd_identityaccess/domain/model/identity/tenantid"
 )
@@ -33,4 +34,8 @@ func (person *Person) ChangeName(aName fullname.FullName) error {
 
 func (person *Person) ContactInformation() contactinformation.ContactInformation {
 	return person.contactInformation
+}
+
+func (person *Person) EmailAddress() emailaddress.EmailAddress {
+	return *person.contactInformation.EmailAddress()
 }
