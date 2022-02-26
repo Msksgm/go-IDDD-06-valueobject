@@ -27,12 +27,11 @@ var (
 )
 
 func init() {
-	u, err := uuid.NewRandom()
+	uuId, err := uuid.NewRandom()
 	if err != nil {
 		log.Fatal(err)
 	}
-	uu := u.String()
-	tenantId, err = tenantid.NewTenantId(uu)
+	tenantId, err = tenantid.NewTenantId(uuId.String())
 	if err != nil {
 		log.Fatal(err)
 	}
