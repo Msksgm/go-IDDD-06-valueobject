@@ -59,3 +59,15 @@ func TestNewEnablement(t *testing.T) {
 		}
 	})
 }
+
+func TestEquals(t *testing.T) {
+	enablement, err := NewEnablement(enabled, startDate, endDate)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	otherEnablement := &Enablement{enabled: enabled, startDate: startDate, endDate: endDate}
+	if !enablement.Equals(otherEnablement) {
+		t.Errorf("enablement: %v must be equal to otherEnablement: %v", enablement, otherEnablement)
+	}
+}

@@ -1,6 +1,7 @@
 package enablement
 
 import (
+	"reflect"
 	"time"
 
 	"github.com/Msksgm/go-IDDD-05-entity/iddd_common/ierrors"
@@ -23,4 +24,11 @@ func NewEnablement(aEnabled bool, aStartDate time.Time, aEndDate time.Time) (*En
 	enablement.startDate = aStartDate
 	enablement.endDate = aEndDate
 	return enablement, nil
+}
+
+func (enablement *Enablement) Equals(otheEnablement *Enablement) bool {
+	isEnabledEqual := reflect.DeepEqual(enablement.enabled, otheEnablement.enabled)
+	isStartDateEqual := reflect.DeepEqual(enablement.startDate, enablement.startDate)
+	isEndDateEqual := reflect.DeepEqual(enablement.endDate, enablement.endDate)
+	return isEnabledEqual && isStartDateEqual && isEndDateEqual
 }
