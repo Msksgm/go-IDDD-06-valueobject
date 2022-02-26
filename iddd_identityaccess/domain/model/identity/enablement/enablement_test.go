@@ -9,16 +9,15 @@ import (
 	"time"
 
 	"github.com/Msksgm/go-IDDD-05-entity/iddd_common/ierrors"
+	"github.com/Msksgm/go-IDDD-05-entity/iddd_common/utils"
 	"github.com/google/go-cmp/cmp"
 )
 
 const (
-	timeFormat = "2006-01-02 15:04:05"
-	enabled    = true
+	enabled = true
 )
 
 var (
-	jst                = time.FixedZone("Asia/Tokyo", 9*60*60)
 	argumentFalseError *ierrors.ArgumentFalseError
 	startDate          time.Time
 	endDate            time.Time
@@ -26,11 +25,11 @@ var (
 )
 
 func init() {
-	startDate, err = time.ParseInLocation(timeFormat, "2020-01-01 00:00:00", jst)
+	startDate, err = time.ParseInLocation(utils.TimeFormat, "2020-01-01 00:00:00", utils.Jst)
 	if err != nil {
 		log.Fatal(err)
 	}
-	endDate, err = time.ParseInLocation(timeFormat, "2030-01-01 00:00:00", jst)
+	endDate, err = time.ParseInLocation(utils.TimeFormat, "2030-01-01 00:00:00", utils.Jst)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -50,7 +49,7 @@ func TestNewEnablement(t *testing.T) {
 		}
 	})
 	t.Run("fail startDate is after than endDate", func(t *testing.T) {
-		endDate, err := time.ParseInLocation(timeFormat, "2010-01-01 00:00:00", jst)
+		endDate, err := time.ParseInLocation(utils.TimeFormat, "2010-01-01 00:00:00", utils.Jst)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -85,11 +84,11 @@ func TestIsTimeExpired(t *testing.T) {
 		}
 	})
 	t.Run("flase", func(t *testing.T) {
-		startDate, err = time.ParseInLocation(timeFormat, "1900-01-01 00:00:00", jst)
+		startDate, err = time.ParseInLocation(utils.TimeFormat, "1900-01-01 00:00:00", utils.Jst)
 		if err != nil {
 			log.Fatal(err)
 		}
-		endDate, err = time.ParseInLocation(timeFormat, "2000-01-01 00:00:00", jst)
+		endDate, err = time.ParseInLocation(utils.TimeFormat, "2000-01-01 00:00:00", utils.Jst)
 		if err != nil {
 			log.Fatal(err)
 		}
