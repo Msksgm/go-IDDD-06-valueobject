@@ -26,6 +26,29 @@ func NewEnablement(aEnabled bool, aStartDate time.Time, aEndDate time.Time) (*En
 	return enablement, nil
 }
 
+func (enablement *Enablement) IsEnabled() bool {
+	return enablement.enabled
+}
+
+func (enablement *Enablement) EndDate() time.Time {
+	return enablement.endDate
+}
+
+func (enablement *Enablement) StartDate() time.Time {
+	return enablement.startDate
+}
+
+func (enablement *Enablement) IsTimeExpired() bool {
+	timeExpired := false
+
+	now := time.Now()
+	if now.Before(enablement.startDate) || now.After(enablement.endDate) {
+		timeExpired = true
+	}
+
+	return timeExpired
+}
+
 func (enablement *Enablement) Equals(otheEnablement *Enablement) bool {
 	isEnabledEqual := reflect.DeepEqual(enablement.enabled, otheEnablement.enabled)
 	isStartDateEqual := reflect.DeepEqual(enablement.startDate, enablement.startDate)

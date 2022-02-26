@@ -71,3 +71,34 @@ func TestEquals(t *testing.T) {
 		t.Errorf("enablement: %v must be equal to otherEnablement: %v", enablement, otherEnablement)
 	}
 }
+
+func TestIsTimeExpired(t *testing.T) {
+	t.Run("true", func(t *testing.T) {
+		enablement, err := NewEnablement(enabled, startDate, endDate)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		if enablement.IsTimeExpired() {
+			t.Errorf("enablement.IsTimeExpired() must be true, when enablement: %v", enablement)
+		}
+	})
+	t.Run("flase", func(t *testing.T) {
+		startDate, err = time.ParseInLocation(timeFormat, "1900-01-01 00:00:00", jst)
+		if err != nil {
+			log.Fatal(err)
+		}
+		endDate, err = time.ParseInLocation(timeFormat, "2000-01-01 00:00:00", jst)
+		if err != nil {
+			log.Fatal(err)
+		}
+		enablement, err := NewEnablement(enabled, startDate, endDate)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		if !enablement.IsTimeExpired() {
+			t.Errorf("enablement.IsTimeExpired() must be false, when enablement: %v", enablement)
+		}
+	})
+}
