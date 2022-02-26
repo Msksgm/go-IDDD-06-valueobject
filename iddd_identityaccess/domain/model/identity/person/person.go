@@ -20,3 +20,8 @@ func NewPerson(aTenantId tenantid.TenantId, aName fullname.FullName, aContactInf
 	person.contactInformation = aContactInformation
 	return person, nil
 }
+
+func (person *Person) ChangeContactInformation(aContactInformation contactinformation.ContactInformation) error {
+	person.contactInformation = aContactInformation
+	return nil
+}

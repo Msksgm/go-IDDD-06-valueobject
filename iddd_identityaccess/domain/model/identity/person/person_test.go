@@ -29,8 +29,6 @@ var (
 	tenantId           *tenantid.TenantId
 )
 
-var err error
-
 func init() {
 	emailAddress, err := emailaddress.NewEmailAddress(address)
 	if err != nil {
@@ -79,6 +77,35 @@ func TestNewPerson(t *testing.T) {
 
 	allowUnexported := cmp.AllowUnexported(Person{}, tenantid.TenantId{}, fullname.FullName{}, contactinformation.ContactInformation{}, emailaddress.EmailAddress{}, postaladdress.PostalAddress{}, telephone.Telephone{})
 	if diff := cmp.Diff(want, got, allowUnexported); diff != "" {
+		t.Errorf("mismatch (-want, +got):\n%s", diff)
+	}
+}
+
+func TestChangeContactInformation(t *testing.T) {
+	person, err := NewPerson(*tenantId, *fullName, *contactInformation)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	changedAddressString := "changed@email.com"
+	changedAddress, err := emailaddress.NewEmailAddress(changedAddressString)
+	if err != nil {
+		t.Fatal(err)
+	}
+	changedContactInfomation, err := contactInformation.ChangeEmailAddress(*changedAddress)
+	if err != nil {
+		t.Fatal(err)
+	}
+	want, err := NewPerson(*tenantId, *fullName, *changedContactInfomation)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := person.ChangeContactInformation(*changedContactInfomation); err != nil {
+		t.Fatal(err)
+	}
+
+	allowUnexported := cmp.AllowUnexported(Person{}, tenantid.TenantId{}, fullname.FullName{}, contactinformation.ContactInformation{}, emailaddress.EmailAddress{}, postaladdress.PostalAddress{}, telephone.Telephone{})
+	if diff := cmp.Diff(want, person, allowUnexported); diff != "" {
 		t.Errorf("mismatch (-want, +got):\n%s", diff)
 	}
 }
