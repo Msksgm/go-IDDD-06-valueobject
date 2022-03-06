@@ -17,53 +17,48 @@ type PostalAddress struct {
 
 func NewPostalAddress(aStreetAddress string, aCity string, aStateProvince string, aPostalCode string, aCountryCode string) (_ *PostalAddress, err error) {
 	defer ierrors.Wrap(&err, "postaladdress.NewPostalAddress(%s, %s, %s, %s, %s)", aStreetAddress, aCity, aStateProvince, aPostalCode, aCountryCode)
-	postalAddress := new(PostalAddress)
 
-	// set StreetAddress
+	// validate StreetAddress
 	if err := ierrors.NewArgumentNotEmptyError(aStreetAddress, "The street address is required.").GetError(); err != nil {
 		return nil, err
 	}
 	if err := ierrors.NewArgumentLengthError(aStreetAddress, 1, 100, "The street address must be 100 characters or less.").GetError(); err != nil {
 		return nil, err
 	}
-	postalAddress.streetAddress = aStreetAddress
 
-	// set City
+	// validate City
 	if err := ierrors.NewArgumentNotEmptyError(aCity, "The street city is required.").GetError(); err != nil {
 		return nil, err
 	}
 	if err := ierrors.NewArgumentLengthError(aCity, 1, 100, "The street city must be 100 characters or less.").GetError(); err != nil {
 		return nil, err
 	}
-	postalAddress.city = aCity
 
-	// set PostalCode
+	// validate PostalCode
 	if err := ierrors.NewArgumentNotEmptyError(aPostalCode, "The postal code is required.").GetError(); err != nil {
 		return nil, err
 	}
 	if err := ierrors.NewArgumentLengthError(aPostalCode, 5, 12, "The postal code must be between 5 characters and 12 characters.").GetError(); err != nil {
 		return nil, err
 	}
-	postalAddress.postalCode = aPostalCode
 
-	// set StateProvince
+	// validate StateProvince
 	if err := ierrors.NewArgumentNotEmptyError(aStateProvince, "The state/province is required.").GetError(); err != nil {
 		return nil, err
 	}
 	if err := ierrors.NewArgumentLengthError(aStateProvince, 2, 100, "The state/province must be between 2 charcters and 100 characters").GetError(); err != nil {
 		return nil, err
 	}
-	postalAddress.stateProvince = aStateProvince
 
-	// set CountryCode
+	// validate CountryCode
 	if err := ierrors.NewArgumentNotEmptyError(aCountryCode, "The country is required.").GetError(); err != nil {
 		return nil, err
 	}
 	if err := ierrors.NewArgumentLengthError(aCountryCode, 2, 2, "The country code must be two characters.").GetError(); err != nil {
 		return nil, err
 	}
-	postalAddress.countryCode = aCountryCode
-	return postalAddress, nil
+
+	return &PostalAddress{streetAddress: aStreetAddress, city: aCity, postalCode: aPostalCode, stateProvince: aStateProvince, countryCode: aCountryCode}, nil
 }
 
 // TODO add shallow copy of PostalAddress
