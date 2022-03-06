@@ -9,46 +9,37 @@ import (
 )
 
 type User struct {
-	tenantId     TenantId
-	userName     string
-	password     string
-	anEnablement Enablement
+	tenantId   TenantId
+	userName   string
+	password   string
+	enablement Enablement
 }
 
 const STRONG_THRESHOL = 20
 
-func NewUser(tenantId TenantId, userName string, password string, anEnablement Enablement) (_ *User, err error) {
+func NewUser(aTenantId TenantId, aUserName string, aPassword string, anEnablement Enablement) (_ *User, err error) {
+	defer ierrors.Wrap(&err, "user.NewUser()")
 	user := new(User)
 
-	user.tenantId = tenantId
-
-	if err := user.setUserName(userName); err != nil {
+	// validate userName
+	if err := ierrors.NewArgumentNotEmptyError(aUserName, "First name is required.").GetError(); err != nil {
+		return nil, err
+	}
+	if err := ierrors.NewArgumentLengthError(aUserName, 3, 250, "The username must be 3 to 250 characters.").GetError(); err != nil {
 		return nil, err
 	}
 
-	if err := user.protectPassword("", password); err != nil {
+	if err := user.protectPassword("", aPassword); err != nil {
 		return nil, err
 	}
 
 	user.setEnablement(anEnablement)
 
-	return user, nil
-}
-
-func (user *User) setUserName(userName string) (err error) {
-	defer ierrors.Wrap(&err, "user.setUserName(%s)", userName)
-	if err := ierrors.NewArgumentNotEmptyError(userName, "First name is required.").GetError(); err != nil {
-		return err
-	}
-	if err := ierrors.NewArgumentLengthError(userName, 3, 250, "The username must be 3 to 250 characters.").GetError(); err != nil {
-		return err
-	}
-	user.userName = userName
-	return nil
+	return &User{tenantId: aTenantId, userName: aUserName, password: aPassword, enablement: anEnablement}, nil
 }
 
 func (user *User) setEnablement(anEnablement Enablement) {
-	user.anEnablement = anEnablement
+	user.enablement = anEnablement
 }
 
 func (user *User) protectPassword(currentPassword string, changedPassword string) error {

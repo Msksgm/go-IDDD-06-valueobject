@@ -24,7 +24,7 @@ const (
 var (
 	tenantId         *TenantId
 	bcryptedPassword []byte
-	anEnablement     *Enablement
+	enablement       *Enablement
 )
 
 func init() {
@@ -49,7 +49,7 @@ func init() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	anEnablement, err = NewEnablement(true, startDate, endDate)
+	enablement, err = NewEnablement(true, startDate, endDate)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -62,12 +62,12 @@ var (
 
 func TestNewUser(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
-		got, err := NewUser(*tenantId, userName, password, *anEnablement)
+		got, err := NewUser(*tenantId, userName, password, *enablement)
 		if err != nil {
 			t.Fatal(err)
 		}
 
-		want := &User{tenantId: *tenantId, userName: userName, password: string(bcryptedPassword), anEnablement: *anEnablement}
+		want := &User{tenantId: *tenantId, userName: userName, password: string(bcryptedPassword), enablement: *enablement}
 
 		opts := cmp.Options{
 			cmp.AllowUnexported(User{}, TenantId{}, Enablement{}),
@@ -81,19 +81,19 @@ func TestNewUser(t *testing.T) {
 		}
 	})
 	t.Run("fail username is required.", func(t *testing.T) {
-		_, err := NewUser(*tenantId, "", password, *anEnablement)
+		_, err := NewUser(*tenantId, "", password, *enablement)
 		if !errors.As(err, &argumentNotEmptyError) {
 			t.Errorf("err type:%v, expect type: %v", reflect.TypeOf(errors.Unwrap(err)), reflect.TypeOf(&argumentNotEmptyError))
 		}
 	})
 	t.Run("fail username is lower than 3 characters.", func(t *testing.T) {
-		_, err := NewUser(*tenantId, "na", password, *anEnablement)
+		_, err := NewUser(*tenantId, "na", password, *enablement)
 		if !errors.As(err, &argumentLengthError) {
 			t.Errorf("err type:%v, expect type: %v", reflect.TypeOf(errors.Unwrap(err)), reflect.TypeOf(&argumentLengthError))
 		}
 	})
 	t.Run("fail username is over than 250 characters.", func(t *testing.T) {
-		_, err := NewUser(*tenantId, utils.RandString(251), password, *anEnablement)
+		_, err := NewUser(*tenantId, utils.RandString(251), password, *enablement)
 		if !errors.As(err, &argumentLengthError) {
 			t.Errorf("err type:%v, expect type: %v", reflect.TypeOf(errors.Unwrap(err)), reflect.TypeOf(&argumentLengthError))
 		}
@@ -102,7 +102,7 @@ func TestNewUser(t *testing.T) {
 
 func TestAssertPasswordNotSame(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
-		user := &User{tenantId: *tenantId, userName: userName, password: string(bcryptedPassword), anEnablement: *anEnablement}
+		user := &User{tenantId: *tenantId, userName: userName, password: string(bcryptedPassword), enablement: *enablement}
 		changedPassword := "ASDFG#qwerty!"
 
 		if err := user.assertPasswordNotSame(password, changedPassword); err != nil {
@@ -110,7 +110,7 @@ func TestAssertPasswordNotSame(t *testing.T) {
 		}
 	})
 	t.Run("fail", func(t *testing.T) {
-		user := &User{tenantId: *tenantId, userName: userName, password: string(bcryptedPassword), anEnablement: *anEnablement}
+		user := &User{tenantId: *tenantId, userName: userName, password: string(bcryptedPassword), enablement: *enablement}
 		changedPassword := "qwerty!ASDFG#"
 
 		err := user.assertPasswordNotSame(password, changedPassword)
@@ -123,7 +123,7 @@ func TestAssertPasswordNotSame(t *testing.T) {
 
 func TestAssertUsernamePasswordNotSame(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
-		user := &User{tenantId: *tenantId, userName: userName, password: string(bcryptedPassword), anEnablement: *anEnablement}
+		user := &User{tenantId: *tenantId, userName: userName, password: string(bcryptedPassword), enablement: *enablement}
 		changedPassword := "qwerty!ASDFG#"
 
 		if err := user.assertUsernamePasswordNotSame(changedPassword); err != nil {
@@ -131,7 +131,7 @@ func TestAssertUsernamePasswordNotSame(t *testing.T) {
 		}
 	})
 	t.Run("fail", func(t *testing.T) {
-		user := &User{tenantId: *tenantId, userName: userName, password: string(bcryptedPassword), anEnablement: *anEnablement}
+		user := &User{tenantId: *tenantId, userName: userName, password: string(bcryptedPassword), enablement: *enablement}
 		changedPassword := "userName"
 
 		err := user.assertUsernamePasswordNotSame(changedPassword)
@@ -144,14 +144,14 @@ func TestAssertUsernamePasswordNotSame(t *testing.T) {
 
 func TestAssertPasswordNotWeak(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
-		user := &User{tenantId: *tenantId, userName: userName, password: string(bcryptedPassword), anEnablement: *anEnablement}
+		user := &User{tenantId: *tenantId, userName: userName, password: string(bcryptedPassword), enablement: *enablement}
 		changedPassword := "qwerty!ASDFG"
 		if err := user.assertPasswordNotWeak(changedPassword); err != nil {
 			t.Error(err)
 		}
 	})
 	t.Run("fail password empty", func(t *testing.T) {
-		user := &User{tenantId: *tenantId, userName: userName, password: string(bcryptedPassword), anEnablement: *anEnablement}
+		user := &User{tenantId: *tenantId, userName: userName, password: string(bcryptedPassword), enablement: *enablement}
 		changedPassword := ""
 		err := user.assertPasswordNotWeak(changedPassword)
 		want := fmt.Sprintf("user.assertPasswordNotWeak(%s): The password must not be empty", changedPassword)
@@ -160,7 +160,7 @@ func TestAssertPasswordNotWeak(t *testing.T) {
 		}
 	})
 	t.Run("fail password is weak", func(t *testing.T) {
-		user := &User{tenantId: *tenantId, userName: userName, password: string(bcryptedPassword), anEnablement: *anEnablement}
+		user := &User{tenantId: *tenantId, userName: userName, password: string(bcryptedPassword), enablement: *enablement}
 		changedPassword := "123456"
 		err := user.assertPasswordNotWeak(changedPassword)
 		want := fmt.Sprintf("user.assertPasswordNotWeak(%s): The password must be stronger.", changedPassword)
@@ -172,7 +172,7 @@ func TestAssertPasswordNotWeak(t *testing.T) {
 
 func TestUserEquals(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
-		user, err := NewUser(*tenantId, userName, password, *anEnablement)
+		user, err := NewUser(*tenantId, userName, password, *enablement)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -184,7 +184,7 @@ func TestUserEquals(t *testing.T) {
 		}
 	})
 	t.Run("fail tenantId is not equal", func(t *testing.T) {
-		user, err := NewUser(*tenantId, userName, password, *anEnablement)
+		user, err := NewUser(*tenantId, userName, password, *enablement)
 		if err != nil {
 			t.Fatal(err)
 		}
