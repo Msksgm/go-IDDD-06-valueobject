@@ -14,7 +14,6 @@ type EmailAddress struct {
 
 func NewEmailAddress(anAddress string) (_ *EmailAddress, err error) {
 	defer ierrors.Wrap(&err, "emailaddress.NewEmailAddress(%s)", anAddress)
-	emailAddress := new(EmailAddress)
 	if err := ierrors.NewArgumentNotEmptyError(anAddress, "The email address is required.").GetError(); err != nil {
 		return nil, err
 	}
@@ -24,8 +23,7 @@ func NewEmailAddress(anAddress string) (_ *EmailAddress, err error) {
 	if err := ierrors.NewArgumentTrueErrorArguments(regexp.MustCompile(`^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$`).MatchString(anAddress), "Email address format is invalid.").GetError(); err != nil {
 		return nil, err
 	}
-	emailAddress.address = anAddress
-	return emailAddress, nil
+	return &EmailAddress{address: anAddress}, nil
 }
 
 // TODO add the shallow copy of EmailAddress
