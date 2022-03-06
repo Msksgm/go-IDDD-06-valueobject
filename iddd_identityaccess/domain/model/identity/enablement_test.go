@@ -21,6 +21,7 @@ var (
 	argumentFalseError *ierrors.ArgumentFalseError
 	startDate          time.Time
 	endDate            time.Time
+	err                error
 )
 
 func init() {
