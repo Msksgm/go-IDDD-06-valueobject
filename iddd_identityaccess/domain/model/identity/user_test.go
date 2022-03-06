@@ -10,7 +10,6 @@ import (
 
 	"github.com/Msksgm/go-IDDD-05-entity/iddd_common/ierrors"
 	"github.com/Msksgm/go-IDDD-05-entity/iddd_common/utils"
-	"github.com/Msksgm/go-IDDD-05-entity/iddd_identityaccess/domain/model/identity/enablement"
 	"github.com/Msksgm/go-IDDD-05-entity/iddd_identityaccess/domain/model/identity/tenantid"
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
@@ -26,7 +25,7 @@ const (
 var (
 	tenantId         *tenantid.TenantId
 	bcryptedPassword []byte
-	anEnablement     *enablement.Enablement
+	anEnablement     *Enablement
 )
 
 func init() {
@@ -51,7 +50,7 @@ func init() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	anEnablement, err = enablement.NewEnablement(true, startDate, endDate)
+	anEnablement, err = NewEnablement(true, startDate, endDate)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -72,7 +71,7 @@ func TestNewUser(t *testing.T) {
 		want := &User{tenantId: *tenantId, userName: userName, password: string(bcryptedPassword), anEnablement: *anEnablement}
 
 		opts := cmp.Options{
-			cmp.AllowUnexported(User{}, tenantid.TenantId{}, enablement.Enablement{}),
+			cmp.AllowUnexported(User{}, tenantid.TenantId{}, Enablement{}),
 			cmpopts.IgnoreFields(User{}, "password"),
 		}
 		if diff := cmp.Diff(want, got, opts); diff != "" {

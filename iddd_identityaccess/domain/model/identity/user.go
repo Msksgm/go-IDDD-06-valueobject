@@ -5,7 +5,6 @@ import (
 	"unicode"
 
 	"github.com/Msksgm/go-IDDD-05-entity/iddd_common/ierrors"
-	"github.com/Msksgm/go-IDDD-05-entity/iddd_identityaccess/domain/model/identity/enablement"
 	"github.com/Msksgm/go-IDDD-05-entity/iddd_identityaccess/domain/model/identity/tenantid"
 	"golang.org/x/crypto/bcrypt"
 )
@@ -14,12 +13,12 @@ type User struct {
 	tenantId     tenantid.TenantId
 	userName     string
 	password     string
-	anEnablement enablement.Enablement
+	anEnablement Enablement
 }
 
 const STRONG_THRESHOL = 20
 
-func NewUser(tenantId tenantid.TenantId, userName string, password string, anEnablement enablement.Enablement) (_ *User, err error) {
+func NewUser(tenantId tenantid.TenantId, userName string, password string, anEnablement Enablement) (_ *User, err error) {
 	user := new(User)
 
 	user.tenantId = tenantId
@@ -49,7 +48,7 @@ func (user *User) setUserName(userName string) (err error) {
 	return nil
 }
 
-func (user *User) setEnablement(anEnablement enablement.Enablement) {
+func (user *User) setEnablement(anEnablement Enablement) {
 	user.anEnablement = anEnablement
 }
 

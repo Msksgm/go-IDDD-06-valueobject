@@ -12,11 +12,7 @@ import (
 	"github.com/google/go-cmp/cmp"
 )
 
-var (
-	argumentLengthError   *ierrors.ArgumentLengthError
-	argumentNotEmptyError *ierrors.ArgumentNotEmptyError
-	argumentTrueError     *ierrors.ArgumentTrueError
-)
+var argumentTrueError *ierrors.ArgumentTrueError
 
 func TestNewFullName(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
