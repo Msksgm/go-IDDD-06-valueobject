@@ -15,16 +15,11 @@ type Enablement struct {
 }
 
 func NewEnablement(aEnabled bool, aStartDate time.Time, aEndDate time.Time) (*Enablement, error) {
-	enablement := new(Enablement)
-
 	if err := ierrors.NewArgumentFalseError(aStartDate.After(aEndDate), "Enablement start and/or end date is invalid.").GetError(); err != nil {
 		return nil, err
 	}
 
-	enablement.enabled = aEnabled
-	enablement.startDate = aStartDate
-	enablement.endDate = aEndDate
-	return enablement, nil
+	return &Enablement{enabled: aEnabled, startDate: aStartDate, endDate: aEndDate}, nil
 }
 
 func (enablement *Enablement) IsEnabled() bool {
