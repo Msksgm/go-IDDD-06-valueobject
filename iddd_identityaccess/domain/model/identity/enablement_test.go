@@ -1,4 +1,4 @@
-package enablement
+package user
 
 import (
 	"errors"
