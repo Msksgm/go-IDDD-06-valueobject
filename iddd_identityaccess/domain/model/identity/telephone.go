@@ -1,4 +1,4 @@
-package telephone
+package identity
 
 import (
 	"fmt"
