@@ -5,33 +5,26 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
-	"github.com/google/uuid"
 )
 
 func TestNewTenantId(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
-		u, err := uuid.NewRandom()
-		if err != nil {
-			t.Fatal(err)
-		}
-		uu := u.String()
-
-		got, err := NewTenantId(uu)
+		got, err := NewTenantId(uuidV4)
 		if err != nil {
 			t.Fatal(err)
 		}
 
-		want := &TenantId{id: uu}
+		want := &TenantId{id: uuidV4}
 
 		if diff := cmp.Diff(want, got, cmp.AllowUnexported(TenantId{})); diff != "" {
 			t.Errorf("mismatch (-want, +got):\n%s", diff)
 		}
 	})
 	t.Run("fail invalid UUID length", func(t *testing.T) {
-		uu := "UUID"
+		dumpyUuuid := "UUID"
 
-		tenatId, err := NewTenantId(uu)
-		want := fmt.Sprintf("tenantid.NewTenantId(%s): invalid UUID length: %d", uu, len(uu))
+		tenatId, err := NewTenantId(dumpyUuuid)
+		want := fmt.Sprintf("tenantid.NewTenantId(%s): invalid UUID length: %d", dumpyUuuid, len(dumpyUuuid))
 		if got := err.Error(); want != got {
 			t.Errorf("got %s, want %s", got, want)
 		}
@@ -43,18 +36,12 @@ func TestNewTenantId(t *testing.T) {
 }
 
 func TestTenantIdEquals(t *testing.T) {
-	u, err := uuid.NewRandom()
-	if err != nil {
-		t.Fatal(err)
-	}
-	uu := u.String()
-
-	tenantId, err := NewTenantId(uu)
+	tenantId, err := NewTenantId(uuidV4)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	otherTenantId := &TenantId{id: uu}
+	otherTenantId := &TenantId{id: uuidV4}
 
 	if !tenantId.Equals(otherTenantId) {
 		t.Errorf("tenantId: %v must be euqal to otherTenantId %v", tenantId, otherTenantId)

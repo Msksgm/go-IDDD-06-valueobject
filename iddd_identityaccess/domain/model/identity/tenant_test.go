@@ -10,15 +10,11 @@ import (
 	"github.com/google/uuid"
 )
 
+var uuidV4 = uuid.New().String()
+
 func TestNewTenant(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
-		u, err := uuid.NewRandom()
-		if err != nil {
-			t.Fatal(err)
-		}
-		uu := u.String()
-
-		tenantId, err := NewTenantId(uu)
+		tenantId, err := NewTenantId(uuidV4)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -36,13 +32,7 @@ func TestNewTenant(t *testing.T) {
 		}
 	})
 	t.Run("fail empty name", func(t *testing.T) {
-		u, err := uuid.NewRandom()
-		if err != nil {
-			t.Fatal(err)
-		}
-		uu := u.String()
-
-		tenantId, err := NewTenantId(uu)
+		tenantId, err := NewTenantId(uuidV4)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -55,13 +45,7 @@ func TestNewTenant(t *testing.T) {
 		}
 	})
 	t.Run("fail over 100 characters name", func(t *testing.T) {
-		u, err := uuid.NewRandom()
-		if err != nil {
-			t.Fatal(err)
-		}
-		uu := u.String()
-
-		tenantId, err := NewTenantId(uu)
+		tenantId, err := NewTenantId(uuidV4)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -77,13 +61,7 @@ func TestNewTenant(t *testing.T) {
 
 func TestDeactivate(t *testing.T) {
 	t.Run("active to deactive", func(t *testing.T) {
-		u, err := uuid.NewRandom()
-		if err != nil {
-			t.Fatal(err)
-		}
-		uu := u.String()
-
-		tenantId, err := NewTenantId(uu)
+		tenantId, err := NewTenantId(uuidV4)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -98,13 +76,7 @@ func TestDeactivate(t *testing.T) {
 		}
 	})
 	t.Run("deactive to deactive", func(t *testing.T) {
-		u, err := uuid.NewRandom()
-		if err != nil {
-			t.Fatal(err)
-		}
-		uu := u.String()
-
-		tenantId, err := NewTenantId(uu)
+		tenantId, err := NewTenantId(uuidV4)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -122,13 +94,7 @@ func TestDeactivate(t *testing.T) {
 
 func TestActivate(t *testing.T) {
 	t.Run("deactive to active", func(t *testing.T) {
-		u, err := uuid.NewRandom()
-		if err != nil {
-			t.Fatal(err)
-		}
-		uu := u.String()
-
-		tenantId, err := NewTenantId(uu)
+		tenantId, err := NewTenantId(uuidV4)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -143,13 +109,7 @@ func TestActivate(t *testing.T) {
 		}
 	})
 	t.Run("active to active", func(t *testing.T) {
-		u, err := uuid.NewRandom()
-		if err != nil {
-			t.Fatal(err)
-		}
-		uu := u.String()
-
-		tenantId, err := NewTenantId(uu)
+		tenantId, err := NewTenantId(uuidV4)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -167,13 +127,7 @@ func TestActivate(t *testing.T) {
 
 func TestTenantEquals(t *testing.T) {
 	t.Run("equal", func(t *testing.T) {
-		u, err := uuid.NewRandom()
-		if err != nil {
-			t.Fatal(err)
-		}
-		uu := u.String()
-
-		tenantId, err := NewTenantId(uu)
+		tenantId, err := NewTenantId(uuidV4)
 		if err != nil {
 			t.Fatal(err)
 		}
@@ -189,22 +143,13 @@ func TestTenantEquals(t *testing.T) {
 		}
 	})
 	t.Run("not equal", func(t *testing.T) {
-		u1, err := uuid.NewRandom()
-		if err != nil {
-			t.Fatal(err)
-		}
-		uu1 := u1.String()
-		tenantId1, err := NewTenantId(uu1)
+		tenantId1, err := NewTenantId(uuidV4)
 		if err != nil {
 			t.Fatal(err)
 		}
 
-		u2, err := uuid.NewRandom()
-		if err != nil {
-			t.Fatal(err)
-		}
-		uu2 := u2.String()
-		tenantId2, err := NewTenantId(uu2)
+		otherUuidV4 := uuid.New().String()
+		tenantId2, err := NewTenantId(otherUuidV4)
 		if err != nil {
 			t.Fatal(err)
 		}
