@@ -1,4 +1,4 @@
-package emailaddress
+package identity
 
 import (
 	"errors"
@@ -6,15 +6,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/Msksgm/go-IDDD-05-entity/iddd_common/ierrors"
 	"github.com/Msksgm/go-IDDD-05-entity/iddd_common/utils"
 	"github.com/google/go-cmp/cmp"
-)
-
-var (
-	argumentLengthError   *ierrors.ArgumentLengthError
-	argumentNotEmptyError *ierrors.ArgumentNotEmptyError
-	argumentTrueError     *ierrors.ArgumentTrueError
 )
 
 func TestNewEmailAddress(t *testing.T) {

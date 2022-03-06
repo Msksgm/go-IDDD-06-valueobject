@@ -1,4 +1,4 @@
-package emailaddress
+package identity
 
 import (
 	"fmt"

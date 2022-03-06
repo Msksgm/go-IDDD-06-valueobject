@@ -2,18 +2,16 @@ package identity
 
 import (
 	"fmt"
-
-	"github.com/Msksgm/go-IDDD-05-entity/iddd_identityaccess/domain/model/identity/emailaddress"
 )
 
 type ContactInformation struct {
-	emailAddress       emailaddress.EmailAddress
+	emailAddress       EmailAddress
 	postalAddress      PostalAddress
 	primaryTelephone   Telephone
 	secondaryTelephone Telephone
 }
 
-func NewContactInformation(aEmailaddress emailaddress.EmailAddress, aPostalAddress PostalAddress, aPrimaryAddress Telephone, aSecondaryAddress Telephone) (*ContactInformation, error) {
+func NewContactInformation(aEmailaddress EmailAddress, aPostalAddress PostalAddress, aPrimaryAddress Telephone, aSecondaryAddress Telephone) (*ContactInformation, error) {
 	contactInformation := new(ContactInformation)
 
 	contactInformation.emailAddress = aEmailaddress
@@ -32,7 +30,7 @@ func CopyContactInfomation(aContactInformation ContactInformation) (*ContactInfo
 	return copiedContactInformation, nil
 }
 
-func (contactInformation *ContactInformation) ChangeEmailAddress(aEmailaddress emailaddress.EmailAddress) (*ContactInformation, error) {
+func (contactInformation *ContactInformation) ChangeEmailAddress(aEmailaddress EmailAddress) (*ContactInformation, error) {
 	newContactInformation, err := NewContactInformation(aEmailaddress, contactInformation.postalAddress, contactInformation.primaryTelephone, contactInformation.secondaryTelephone)
 	if err != nil {
 		return nil, err
@@ -64,7 +62,7 @@ func (contactInformation *ContactInformation) ChangeSecondaryTelephone(aTelephon
 	return newContactInformation, nil
 }
 
-func (contactInformation *ContactInformation) EmailAddress() *emailaddress.EmailAddress {
+func (contactInformation *ContactInformation) EmailAddress() *EmailAddress {
 	return &contactInformation.emailAddress
 }
 
