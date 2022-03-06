@@ -14,9 +14,8 @@ type Telephone struct {
 
 func NewTelephone(aNumber string) (_ *Telephone, err error) {
 	defer ierrors.Wrap(&err, "telephone.NewTelephone(%s)", aNumber)
-	telephone := new(Telephone)
 
-	// set number
+	// validate number
 	if err := ierrors.NewArgumentNotEmptyError(aNumber, "Telephone number is required.").GetError(); err != nil {
 		return nil, err
 	}
@@ -26,9 +25,8 @@ func NewTelephone(aNumber string) (_ *Telephone, err error) {
 	if err := ierrors.NewArgumentTrueErrorArguments(regexp.MustCompile(`^0\d{2,3}-\d{1,4}-\d{4}$`).MatchString(aNumber), "First name must be at least one character in length, starting with a capital letter.").GetError(); err != nil {
 		return nil, err
 	}
-	telephone.number = aNumber
 
-	return telephone, nil
+	return &Telephone{number: aNumber}, nil
 }
 
 // TODO add the shallow copy function
