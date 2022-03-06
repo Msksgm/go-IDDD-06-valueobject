@@ -1,16 +1,15 @@
-package user
+package identity
 
 import (
 	"fmt"
 	"unicode"
 
 	"github.com/Msksgm/go-IDDD-05-entity/iddd_common/ierrors"
-	"github.com/Msksgm/go-IDDD-05-entity/iddd_identityaccess/domain/model/identity/tenantid"
 	"golang.org/x/crypto/bcrypt"
 )
 
 type User struct {
-	tenantId     tenantid.TenantId
+	tenantId     TenantId
 	userName     string
 	password     string
 	anEnablement Enablement
@@ -18,7 +17,7 @@ type User struct {
 
 const STRONG_THRESHOL = 20
 
-func NewUser(tenantId tenantid.TenantId, userName string, password string, anEnablement Enablement) (_ *User, err error) {
+func NewUser(tenantId TenantId, userName string, password string, anEnablement Enablement) (_ *User, err error) {
 	user := new(User)
 
 	user.tenantId = tenantId

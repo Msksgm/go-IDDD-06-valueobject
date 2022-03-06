@@ -1,17 +1,16 @@
-package tenant
+package identity
 
 import (
 	"github.com/Msksgm/go-IDDD-05-entity/iddd_common/ierrors"
-	"github.com/Msksgm/go-IDDD-05-entity/iddd_identityaccess/domain/model/identity/tenantid"
 )
 
 type Tenant struct {
-	tenantId tenantid.TenantId
+	tenantId TenantId
 	name     string
 	active   bool
 }
 
-func NewTenant(tenantId tenantid.TenantId, name string, active bool) (_ *Tenant, err error) {
+func NewTenant(tenantId TenantId, name string, active bool) (_ *Tenant, err error) {
 	tenant := new(Tenant)
 	if err := tenant.setName(name); err != nil {
 		return nil, err

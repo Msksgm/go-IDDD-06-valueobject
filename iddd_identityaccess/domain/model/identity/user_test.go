@@ -1,4 +1,4 @@
-package user
+package identity
 
 import (
 	"errors"
@@ -10,7 +10,6 @@ import (
 
 	"github.com/Msksgm/go-IDDD-05-entity/iddd_common/ierrors"
 	"github.com/Msksgm/go-IDDD-05-entity/iddd_common/utils"
-	"github.com/Msksgm/go-IDDD-05-entity/iddd_identityaccess/domain/model/identity/tenantid"
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/google/uuid"
@@ -23,7 +22,7 @@ const (
 )
 
 var (
-	tenantId         *tenantid.TenantId
+	tenantId         *TenantId
 	bcryptedPassword []byte
 	anEnablement     *Enablement
 )
@@ -33,7 +32,7 @@ func init() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	tenantId, err = tenantid.NewTenantId(uuId.String())
+	tenantId, err = NewTenantId(uuId.String())
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -71,7 +70,7 @@ func TestNewUser(t *testing.T) {
 		want := &User{tenantId: *tenantId, userName: userName, password: string(bcryptedPassword), anEnablement: *anEnablement}
 
 		opts := cmp.Options{
-			cmp.AllowUnexported(User{}, tenantid.TenantId{}, Enablement{}),
+			cmp.AllowUnexported(User{}, TenantId{}, Enablement{}),
 			cmpopts.IgnoreFields(User{}, "password"),
 		}
 		if diff := cmp.Diff(want, got, opts); diff != "" {
@@ -195,7 +194,7 @@ func TestUserEquals(t *testing.T) {
 			t.Fatal(err)
 		}
 		uu2 := u2.String()
-		tenantId2, err := tenantid.NewTenantId(uu2)
+		tenantId2, err := NewTenantId(uu2)
 		if err != nil {
 			t.Fatal(err)
 		}

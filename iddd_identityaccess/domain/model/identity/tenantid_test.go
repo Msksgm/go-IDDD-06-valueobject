@@ -1,4 +1,4 @@
-package tenantid
+package identity
 
 import (
 	"fmt"
@@ -42,7 +42,7 @@ func TestNewTenantId(t *testing.T) {
 	})
 }
 
-func TestEquals(t *testing.T) {
+func TestTenantIdEquals(t *testing.T) {
 	u, err := uuid.NewRandom()
 	if err != nil {
 		t.Fatal(err)
