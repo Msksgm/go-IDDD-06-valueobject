@@ -15,9 +15,8 @@ type FullName struct {
 
 func NewFullName(aFirstName string, aLastName string) (_ *FullName, err error) {
 	defer ierrors.Wrap(&err, "fullname.NewFullName(%s, %s)", aFirstName, aLastName)
-	fullName := new(FullName)
 
-	// set firstName
+	// validate firstName
 	if err := ierrors.NewArgumentNotEmptyError(aFirstName, "First name is required.").GetError(); err != nil {
 		return nil, err
 	}
@@ -27,9 +26,8 @@ func NewFullName(aFirstName string, aLastName string) (_ *FullName, err error) {
 	if err := ierrors.NewArgumentTrueErrorArguments(regexp.MustCompile(`^[A-Z][a-z]*`).MatchString(aFirstName), "First name must be at least one character in length, starting with a capital letter.").GetError(); err != nil {
 		return nil, err
 	}
-	fullName.firstName = aFirstName
 
-	// set lastName
+	// validate lastName
 	if err := ierrors.NewArgumentNotEmptyError(aLastName, "Last name is required.").GetError(); err != nil {
 		return nil, err
 	}
@@ -39,9 +37,8 @@ func NewFullName(aFirstName string, aLastName string) (_ *FullName, err error) {
 	if err := ierrors.NewArgumentTrueErrorArguments(regexp.MustCompile(`^[a-zA-Z'][ a-zA-Z'-]*[a-zA-Z']?`).MatchString(aLastName), "Last name must be at least one character in length.").GetError(); err != nil {
 		return nil, err
 	}
-	fullName.lastName = aLastName
 
-	return fullName, nil
+	return &FullName{firstName: aFirstName, lastName: aLastName}, nil
 }
 
 // TODO CopyFullName as shallow copy
