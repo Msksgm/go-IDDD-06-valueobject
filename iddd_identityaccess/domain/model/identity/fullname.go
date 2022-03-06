@@ -1,4 +1,4 @@
-package fullname
+package user
 
 import (
 	"fmt"
