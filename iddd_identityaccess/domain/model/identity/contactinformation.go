@@ -78,11 +78,11 @@ func (contactInformation *ContactInformation) SecondaryTelephone() *Telephone {
 	return &contactInformation.secondaryTelephone
 }
 
-func (contactInformation *ContactInformation) Equals(otheContactInformation ContactInformation) bool {
-	isEmailAddressEqual := contactInformation.emailAddress.Equals(otheContactInformation.emailAddress)
-	isPostalAddressEqual := contactInformation.postalAddress.Equals(otheContactInformation.postalAddress)
-	isPrimaryTelephoneEqual := contactInformation.primaryTelephone.Equals(otheContactInformation.primaryTelephone)
-	isSecondaryTelephoneEqual := contactInformation.secondaryTelephone.Equals(otheContactInformation.secondaryTelephone)
+func (contactInformation *ContactInformation) Equals(otherContactInformation ContactInformation) bool {
+	isEmailAddressEqual := contactInformation.emailAddress.Equals(otherContactInformation.emailAddress)
+	isPostalAddressEqual := contactInformation.postalAddress.Equals(otherContactInformation.postalAddress)
+	isPrimaryTelephoneEqual := contactInformation.primaryTelephone.Equals(otherContactInformation.primaryTelephone)
+	isSecondaryTelephoneEqual := contactInformation.secondaryTelephone.Equals(otherContactInformation.secondaryTelephone)
 	return isEmailAddressEqual && isPostalAddressEqual && isPrimaryTelephoneEqual && isSecondaryTelephoneEqual
 }
 
