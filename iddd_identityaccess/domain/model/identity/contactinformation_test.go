@@ -1,4 +1,4 @@
-package contactinformation
+package identity
 
 import (
 	"fmt"
@@ -6,8 +6,6 @@ import (
 	"testing"
 
 	"github.com/Msksgm/go-IDDD-05-entity/iddd_identityaccess/domain/model/identity/emailaddress"
-	"github.com/Msksgm/go-IDDD-05-entity/iddd_identityaccess/domain/model/identity/postaladdress"
-	"github.com/Msksgm/go-IDDD-05-entity/iddd_identityaccess/domain/model/identity/telephone"
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
 )
@@ -21,9 +19,9 @@ const (
 
 var (
 	emailAddress       *emailaddress.EmailAddress
-	postalAddress      *postaladdress.PostalAddress
-	primaryTelephone   *telephone.Telephone
-	secondaryTelephone *telephone.Telephone
+	postalAddress      *PostalAddress
+	primaryTelephone   *Telephone
+	secondaryTelephone *Telephone
 )
 
 var err error
@@ -33,15 +31,15 @@ func init() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	postalAddress, err = postaladdress.NewPostalAddress(streetAddress, city, stateProvince, postalCode, countryCode)
+	postalAddress, err = NewPostalAddress(streetAddress, city, stateProvince, postalCode, countryCode)
 	if err != nil {
 		log.Fatal(err)
 	}
-	primaryTelephone, err = telephone.NewTelephone(primaryNumber)
+	primaryTelephone, err = NewTelephone(primaryNumber)
 	if err != nil {
 		log.Fatal(err)
 	}
-	secondaryTelephone, err = telephone.NewTelephone(secondaryNumber)
+	secondaryTelephone, err = NewTelephone(secondaryNumber)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -54,7 +52,7 @@ func TestNewContactInfomation(t *testing.T) {
 	}
 	want := &ContactInformation{emailAddress: *emailAddress, postalAddress: *postalAddress, primaryTelephone: *primaryTelephone, secondaryTelephone: *secondaryTelephone}
 
-	allowUnexported := cmp.AllowUnexported(ContactInformation{}, emailaddress.EmailAddress{}, postaladdress.PostalAddress{}, telephone.Telephone{})
+	allowUnexported := cmp.AllowUnexported(ContactInformation{}, emailaddress.EmailAddress{}, PostalAddress{}, Telephone{})
 	if diff := cmp.Diff(want, got, allowUnexported); diff != "" {
 		t.Errorf("mismatch (-want, +got):\n%s", diff)
 	}
@@ -96,7 +94,7 @@ func TestChangeEmailAddress(t *testing.T) {
 	}
 
 	opts := cmp.Options{
-		cmp.AllowUnexported(ContactInformation{}, emailaddress.EmailAddress{}, postaladdress.PostalAddress{}, telephone.Telephone{}),
+		cmp.AllowUnexported(ContactInformation{}, emailaddress.EmailAddress{}, PostalAddress{}, Telephone{}),
 		cmpopts.IgnoreFields(emailaddress.EmailAddress{}),
 	}
 	if diff := cmp.Diff(contactInformation, copiedContactInformation, opts); diff != "" {
@@ -114,7 +112,7 @@ func TestPostalAddress(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	changedPostalAddress, err := postaladdress.NewPostalAddress("changedStreetAddress", "changedCity", "changedStateProvince", "postalCode", "00")
+	changedPostalAddress, err := NewPostalAddress("changedStreetAddress", "changedCity", "changedStateProvince", "postalCode", "00")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -156,8 +154,8 @@ func TestPostalAddress(t *testing.T) {
 	}
 
 	opts := cmp.Options{
-		cmp.AllowUnexported(ContactInformation{}, emailaddress.EmailAddress{}, postaladdress.PostalAddress{}, telephone.Telephone{}),
-		cmpopts.IgnoreFields(postaladdress.PostalAddress{}),
+		cmp.AllowUnexported(ContactInformation{}, emailaddress.EmailAddress{}, PostalAddress{}, Telephone{}),
+		cmpopts.IgnoreFields(PostalAddress{}),
 	}
 	if diff := cmp.Diff(contactInformation, copiedContactInformation, opts); diff != "" {
 		t.Errorf("mismatch (-want, +got):\n%s", diff)
@@ -174,7 +172,7 @@ func TestPrimaryTelephone(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	changedPrimaryTelephone, err := telephone.NewTelephone("090-0000-0000")
+	changedPrimaryTelephone, err := NewTelephone("090-0000-0000")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -200,8 +198,8 @@ func TestPrimaryTelephone(t *testing.T) {
 	}
 
 	opts := cmp.Options{
-		cmp.AllowUnexported(ContactInformation{}, emailaddress.EmailAddress{}, postaladdress.PostalAddress{}, telephone.Telephone{}),
-		cmpopts.IgnoreFields(telephone.Telephone{}),
+		cmp.AllowUnexported(ContactInformation{}, emailaddress.EmailAddress{}, PostalAddress{}, Telephone{}),
+		cmpopts.IgnoreFields(Telephone{}),
 	}
 	if diff := cmp.Diff(contactInformation, copiedContactInformation, opts); diff != "" {
 		t.Errorf("mismatch (-want, +got):\n%s", diff)
@@ -218,7 +216,7 @@ func TestSecondaryTelephone(t *testing.T) {
 		t.Fatal(err)
 	}
 
-	changedSecondaryTelephone, err := telephone.NewTelephone("090-9999-9999")
+	changedSecondaryTelephone, err := NewTelephone("090-9999-9999")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -244,8 +242,8 @@ func TestSecondaryTelephone(t *testing.T) {
 	}
 
 	opts := cmp.Options{
-		cmp.AllowUnexported(ContactInformation{}, emailaddress.EmailAddress{}, postaladdress.PostalAddress{}, telephone.Telephone{}),
-		cmpopts.IgnoreFields(telephone.Telephone{}),
+		cmp.AllowUnexported(ContactInformation{}, emailaddress.EmailAddress{}, PostalAddress{}, Telephone{}),
+		cmpopts.IgnoreFields(Telephone{}),
 	}
 	if diff := cmp.Diff(contactInformation, copiedContactInformation, opts); diff != "" {
 		t.Errorf("mismatch (-want, +got):\n%s", diff)

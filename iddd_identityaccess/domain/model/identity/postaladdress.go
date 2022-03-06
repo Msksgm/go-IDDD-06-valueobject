@@ -1,4 +1,4 @@
-package postaladdress
+package identity
 
 import (
 	"fmt"

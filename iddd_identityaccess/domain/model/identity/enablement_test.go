@@ -21,7 +21,6 @@ var (
 	argumentFalseError *ierrors.ArgumentFalseError
 	startDate          time.Time
 	endDate            time.Time
-	err                error
 )
 
 func init() {
@@ -103,7 +102,7 @@ func TestIsTimeExpired(t *testing.T) {
 	})
 }
 
-func TestString(t *testing.T) {
+func TestEnablementString(t *testing.T) {
 	enablement, err := NewEnablement(enabled, startDate, endDate)
 	if err != nil {
 		t.Fatal(err)

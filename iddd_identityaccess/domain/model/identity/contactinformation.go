@@ -1,21 +1,19 @@
-package contactinformation
+package identity
 
 import (
 	"fmt"
 
 	"github.com/Msksgm/go-IDDD-05-entity/iddd_identityaccess/domain/model/identity/emailaddress"
-	"github.com/Msksgm/go-IDDD-05-entity/iddd_identityaccess/domain/model/identity/postaladdress"
-	"github.com/Msksgm/go-IDDD-05-entity/iddd_identityaccess/domain/model/identity/telephone"
 )
 
 type ContactInformation struct {
 	emailAddress       emailaddress.EmailAddress
-	postalAddress      postaladdress.PostalAddress
-	primaryTelephone   telephone.Telephone
-	secondaryTelephone telephone.Telephone
+	postalAddress      PostalAddress
+	primaryTelephone   Telephone
+	secondaryTelephone Telephone
 }
 
-func NewContactInformation(aEmailaddress emailaddress.EmailAddress, aPostalAddress postaladdress.PostalAddress, aPrimaryAddress telephone.Telephone, aSecondaryAddress telephone.Telephone) (*ContactInformation, error) {
+func NewContactInformation(aEmailaddress emailaddress.EmailAddress, aPostalAddress PostalAddress, aPrimaryAddress Telephone, aSecondaryAddress Telephone) (*ContactInformation, error) {
 	contactInformation := new(ContactInformation)
 
 	contactInformation.emailAddress = aEmailaddress
@@ -42,7 +40,7 @@ func (contactInformation *ContactInformation) ChangeEmailAddress(aEmailaddress e
 	return newContactInformation, nil
 }
 
-func (contactInformation *ContactInformation) ChangePostalAddress(aPostalAddress postaladdress.PostalAddress) (*ContactInformation, error) {
+func (contactInformation *ContactInformation) ChangePostalAddress(aPostalAddress PostalAddress) (*ContactInformation, error) {
 	newContactInformation, err := NewContactInformation(contactInformation.emailAddress, aPostalAddress, contactInformation.primaryTelephone, contactInformation.secondaryTelephone)
 	if err != nil {
 		return nil, err
@@ -50,7 +48,7 @@ func (contactInformation *ContactInformation) ChangePostalAddress(aPostalAddress
 	return newContactInformation, nil
 }
 
-func (contactInformation *ContactInformation) ChangePrimaryTelephone(aTelephone telephone.Telephone) (*ContactInformation, error) {
+func (contactInformation *ContactInformation) ChangePrimaryTelephone(aTelephone Telephone) (*ContactInformation, error) {
 	newContactInformation, err := NewContactInformation(contactInformation.emailAddress, contactInformation.postalAddress, aTelephone, contactInformation.secondaryTelephone)
 	if err != nil {
 		return nil, err
@@ -58,7 +56,7 @@ func (contactInformation *ContactInformation) ChangePrimaryTelephone(aTelephone 
 	return newContactInformation, nil
 }
 
-func (contactInformation *ContactInformation) ChangeSecondaryTelephone(aTelephone telephone.Telephone) (*ContactInformation, error) {
+func (contactInformation *ContactInformation) ChangeSecondaryTelephone(aTelephone Telephone) (*ContactInformation, error) {
 	newContactInformation, err := NewContactInformation(contactInformation.emailAddress, contactInformation.postalAddress, contactInformation.primaryTelephone, aTelephone)
 	if err != nil {
 		return nil, err
@@ -70,15 +68,15 @@ func (contactInformation *ContactInformation) EmailAddress() *emailaddress.Email
 	return &contactInformation.emailAddress
 }
 
-func (contactInformation *ContactInformation) PostalAddress() *postaladdress.PostalAddress {
+func (contactInformation *ContactInformation) PostalAddress() *PostalAddress {
 	return &contactInformation.postalAddress
 }
 
-func (contactInformation *ContactInformation) PrimaryTelephone() *telephone.Telephone {
+func (contactInformation *ContactInformation) PrimaryTelephone() *Telephone {
 	return &contactInformation.primaryTelephone
 }
 
-func (contactInformation *ContactInformation) SecondaryTelephone() *telephone.Telephone {
+func (contactInformation *ContactInformation) SecondaryTelephone() *Telephone {
 	return &contactInformation.secondaryTelephone
 }
 
