@@ -69,7 +69,7 @@ func TestDeactivate(t *testing.T) {
 		acitve := true
 		tenant := Tenant{tenantId: *tenantId, name: name, active: acitve}
 
-		tenant.deactivate()
+		tenant.Deactivate()
 
 		if tenant.active {
 			t.Errorf("tenant.activa must be false, but true")
@@ -84,7 +84,7 @@ func TestDeactivate(t *testing.T) {
 		acitve := false
 		tenant := Tenant{tenantId: *tenantId, name: name, active: acitve}
 
-		tenant.deactivate()
+		tenant.Deactivate()
 
 		if tenant.active {
 			t.Errorf("tenant.activa must be false, but true")
@@ -102,7 +102,7 @@ func TestActivate(t *testing.T) {
 		acitve := false
 		tenant := Tenant{tenantId: *tenantId, name: name, active: acitve}
 
-		tenant.activate()
+		tenant.Activate()
 
 		if !tenant.active {
 			t.Errorf("tenant.activa must be true, but false")
@@ -117,7 +117,7 @@ func TestActivate(t *testing.T) {
 		acitve := true
 		tenant := Tenant{tenantId: *tenantId, name: name, active: acitve}
 
-		tenant.activate()
+		tenant.Activate()
 
 		if !tenant.active {
 			t.Errorf("tenant.activa must be true, but false")
