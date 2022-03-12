@@ -1,6 +1,8 @@
 package identity
 
 import (
+	"reflect"
+
 	"github.com/Msksgm/go-IDDD-05-entity/iddd_common/ierrors"
 )
 
@@ -44,5 +46,5 @@ func (tenant *Tenant) IsActive() bool {
 }
 
 func (tenant *Tenant) Equals(otherTenant Tenant) bool {
-	return tenant.tenantId == otherTenant.tenantId
+	return reflect.DeepEqual(tenant.tenantId, otherTenant.tenantId)
 }
