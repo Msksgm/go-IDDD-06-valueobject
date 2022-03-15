@@ -21,7 +21,9 @@ func NewUser(aTenantId TenantId, aUserName string, aPassword string, anEnablemen
 	defer ierrors.Wrap(&err, "user.NewUser()")
 	user := new(User)
 
-	user.tenantId = aTenantId
+	if err := user.setTenantId(aTenantId); err != nil {
+		return nil, err
+	}
 
 	if err := user.setUsername(aUserName); err != nil {
 		return nil, err
@@ -37,6 +39,23 @@ func NewUser(aTenantId TenantId, aUserName string, aPassword string, anEnablemen
 	}
 
 	return user, nil
+}
+
+func (user *User) setTenantId(aTenantId TenantId) error {
+	user.tenantId = aTenantId
+	return nil
+}
+
+func (user *User) setUsername(aUserName string) error {
+	// validate userName
+	if err := ierrors.NewArgumentNotEmptyError(aUserName, "First name is required.").GetError(); err != nil {
+		return err
+	}
+	if err := ierrors.NewArgumentLengthError(aUserName, 3, 250, "The username must be 3 to 250 characters.").GetError(); err != nil {
+		return err
+	}
+	user.userName = aUserName
+	return nil
 }
 
 func (user *User) setEnablement(anEnablement Enablement) error {
@@ -130,16 +149,4 @@ func (user *User) assertUsernamePasswordNotSame(changedPassword string) (err err
 
 func (user *User) Equals(other User) bool {
 	return user.tenantId == other.tenantId
-}
-
-func (user *User) setUsername(aUserName string) error {
-	// validate userName
-	if err := ierrors.NewArgumentNotEmptyError(aUserName, "First name is required.").GetError(); err != nil {
-		return err
-	}
-	if err := ierrors.NewArgumentLengthError(aUserName, 3, 250, "The username must be 3 to 250 characters.").GetError(); err != nil {
-		return err
-	}
-	user.userName = aUserName
-	return nil
 }
