@@ -32,13 +32,16 @@ func NewUser(aTenantId TenantId, aUserName string, aPassword string, anEnablemen
 	}
 	user.password = aPassword
 
-	user.setEnablement(anEnablement)
+	if err := user.setEnablement(anEnablement); err != nil {
+		return nil, err
+	}
 
 	return user, nil
 }
 
-func (user *User) setEnablement(anEnablement Enablement) {
+func (user *User) setEnablement(anEnablement Enablement) error {
 	user.enablement = anEnablement
+	return nil
 }
 
 func (user *User) protectPassword(currentPassword string, changedPassword string) error {
