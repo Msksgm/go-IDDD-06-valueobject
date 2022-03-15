@@ -19,34 +19,21 @@ const STRONG_THRESHOL = 20
 
 func NewUser(aTenantId TenantId, aUserName string, aPassword string, anEnablement Enablement) (_ *User, err error) {
 	defer ierrors.Wrap(&err, "user.NewUser()")
-	user := new(User)
 
-	if err := user.setTenantId(aTenantId); err != nil {
+	if err := validateUsername(aUserName); err != nil {
 		return nil, err
 	}
 
-	if err := user.setUsername(aUserName); err != nil {
-		return nil, err
-	}
+	user := &User{tenantId: aTenantId, userName: aUserName, password: "", enablement: anEnablement}
 
 	if err := user.protectPassword("", aPassword); err != nil {
-		return nil, err
-	}
-	user.password = aPassword
-
-	if err := user.setEnablement(anEnablement); err != nil {
 		return nil, err
 	}
 
 	return user, nil
 }
 
-func (user *User) setTenantId(aTenantId TenantId) error {
-	user.tenantId = aTenantId
-	return nil
-}
-
-func (user *User) setUsername(aUserName string) error {
+func validateUsername(aUserName string) error {
 	// validate userName
 	if err := ierrors.NewArgumentNotEmptyError(aUserName, "First name is required.").GetError(); err != nil {
 		return err
@@ -54,12 +41,6 @@ func (user *User) setUsername(aUserName string) error {
 	if err := ierrors.NewArgumentLengthError(aUserName, 3, 250, "The username must be 3 to 250 characters.").GetError(); err != nil {
 		return err
 	}
-	user.userName = aUserName
-	return nil
-}
-
-func (user *User) setEnablement(anEnablement Enablement) error {
-	user.enablement = anEnablement
 	return nil
 }
 
