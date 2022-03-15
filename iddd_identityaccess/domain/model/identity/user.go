@@ -21,6 +21,8 @@ func NewUser(aTenantId TenantId, aUserName string, aPassword string, anEnablemen
 	defer ierrors.Wrap(&err, "user.NewUser()")
 	user := new(User)
 
+	user.tenantId = aTenantId
+
 	// validate userName
 	if err := ierrors.NewArgumentNotEmptyError(aUserName, "First name is required.").GetError(); err != nil {
 		return nil, err
@@ -28,14 +30,16 @@ func NewUser(aTenantId TenantId, aUserName string, aPassword string, anEnablemen
 	if err := ierrors.NewArgumentLengthError(aUserName, 3, 250, "The username must be 3 to 250 characters.").GetError(); err != nil {
 		return nil, err
 	}
+	user.userName = aUserName
 
 	if err := user.protectPassword("", aPassword); err != nil {
 		return nil, err
 	}
+	user.password = aPassword
 
 	user.setEnablement(anEnablement)
 
-	return &User{tenantId: aTenantId, userName: aUserName, password: aPassword, enablement: anEnablement}, nil
+	return user, nil
 }
 
 func (user *User) setEnablement(anEnablement Enablement) {
