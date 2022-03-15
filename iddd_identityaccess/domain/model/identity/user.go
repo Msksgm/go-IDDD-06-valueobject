@@ -23,14 +23,9 @@ func NewUser(aTenantId TenantId, aUserName string, aPassword string, anEnablemen
 
 	user.tenantId = aTenantId
 
-	// validate userName
-	if err := ierrors.NewArgumentNotEmptyError(aUserName, "First name is required.").GetError(); err != nil {
+	if err := user.setUsername(aUserName); err != nil {
 		return nil, err
 	}
-	if err := ierrors.NewArgumentLengthError(aUserName, 3, 250, "The username must be 3 to 250 characters.").GetError(); err != nil {
-		return nil, err
-	}
-	user.userName = aUserName
 
 	if err := user.protectPassword("", aPassword); err != nil {
 		return nil, err
@@ -132,4 +127,16 @@ func (user *User) assertUsernamePasswordNotSame(changedPassword string) (err err
 
 func (user *User) Equals(other User) bool {
 	return user.tenantId == other.tenantId
+}
+
+func (user *User) setUsername(aUserName string) error {
+	// validate userName
+	if err := ierrors.NewArgumentNotEmptyError(aUserName, "First name is required.").GetError(); err != nil {
+		return err
+	}
+	if err := ierrors.NewArgumentLengthError(aUserName, 3, 250, "The username must be 3 to 250 characters.").GetError(); err != nil {
+		return err
+	}
+	user.userName = aUserName
+	return nil
 }
