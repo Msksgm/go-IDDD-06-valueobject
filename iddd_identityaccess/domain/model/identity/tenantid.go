@@ -1,6 +1,8 @@
 package identity
 
 import (
+	"fmt"
+
 	"github.com/Msksgm/go-IDDD-05-entity/iddd_common/ierrors"
 	"github.com/google/uuid"
 )
@@ -22,4 +24,8 @@ func NewTenantId(uu string) (_ *TenantId, err error) {
 
 func (tenantId *TenantId) Equals(otherTeanntId *TenantId) bool {
 	return tenantId.id == otherTeanntId.id
+}
+
+func (tenantId *TenantId) String() string {
+	return fmt.Sprintf("TenantId [id= %s ]", tenantId.id)
 }

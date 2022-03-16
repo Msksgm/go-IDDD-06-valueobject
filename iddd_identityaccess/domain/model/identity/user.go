@@ -34,7 +34,6 @@ func NewUser(aTenantId TenantId, aUserName string, aPassword string, anEnablemen
 }
 
 func validateUsername(aUserName string) error {
-	// validate userName
 	if err := ierrors.NewArgumentNotEmptyError(aUserName, "First name is required.").GetError(); err != nil {
 		return err
 	}
