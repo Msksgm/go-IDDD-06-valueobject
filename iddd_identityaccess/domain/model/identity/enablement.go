@@ -45,10 +45,10 @@ func (enablement *Enablement) IsTimeExpired() bool {
 	return timeExpired
 }
 
-func (enablement *Enablement) Equals(otherEnablement *Enablement) bool {
-	isEnabledEqual := reflect.DeepEqual(enablement.enabled, otherEnablement.enabled)
-	isStartDateEqual := reflect.DeepEqual(enablement.startDate, otherEnablement.startDate)
-	isEndDateEqual := reflect.DeepEqual(enablement.endDate, otherEnablement.endDate)
+func (enablement *Enablement) Equals(otheEnablement *Enablement) bool {
+	isEnabledEqual := reflect.DeepEqual(enablement.enabled, otheEnablement.enabled)
+	isStartDateEqual := reflect.DeepEqual(enablement.startDate, enablement.startDate)
+	isEndDateEqual := reflect.DeepEqual(enablement.endDate, enablement.endDate)
 	return isEnabledEqual && isStartDateEqual && isEndDateEqual
 }
 
