@@ -2,16 +2,25 @@ package backlogitem
 
 import (
 	"fmt"
+	"log"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
 )
 
-func TestNewBusinessPriority(t *testing.T) {
-	businessPriorityRatings, err := NewBusinessPriorityRatings(benefit, cost, penalty, risk)
+var (
+	businessPriorityRatings *BusinessPriorityRatings
+	err                     error
+)
+
+func init() {
+	businessPriorityRatings, err = NewBusinessPriorityRatings(benefit, cost, penalty, risk)
 	if err != nil {
-		t.Fatal(err)
+		log.Fatal(err)
 	}
+}
+
+func TestNewBusinessPriority(t *testing.T) {
 	got, err := NewBusinessPriority(*businessPriorityRatings)
 	if err != nil {
 		t.Fatal(err)
