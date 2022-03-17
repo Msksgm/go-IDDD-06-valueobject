@@ -10,11 +10,16 @@ import (
 
 var (
 	businessPriorityRatings *BusinessPriorityRatings
+	businessPriorityTotals  *BusinessPriorityTotals
 	err                     error
 )
 
 func init() {
 	businessPriorityRatings, err = NewBusinessPriorityRatings(benefit, cost, penalty, risk)
+	if err != nil {
+		log.Fatal(err)
+	}
+	businessPriorityTotals, err = NewBusinessPriorityTotals(totalBenefit, totalCost, totalPenalty, totalRisk, totalValue)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -32,11 +37,21 @@ func TestNewBusinessPriority(t *testing.T) {
 	}
 }
 
-func TestBusinessPriorityEquals(t *testing.T) {
-	businessPriorityRatings, err := NewBusinessPriorityRatings(benefit, cost, penalty, risk)
+func TestCostPercentage(t *testing.T) {
+	businessPriority, err := NewBusinessPriority(*businessPriorityRatings)
 	if err != nil {
 		t.Fatal(err)
 	}
+
+	got := businessPriority.CostPercentage(*businessPriorityTotals)
+	want := 100 * float64(cost) / float64(totalCost)
+
+	if got != want {
+		t.Errorf("got %v, want %v", got, want)
+	}
+}
+
+func TestBusinessPriorityEquals(t *testing.T) {
 	businessPriority, err := NewBusinessPriority(*businessPriorityRatings)
 	if err != nil {
 		t.Fatal(err)
@@ -49,10 +64,6 @@ func TestBusinessPriorityEquals(t *testing.T) {
 }
 
 func TestBusinessPriorityString(t *testing.T) {
-	businessPriorityRatings, err := NewBusinessPriorityRatings(benefit, cost, penalty, risk)
-	if err != nil {
-		t.Fatal(err)
-	}
 	businessPriority, err := NewBusinessPriority(*businessPriorityRatings)
 	if err != nil {
 		t.Fatal(err)

@@ -13,6 +13,10 @@ func NewBusinessPriority(aBusinessPriorityRatings BusinessPriorityRatings) (*Bus
 	return &BusinessPriority{ratings: aBusinessPriorityRatings}, nil
 }
 
+func (businessPriority *BusinessPriority) CostPercentage(aTotals BusinessPriorityTotals) float64 {
+	return 100 * float64(businessPriority.ratings.cost) / float64(aTotals.TotalCost())
+}
+
 func (businessPriority *BusinessPriority) String() string {
 	return fmt.Sprintf("BusinessPriority [ratings=%v]", businessPriority.ratings)
 }
