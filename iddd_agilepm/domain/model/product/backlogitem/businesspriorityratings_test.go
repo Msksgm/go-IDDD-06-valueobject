@@ -276,3 +276,16 @@ func TestPenalty(t *testing.T) {
 		t.Errorf("got %v, want %v", got, want)
 	}
 }
+
+func Risk(t *testing.T) {
+	businessPriorityRatings, err := NewBusinessPriorityRatings(benefit, cost, penalty, risk)
+	if err != nil {
+		t.Fatal(err)
+	}
+	got := businessPriorityRatings.Risk()
+	want := benefit
+
+	if got != want {
+		t.Errorf("got %v, want %v", got, want)
+	}
+}
