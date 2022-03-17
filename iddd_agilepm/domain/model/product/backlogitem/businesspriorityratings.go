@@ -2,6 +2,7 @@ package backlogitem
 
 import (
 	"fmt"
+	"reflect"
 
 	"github.com/Msksgm/go-IDDD-05-entity/iddd_common/ierrors"
 )
@@ -32,4 +33,24 @@ func NewBusinessPriorityRatings(aBenefit int, aCost int, aPenalty int, aRisk int
 
 func (businessPriorityRatings *BusinessPriorityRatings) String() string {
 	return fmt.Sprintf("BusinessPriorityRatings [benefit=%d, cost=%d, penalty=%d, risk =%d]", businessPriorityRatings.benefit, businessPriorityRatings.cost, businessPriorityRatings.penalty, businessPriorityRatings.risk)
+}
+
+func (businessPriorityRatings *BusinessPriorityRatings) Equals(other BusinessPriorityRatings) bool {
+	if !reflect.DeepEqual(businessPriorityRatings.benefit, other.benefit) {
+		return false
+	}
+
+	if !reflect.DeepEqual(businessPriorityRatings.cost, other.cost) {
+		return false
+	}
+
+	if !reflect.DeepEqual(businessPriorityRatings.penalty, other.penalty) {
+		return false
+	}
+
+	if !reflect.DeepEqual(businessPriorityRatings.risk, other.risk) {
+		return false
+	}
+
+	return true
 }

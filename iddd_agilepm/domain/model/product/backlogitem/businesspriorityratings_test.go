@@ -110,3 +110,16 @@ func TestBusinessPriorityRatingsString(t *testing.T) {
 		t.Errorf("got %s, want %s", got, want)
 	}
 }
+
+func TestBusinessPriorityRatingsEquals(t *testing.T) {
+	businessPriorityRatings, err := NewBusinessPriorityRatings(benefit, cost, penalty, risk)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	other := &BusinessPriorityRatings{benefit: benefit, cost: cost, penalty: penalty, risk: risk}
+
+	if !businessPriorityRatings.Equals(*other) {
+		t.Errorf("businessPriorityRatings %v must be equal to other %v", businessPriorityRatings, other)
+	}
+}
