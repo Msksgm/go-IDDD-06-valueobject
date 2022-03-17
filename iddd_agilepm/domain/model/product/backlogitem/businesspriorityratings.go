@@ -21,7 +21,7 @@ func NewBusinessPriorityRatings(aBenefit int, aCost int, aPenalty int, aRisk int
 	if err := ierrors.NewArgumentRangeError(aPenalty, 1, 9, "Relative penalty must be between 1 and 9.").GetError(); err != nil {
 		return nil, err
 	}
-	if err := ierrors.NewArgumentRangeError(aRisk, 1, 9, "Relative penalty must be between 1 and 9.").GetError(); err != nil {
+	if err := ierrors.NewArgumentRangeError(aRisk, 1, 9, "Relative risk must be between 1 and 9.").GetError(); err != nil {
 		return nil, err
 	}
 
