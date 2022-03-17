@@ -2,6 +2,7 @@ package backlogitem
 
 import (
 	"errors"
+	"fmt"
 	"reflect"
 	"testing"
 
@@ -95,4 +96,17 @@ func TestNewBusinessPriorityRatings(t *testing.T) {
 			t.Errorf("err type:%v, expect type: %v", reflect.TypeOf(errors.Unwrap(err)), reflect.TypeOf(&argumentRangeError))
 		}
 	})
+}
+
+func TestBusinessPriorityRatingsString(t *testing.T) {
+	businessPriorityRatings, err := NewBusinessPriorityRatings(benefit, cost, penalty, risk)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	got := fmt.Sprint(businessPriorityRatings)
+	want := fmt.Sprintf("BusinessPriorityRatings [benefit=%d, cost=%d, penalty=%d, risk =%d]", benefit, cost, penalty, risk)
+	if got != want {
+		t.Errorf("got %s, want %s", got, want)
+	}
 }

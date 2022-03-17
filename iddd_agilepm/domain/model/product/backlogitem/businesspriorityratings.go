@@ -1,6 +1,8 @@
 package backlogitem
 
 import (
+	"fmt"
+
 	"github.com/Msksgm/go-IDDD-05-entity/iddd_common/ierrors"
 )
 
@@ -26,4 +28,8 @@ func NewBusinessPriorityRatings(aBenefit int, aCost int, aPenalty int, aRisk int
 	}
 
 	return &BusinessPriorityRatings{benefit: aBenefit, cost: aCost, penalty: aPenalty, risk: aRisk}, nil
+}
+
+func (businessPriorityRatings *BusinessPriorityRatings) String() string {
+	return fmt.Sprintf("BusinessPriorityRatings [benefit=%d, cost=%d, penalty=%d, risk =%d]", businessPriorityRatings.benefit, businessPriorityRatings.cost, businessPriorityRatings.penalty, businessPriorityRatings.risk)
 }
