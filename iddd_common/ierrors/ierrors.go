@@ -133,3 +133,35 @@ func (argumentFalseError *ArgumentFalseError) GetError() error {
 func (argumentFalseError *ArgumentFalseError) Error() string {
 	return argumentFalseError.arguments.message
 }
+
+type ArgumentRangeErrorArguments struct {
+	value   int
+	minimum int
+	maximum int
+	message string
+}
+
+type ArgumentRangeError struct {
+	arguments ArgumentRangeErrorArguments
+}
+
+func (argumentRangeError *ArgumentRangeError) GetArguments() ArgumentRangeErrorArguments {
+	return argumentRangeError.arguments
+}
+
+func (argumentRangeError *ArgumentRangeError) GetError() error {
+	args := argumentRangeError.arguments
+	if args.value < args.minimum || args.value > args.maximum {
+		return argumentRangeError
+	}
+	return nil
+}
+
+func (argumentRangeError *ArgumentRangeError) Error() string {
+	return argumentRangeError.arguments.message
+}
+
+func NewArgumentRangeError(aValue int, aMinimum int, aMaximum int, aMessage string) *ArgumentRangeError {
+	arguments := ArgumentRangeErrorArguments{value: aValue, minimum: aMinimum, maximum: aMaximum, message: aMessage}
+	return &ArgumentRangeError{arguments: arguments}
+}
