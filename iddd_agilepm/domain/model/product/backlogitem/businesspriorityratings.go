@@ -67,6 +67,10 @@ func (businessPriorityRatings *BusinessPriorityRatings) Benefit() int {
 	return businessPriorityRatings.benefit
 }
 
+func (businessPriorityRatings *BusinessPriorityRatings) Cost() int {
+	return businessPriorityRatings.cost
+}
+
 func (businessPriorityRatings *BusinessPriorityRatings) Penalty() int {
 	return businessPriorityRatings.penalty
 }
