@@ -14,7 +14,7 @@ type BusinessPriorityTotals struct {
 }
 
 func NewBusinessPriorityTotals(aTotalBenefit int, aTotalCost int, aTotalPenalty int, aTotalRisk int, aTotalValue int) (*BusinessPriorityTotals, error) {
-	return &BusinessPriorityTotals{totalBenefit: aTotalBenefit, totalCost: aTotalCost, totalPenalty: aTotalBenefit, totalRisk: aTotalRisk, totalValue: aTotalRisk}, nil
+	return &BusinessPriorityTotals{totalBenefit: aTotalBenefit, totalCost: aTotalCost, totalPenalty: aTotalBenefit, totalRisk: aTotalRisk, totalValue: aTotalValue}, nil
 }
 
 func (busineePriorityTotals *BusinessPriorityTotals) String() string {
