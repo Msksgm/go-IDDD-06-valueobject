@@ -14,11 +14,27 @@ type BusinessPriorityTotals struct {
 }
 
 func NewBusinessPriorityTotals(aTotalBenefit int, aTotalCost int, aTotalPenalty int, aTotalRisk int, aTotalValue int) (*BusinessPriorityTotals, error) {
-	return &BusinessPriorityTotals{totalBenefit: aTotalBenefit, totalCost: aTotalCost, totalPenalty: aTotalBenefit, totalRisk: aTotalRisk, totalValue: aTotalValue}, nil
+	return &BusinessPriorityTotals{totalBenefit: aTotalBenefit, totalCost: aTotalCost, totalPenalty: aTotalPenalty, totalRisk: aTotalRisk, totalValue: aTotalValue}, nil
 }
 
-func (busineePriorityTotals *BusinessPriorityTotals) String() string {
-	return fmt.Sprintf("BusinessPriorityTotals [totalBenefit=%d, totalCost=%d, totalPenalty=%d, totalRisk =%d, totalValue=%d]", busineePriorityTotals.totalBenefit, busineePriorityTotals.totalCost, busineePriorityTotals.totalPenalty, busineePriorityTotals.totalRisk, busineePriorityTotals.totalValue)
+func (busineePriorityTotals *BusinessPriorityTotals) TotalBenefit() int {
+	return busineePriorityTotals.totalBenefit
+}
+
+func (busineePriorityTotals *BusinessPriorityTotals) TotalCost() int {
+	return busineePriorityTotals.totalCost
+}
+
+func (busineePriorityTotals *BusinessPriorityTotals) TotalPenalty() int {
+	return busineePriorityTotals.totalPenalty
+}
+
+func (busineePriorityTotals *BusinessPriorityTotals) TotalRisk() int {
+	return busineePriorityTotals.totalRisk
+}
+
+func (busineePriorityTotals *BusinessPriorityTotals) TotalValue() int {
+	return busineePriorityTotals.totalValue
 }
 
 func (busineePriorityTotals *BusinessPriorityTotals) Equals(other BusinessPriorityTotals) bool {
@@ -38,4 +54,8 @@ func (busineePriorityTotals *BusinessPriorityTotals) Equals(other BusinessPriori
 		return false
 	}
 	return true
+}
+
+func (busineePriorityTotals *BusinessPriorityTotals) String() string {
+	return fmt.Sprintf("BusinessPriorityTotals [totalBenefit=%d, totalCost=%d, totalPenalty=%d, totalRisk =%d, totalValue=%d]", busineePriorityTotals.totalBenefit, busineePriorityTotals.totalCost, busineePriorityTotals.totalPenalty, busineePriorityTotals.totalRisk, busineePriorityTotals.totalValue)
 }

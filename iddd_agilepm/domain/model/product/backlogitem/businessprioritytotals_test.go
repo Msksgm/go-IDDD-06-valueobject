@@ -28,6 +28,76 @@ func TestNewBusinessPriorityTotals(t *testing.T) {
 	}
 }
 
+func TestTotalBenefit(t *testing.T) {
+	busineePriorityTotals, err := NewBusinessPriorityTotals(totalBenefit, totalCost, totalPenalty, totalRisk, totalValue)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	got := busineePriorityTotals.TotalBenefit()
+	want := totalBenefit
+
+	if got != want {
+		t.Errorf("got %v, want %v", got, want)
+	}
+}
+
+func TestTotalCost(t *testing.T) {
+	busineePriorityTotals, err := NewBusinessPriorityTotals(totalBenefit, totalCost, totalPenalty, totalRisk, totalValue)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	got := busineePriorityTotals.TotalCost()
+	want := totalCost
+
+	if got != want {
+		t.Errorf("got %v, want %v", got, want)
+	}
+}
+
+func TestTotalPenalty(t *testing.T) {
+	busineePriorityTotals, err := NewBusinessPriorityTotals(totalBenefit, totalCost, totalPenalty, totalRisk, totalValue)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	got := busineePriorityTotals.TotalPenalty()
+	want := totalPenalty
+
+	if got != want {
+		t.Errorf("got %v, want %v", got, want)
+	}
+}
+
+func TestTotalRisk(t *testing.T) {
+	busineePriorityTotals, err := NewBusinessPriorityTotals(totalBenefit, totalCost, totalPenalty, totalRisk, totalValue)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	got := busineePriorityTotals.TotalRisk()
+	want := totalRisk
+
+	if got != want {
+		t.Errorf("got %v, want %v", got, want)
+	}
+}
+
+func TestTotalValue(t *testing.T) {
+	busineePriorityTotals, err := NewBusinessPriorityTotals(totalBenefit, totalCost, totalPenalty, totalRisk, totalValue)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	got := busineePriorityTotals.TotalValue()
+	want := totalValue
+
+	if got != want {
+		t.Errorf("got %v, want %v", got, want)
+	}
+}
+
 func TestBusinessPriorityTotalsEquals(t *testing.T) {
 	businessPriorityTotals, err := NewBusinessPriorityTotals(totalBenefit, totalCost, totalPenalty, totalRisk, totalValue)
 	if err != nil {
