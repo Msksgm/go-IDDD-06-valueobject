@@ -237,3 +237,16 @@ func TestWithAdjustedRisk(t *testing.T) {
 		t.Errorf("mismatch (-want, +got):\n%s", diff)
 	}
 }
+
+func TestBenefit(t *testing.T) {
+	businessPriorityRatings, err := NewBusinessPriorityRatings(benefit, cost, penalty, risk)
+	if err != nil {
+		t.Fatal(err)
+	}
+	got := businessPriorityRatings.Benefit()
+	want := benefit
+
+	if got != want {
+		t.Errorf("got %v, want %v", got, want)
+	}
+}
