@@ -1,6 +1,9 @@
 package backlogitem
 
-import "reflect"
+import (
+	"fmt"
+	"reflect"
+)
 
 type BusinessPriority struct {
 	ratings BusinessPriorityRatings
@@ -8,6 +11,10 @@ type BusinessPriority struct {
 
 func NewBusinessPriority(aBusinessPriorityRatings BusinessPriorityRatings) (*BusinessPriority, error) {
 	return &BusinessPriority{ratings: aBusinessPriorityRatings}, nil
+}
+
+func (businessPriority *BusinessPriority) String() string {
+	return fmt.Sprintf("BusinessPriority [ratings=%v]", businessPriority.ratings)
 }
 
 func (businessPriority *BusinessPriority) Equals(other BusinessPriority) bool {

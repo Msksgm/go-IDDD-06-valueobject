@@ -1,6 +1,7 @@
 package backlogitem
 
 import (
+	"fmt"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -35,5 +36,21 @@ func TestBusinessPriorityEquals(t *testing.T) {
 
 	if !businessPriority.Equals(*other) {
 		t.Errorf("businessPriority %v must be equal to other %v", businessPriority, other)
+	}
+}
+
+func TestBusinessPriorityString(t *testing.T) {
+	businessPriorityRatings, err := NewBusinessPriorityRatings(benefit, cost, penalty, risk)
+	if err != nil {
+		t.Fatal(err)
+	}
+	businessPriority, err := NewBusinessPriority(*businessPriorityRatings)
+	if err != nil {
+		t.Fatal(err)
+	}
+	got := fmt.Sprint(businessPriority)
+	want := fmt.Sprintf("BusinessPriority [ratings=%v]", businessPriority.ratings)
+	if got != want {
+		t.Errorf("got %s, want %s", got, want)
 	}
 }
