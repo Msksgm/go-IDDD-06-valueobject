@@ -112,14 +112,27 @@ func TestBusinessPriorityRatingsString(t *testing.T) {
 }
 
 func TestBusinessPriorityRatingsEquals(t *testing.T) {
-	businessPriorityRatings, err := NewBusinessPriorityRatings(benefit, cost, penalty, risk)
-	if err != nil {
-		t.Fatal(err)
-	}
+	t.Run("equal", func(t *testing.T) {
+		businessPriorityRatings, err := NewBusinessPriorityRatings(benefit, cost, penalty, risk)
+		if err != nil {
+			t.Fatal(err)
+		}
 
-	other := &BusinessPriorityRatings{benefit: benefit, cost: cost, penalty: penalty, risk: risk}
+		other := &BusinessPriorityRatings{benefit: benefit, cost: cost, penalty: penalty, risk: risk}
 
-	if !businessPriorityRatings.Equals(*other) {
-		t.Errorf("businessPriorityRatings %v must be equal to other %v", businessPriorityRatings, other)
-	}
+		if !businessPriorityRatings.Equals(*other) {
+			t.Errorf("businessPriorityRatings %v must be equal to other %v", businessPriorityRatings, other)
+		}
+	})
+	t.Run("not equal", func(t *testing.T) {
+		businessPriorityRatings, err := NewBusinessPriorityRatings(benefit, cost, penalty, risk)
+		if err != nil {
+			t.Fatal(err)
+		}
+
+		other := &BusinessPriorityRatings{benefit: 1, cost: cost, penalty: penalty, risk: risk}
+		if businessPriorityRatings.Equals(*other) {
+			t.Errorf("businessPriorityRatings %v must not be equal to other %v", businessPriorityRatings, other)
+		}
+	})
 }
