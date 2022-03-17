@@ -203,3 +203,20 @@ func TestWithAdjustedCost(t *testing.T) {
 		t.Errorf("mismatch (-want, +got):\n%s", diff)
 	}
 }
+
+func TestWithAdjustedPenalty(t *testing.T) {
+	businessPriorityRatings, err := NewBusinessPriorityRatings(benefit, cost, penalty, risk)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	changedPenalty := 7
+	got, err := businessPriorityRatings.WithAdjustedPenalty(changedPenalty)
+	if err != nil {
+		t.Fatal(err)
+	}
+	want := &BusinessPriorityRatings{benefit: benefit, cost: cost, penalty: changedPenalty, risk: risk}
+	if diff := cmp.Diff(want, got, cmp.AllowUnexported(BusinessPriorityRatings{})); diff != "" {
+		t.Errorf("mismatch (-want, +got):\n%s", diff)
+	}
+}

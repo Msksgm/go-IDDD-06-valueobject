@@ -47,6 +47,14 @@ func (businessPriorityRatings *BusinessPriorityRatings) WithAdjustedCost(aCost i
 	return changedBusinessPriorityRatings, nil
 }
 
+func (businessPriorityRatings *BusinessPriorityRatings) WithAdjustedPenalty(aPenalty int) (*BusinessPriorityRatings, error) {
+	changedBusinessPriorityRatings, err := NewBusinessPriorityRatings(businessPriorityRatings.benefit, businessPriorityRatings.cost, aPenalty, businessPriorityRatings.risk)
+	if err != nil {
+		return nil, err
+	}
+	return changedBusinessPriorityRatings, nil
+}
+
 func (businessPriorityRatings *BusinessPriorityRatings) String() string {
 	return fmt.Sprintf("BusinessPriorityRatings [benefit=%d, cost=%d, penalty=%d, risk =%d]", businessPriorityRatings.benefit, businessPriorityRatings.cost, businessPriorityRatings.penalty, businessPriorityRatings.risk)
 }
