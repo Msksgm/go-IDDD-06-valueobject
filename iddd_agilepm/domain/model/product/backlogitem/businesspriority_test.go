@@ -72,8 +72,8 @@ func TestRatings(t *testing.T) {
 	}
 
 	got := businessPriority.Ratings()
-	want := *businessPriorityRatings
-	if got != want {
+	want := businessPriorityRatings
+	if !reflect.DeepEqual(got, want) {
 		t.Errorf("got %v, want %v", got, want)
 	}
 }
