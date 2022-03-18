@@ -3,6 +3,7 @@ package backlogitem
 import (
 	"fmt"
 	"log"
+	"reflect"
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
@@ -45,6 +46,20 @@ func TestCostPercentage(t *testing.T) {
 
 	got := businessPriority.CostPercentage(*businessPriorityTotals)
 	want := 100 * float64(cost) / float64(totalCost)
+
+	if got != want {
+		t.Errorf("got %v, want %v", got, want)
+	}
+}
+
+func TestRiskPercentage(t *testing.T) {
+	businessPriority, err := NewBusinessPriority(*businessPriorityRatings)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	got := businessPriority.RiskPercentage(*businessPriorityTotals)
+	want := 100 * float64(risk) / float64(totalRisk)
 
 	if got != want {
 		t.Errorf("got %v, want %v", got, want)
