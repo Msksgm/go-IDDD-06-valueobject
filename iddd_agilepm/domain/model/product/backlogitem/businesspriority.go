@@ -21,10 +21,14 @@ func (businessPriority *BusinessPriority) TotalValue(aTotals BusinessPriorityTot
 	return float64(businessPriority.ratings.benefit) + float64(businessPriority.ratings.penalty)
 }
 
-func (businessPriority *BusinessPriority) String() string {
-	return fmt.Sprintf("BusinessPriority [ratings=%v]", businessPriority.ratings)
+func (businessPriority *BusinessPriority) Ratings() BusinessPriorityRatings {
+	return businessPriority.ratings
 }
 
 func (businessPriority *BusinessPriority) Equals(other BusinessPriority) bool {
 	return reflect.DeepEqual(businessPriority.ratings, other.ratings)
+}
+
+func (businessPriority *BusinessPriority) String() string {
+	return fmt.Sprintf("BusinessPriority [ratings=%v]", businessPriority.ratings)
 }

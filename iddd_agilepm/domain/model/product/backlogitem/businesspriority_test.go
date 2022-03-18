@@ -65,6 +65,19 @@ func TestBusinessPriorityTotalValue(t *testing.T) {
 	}
 }
 
+func TestRatings(t *testing.T) {
+	businessPriority, err := NewBusinessPriority(*businessPriorityRatings)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	got := businessPriority.Ratings()
+	want := *businessPriorityRatings
+	if got != want {
+		t.Errorf("got %v, want %v", got, want)
+	}
+}
+
 func TestBusinessPriorityEquals(t *testing.T) {
 	businessPriority, err := NewBusinessPriority(*businessPriorityRatings)
 	if err != nil {
