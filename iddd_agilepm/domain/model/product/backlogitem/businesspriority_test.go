@@ -52,6 +52,21 @@ func TestCostPercentage(t *testing.T) {
 	}
 }
 
+func TestPriority(t *testing.T) {
+	businessPriority, err := NewBusinessPriority(*businessPriorityRatings)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	got := businessPriority.Priority(*businessPriorityTotals)
+	costAndRisk := businessPriority.CostPercentage(*businessPriorityTotals) + businessPriority.RiskPercentage(*businessPriorityTotals)
+	want := businessPriority.ValuePercentage(*businessPriorityTotals) / costAndRisk
+
+	if got != want {
+		t.Errorf("got %v, want %v", got, want)
+	}
+}
+
 func TestRiskPercentage(t *testing.T) {
 	businessPriority, err := NewBusinessPriority(*businessPriorityRatings)
 	if err != nil {
@@ -74,6 +89,20 @@ func TestBusinessPriorityTotalValue(t *testing.T) {
 
 	got := businessPriority.TotalValue(*businessPriorityTotals)
 	want := float64(benefit) + float64(penalty)
+
+	if got != want {
+		t.Errorf("got %v, want %v", got, want)
+	}
+}
+
+func TestValuePercentage(t *testing.T) {
+	businessPriority, err := NewBusinessPriority(*businessPriorityRatings)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	got := businessPriority.TotalValue(*businessPriorityTotals)
+	want := 100 * float64(businessPriority.ratings.Risk()) / float64(businessPriorityTotals.TotalRisk())
 
 	if got != want {
 		t.Errorf("got %v, want %v", got, want)
